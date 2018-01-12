@@ -1,10 +1,34 @@
 #include "server.h"
 
+void	get_new_clients(t_server *server)
+{
+	t_client	client;
+	int			fd;
+
+	while (is_input_waiting(server->socket, server->timeout))
+	{
+		fd = accept(server->socket, &client.addr, &client.addr_len);
+		FD_ZERO(&client.set);
+		FD_SET(fd, &client.set);
+		ft_vector_add(server->clients, &client);
+		ft_printf("client added\n");
+	}
+}
+
 void	run_server_tcp(t_server *server)
 {
-	(void)server;
+	char	*line;
+	int		r;
+
 	while (1)
 	{
+		get_new_clients(server);
+		while (is_input_waiting(0, server->timeout))
+		{
+			ft_get_next_line(0, &line);
+			ft_putendl(line);
+			free(line);
+		}
 	}
 }
 
@@ -28,8 +52,7 @@ void	start_server(t_server *server)
 
 	if (server->protocol == TCP)
 	{
-		if ((server->socket = socket(AF_INET, server->protocol |
-			SOCK_NONBLOCK, 0)) < 0)
+		if ((server->socket = socket(AF_INET, server->protocol, 0)) < 0)
 			error(0, 1, NULL);
 		addr.sin_family = AF_INET;
 		addr.sin_port = htons(server->port);

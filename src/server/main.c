@@ -10,6 +10,7 @@ t_server	*init_server(void)
 	static t_server	server;
 
 	ft_bzero(&server, sizeof(t_server));
+	server.socket = -1;
 	server.protocol = TCP;
 	server.port = 4242;
 	server.opt = VERBOSE;

@@ -23,6 +23,9 @@ char	*error_2(int error, void *param, char *s)
 		s = ft_joinf("'%s' number must be in interval [0;2147483647]", param);
 	else if (error == 17)
 		s = ft_joinf("option '%s' must take exactly two argument", param);
+	else if (error == 18)
+		s = ft_joinf("port already set to %d, overwriting",
+			*(uint16_t*)param);
 	else
 		s = ft_strdup("unknown error");
 	return (s);
@@ -40,7 +43,7 @@ void	error(int error, int state, void *param)
 	else if (error == 1)
 		s = ft_strdup("cannot allocate memory");
 	else if (error == 10)
-		s = ft_joinf("'%s' is not a number or is negative", param);
+		s = ft_joinf("'%s' must be a number in interval [0;65536]", param);
 	else if (error == 11)
 		s = ft_joinf("unknown parameter '%s', allowed: on, off", param);
 	else if (error == 12)

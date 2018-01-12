@@ -6,7 +6,8 @@ INC_DIR = include
 INCLUDES = server.h
 INCLUDE = $(INCLUDES:%.h=$(INC_DIR)/%.h)
 SRC_DIR = src/server
-SRC = main.c server.c flags.c error.c
+SRC =	main.c flags.c error.c server.c\
+		io.c
 OBJ = $(SRC:%.c=$(SRC_DIR)/%.o)
 
 .PHONY: all clean fclean re norme nl

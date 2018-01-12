@@ -16,6 +16,7 @@ typedef struct		s_client
 {
 	struct sockaddr	addr;
 	socklen_t		addr_len;
+	fd_set			set;
 }					t_client;
 
 typedef struct		s_server
@@ -36,5 +37,7 @@ void				get_flags(t_server *server, int argc, char **argv);
 
 void				start_server(t_server *server);
 void				run_server(t_server *server);
+
+int					is_input_waiting(int fd, struct timeval timeout);
 
 #endif

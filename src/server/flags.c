@@ -94,14 +94,23 @@ void	get_param(t_server *server, int argc, char **argv, int *i)
 void	get_flags(t_server *server, int argc, char **argv)
 {
 	int		i;
+	char	state;
 
 	i = 0;
+	state = 0;
 	while (++i < argc)
 	{
 		if (argv[i][0] == '-')
 			get_param(server, argc, argv, &i);
-		else if (ft_isnumeric(argv[i]) && ft_atoi(argv[i]) >= 0)
+		else if (ft_isnumeric(argv[i]) && ft_atoi(argv[i]) >= 0 &&
+			ft_atoi(argv[i]) < 65537)
+		{
+			if (state)
+				error(18, 0, &server->port);
+			else
+				state = 1;
 			server->port = ft_atou(argv[i]);
+		}
 		else
 			error(10, 0, argv[i]);
 	}

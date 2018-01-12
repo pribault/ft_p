@@ -1,12 +1,13 @@
 NAME = client
 CC = clang
-FLAGS = -Wall -Wextra -Werror
+FLAGS = -Wall -Wextra
 LIBFT = libft
 INC_DIR = include
 INCLUDES = client.h
 INCLUDE = $(INCLUDES:%.h=$(INC_DIR)/%.h)
 SRC_DIR = src/client
-SRC = client.c
+SRC =	main.c flags.c error.c client.c\
+		connect.c
 OBJ = $(SRC:%.c=$(SRC_DIR)/%.o)
 
 .PHONY: all clean fclean re norme nl
