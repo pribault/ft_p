@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/10 18:50:13 by pribault          #+#    #+#             */
-/*   Updated: 2017/10/18 21:16:16 by pribault         ###   ########.fr       */
+/*   Updated: 2017/11/04 11:24:53 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,8 @@ static int		alloc(int fd, char **line, char *b)
 	}
 	if (r < 0)
 		return (-1);
-	*line = realloc(*line, len + r + 1);
-	ft_memcpy(*line + len, b, r + 1);
+	*line = realloc(*line, len + BUFF_SIZE + 1);
+	ft_memcpy(*line + len, b, BUFF_SIZE + 1);
 	if ((tmp = ft_strchr(*line, '\n')))
 		*tmp = '\0';
 	return (r);

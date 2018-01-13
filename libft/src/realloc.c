@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/20 13:06:04 by pribault          #+#    #+#             */
-/*   Updated: 2017/10/18 20:00:47 by pribault         ###   ########.fr       */
+/*   Updated: 2017/11/18 11:02:04 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ t_alloc	*find_alloc_in_zone(t_zone *zone, void *ptr)
 	return (NULL);
 }
 
-void	*realloc_alloc(t_alloc *alloc, void *ptr, size_t size)
+void	*realloc_alloc(t_alloc *alloc, size_t size)
 {
 	void	*ret;
 
@@ -48,11 +48,24 @@ void	*realloc_alloc(t_alloc *alloc, void *ptr, size_t size)
 	else
 	{
 		ret = malloc(size);
-		ft_memcpy(ret, alloc->ptr, alloc->size);
-		free(ptr);
+		ft_memcpy(ret, alloc->ptr, (alloc->size < size) ? alloc->size : size);
+		free(alloc->ptr);
 		return (ret);
 	}
 	return (alloc->ptr);
+}
+
+void	*realloc_large(t_alloc *alloc, size_t size)
+{
+	if (!alloc)
+		return (NULL);
+	if (size <= alloc->size)
+	{
+		alloc->size = size;
+		return (alloc->ptr);
+	}
+	free(alloc->ptr);
+	return (malloc(size));
 }
 
 void	*realloc(void *ptr, size_t size)
@@ -61,6 +74,7 @@ void	*realloc(void *ptr, size_t size)
 	void	*ret;
 
 	pthread_mutex_lock(&g_env.mutex[3]);
+	ret = NULL;
 	if (!ptr)
 	{
 		pthread_mutex_unlock(&g_env.mutex[3]);
@@ -69,14 +83,10 @@ void	*realloc(void *ptr, size_t size)
 	alloc = find_alloc_in_zone(g_env.tiny, ptr);
 	if (!alloc)
 		alloc = find_alloc_in_zone(g_env.small, ptr);
-	if (!alloc)
-		alloc = find_alloc(g_env.large, ptr);
 	if (alloc)
-	{
-		ret = realloc_alloc(alloc, ptr, size);
-		pthread_mutex_unlock(&g_env.mutex[3]);
-		return (ret);
-	}
+		ret = realloc_alloc(alloc, size);
+	else
+		ret = realloc_large(find_alloc(g_env.large, ptr), size);
 	pthread_mutex_unlock(&g_env.mutex[3]);
-	return (NULL);
+	return (ret);
 }

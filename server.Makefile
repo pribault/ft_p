@@ -1,39 +1,44 @@
 NAME = server
 CC = clang
 FLAGS = -Wall -Wextra
+INC = include
+INCLUDE = server.h
+INCLUDES = $(INCLUDE:%.h=$(INC)/%.h)
+OBJ = src/server_obj
+SRC = src/server
+SRCS =	main.c flags.c error.c\
+		server.c io.c
+OBJS = $(SRCS:%.c=$(OBJ)/%.o)
 LIBFT = libft
-INC_DIR = include
-INCLUDES = server.h
-INCLUDE = $(INCLUDES:%.h=$(INC_DIR)/%.h)
-SRC_DIR = src/server
-SRC =	main.c flags.c error.c server.c\
-		io.c
-OBJ = $(SRC:%.c=$(SRC_DIR)/%.o)
+INCLUDE_LIBS = -I $(LIBFT)/include
+COMPILE_LIBS = -L $(LIBFT) -lft
 
-.PHONY: all clean fclean re norme nl
+.PHONY: all clean fclean re export
 
 all: $(NAME)
 
-%.o: %.c $(INCLUDE)
-	@echo "\033[0m\033[38;5;214mcompiling $@\033[0m"
-	@$(CC) $(FLAGS) -I $(INC_DIR) -I $(LIBFT)/$(INC_DIR) -o $@ -c $<
-	@echo "\033[1A\033[K\033[0m\033[38;5;214m$@ compiled\033[0m"
+$(OBJ):
+	@mkdir $@
 
-$(NAME): $(OBJ) $(LIBFT)/libft.a
-	@echo "\033[0m\033[38;5;124m\033[1mcompiling $@\033[0m"
-	@$(CC) $(FLAGS) -o $(NAME) $(OBJ) -L $(LIBFT) -lft
-	@echo "\033[1A\033[K\033[0m\033[38;5;124m\033[1m$@ compiled\033[0m"
+$(LIBFT)/libft.a:
+
+$(OBJ)%.o: $(SRC)%.c $(INCLUDES) $(LIBFT)/libft.a | $(OBJ)
+	@echo "\033[38;5;207m🍇  compiling $@\033[0m"
+	@$(CC) $(FLAGS) -I $(INC) $(INCLUDE_LIBS) -o $@ -c $<
+	@echo "\033[1A\033[K\033[38;5;207m🍇  $@ done\033[0m"
+
+$(NAME): $(OBJS)
+	@echo "\033[38;5;125m🐼  compiling $(NAME)\033[0m"
+	@$(CC) $(FLAGS) -o $(NAME) $(OBJS) $(COMPILE_LIBS)
+	@echo "\033[1A\033[K\033[38;5;125m🐼  $(NAME) done\033[0m"
 
 clean:
-	@echo "\033[0m\033[38;5;123mremoving object files\033[0m"
-	@rm -f $(OBJ)
-	@echo "\033[1A\033[K\033[0m\033[38;5;123mobject files removed\033[0m"
+	@rm -f $(OBJS)
 
 fclean: clean
-	@echo "\033[0m\033[38;5;14mremoving $(NAME)\033[0m"
 	@rm -f $(NAME)
-	@echo "\033[1A\033[K\033[0m\033[38;5;14m$(NAME) removed\033[0m"
-
-re: fclean all
 
 norme:
+	@norminette $(OBJS:%.o=%.c) $(INCLUDES)
+
+re: fclean all
