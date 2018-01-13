@@ -1,8 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   client.h                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2018/01/13 11:04:44 by pribault          #+#    #+#             */
+/*   Updated: 2018/01/13 20:52:09 by pribault         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef CLIENT_H
 # define CLIENT_H
 
 # include <sys/select.h>
 # include <sys/socket.h>
+# include <arpa/inet.h>
 # include <errno.h>
 # include <netdb.h>
 # include "libft.h"
@@ -10,19 +23,45 @@
 # define TCP	SOCK_STREAM
 # define UDP	SOCK_DGRAM
 
-typedef struct	s_client
+# define READ_BUFFER_SIZE	1024
+
+# define WHITESPACES		"\a\b\t\n\v\f\r "
+
+typedef struct		s_towrite
 {
-	char		*addr;
-	char		*service;
-	int			socket;
-	int			protocol;
-	uint16_t	port;
-}				t_client;
+	int				fd;
+	void			*data;
+	size_t			size;
+}					t_towrite;
 
-void			error(int error, int state, void *param);
+typedef struct		s_client
+{
+	char			*addr;
+	char			*service;
+	int				socket;
+	int				protocol;
+	uint16_t		port;
+	struct timeval	timeout;
+	t_vector		*write_queue;
+	fd_set			in;
+	fd_set			out;
+}					t_client;
 
-void			get_flags(t_client *client, int argc, char **argv);
+void				error(int error, int state, void *param);
 
-void			connect_to_server(t_client *client);
+void				get_flags(t_client *client, int argc, char **argv);
+
+void				connect_to_server(t_client *client);
+
+void				run_client(t_client *client);
+
+void				read_from_terminal(t_client *client, int *n);
+void				read_from_socket(t_client *client, int *n);
+
+void				write_output(t_client *client, int *n);
+void				enqueue_write(t_client *client, int fd, void *data,
+					size_t size);
+
+extern t_client	*g_global;
 
 #endif

@@ -7,7 +7,7 @@ INCLUDES = $(INCLUDE:%.h=$(INC)/%.h)
 OBJ = src/server_obj
 SRC = src/server
 SRCS =	main.c flags.c error.c\
-		server.c io.c
+		server.c input.c output.c
 OBJS = $(SRCS:%.c=$(OBJ)/%.o)
 LIBFT = libft
 INCLUDE_LIBS = -I $(LIBFT)/include

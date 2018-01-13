@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   connect.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2018/01/13 11:04:44 by pribault          #+#    #+#             */
+/*   Updated: 2018/01/13 20:53:52 by pribault         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "client.h"
 
 void	connect_to_server(t_client *client)
@@ -15,9 +27,12 @@ void	connect_to_server(t_client *client)
 	addr = result;
 	while (addr)
 	{
-		ft_memdump(addr->ai_addr, addr->ai_addrlen);
 		if (connect(client->socket, addr->ai_addr, addr->ai_addrlen) >= 0)
+		{
+			ft_printf("connected to %s\n",
+			inet_ntoa(((struct sockaddr_in *)addr->ai_addr)->sin_addr));
 			return ;
+		}
 		else
 			error(0, 0, NULL);
 		addr = addr->ai_next;

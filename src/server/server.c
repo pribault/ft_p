@@ -1,33 +1,33 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   server.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2018/01/13 11:04:44 by pribault          #+#    #+#             */
+/*   Updated: 2018/01/13 20:48:00 by pribault         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "server.h"
-
-void	get_new_clients(t_server *server)
-{
-	t_client	client;
-	int			fd;
-
-	while (is_input_waiting(server->socket, server->timeout))
-	{
-		fd = accept(server->socket, &client.addr, &client.addr_len);
-		FD_ZERO(&client.set);
-		FD_SET(fd, &client.set);
-		ft_vector_add(server->clients, &client);
-		ft_printf("client added\n");
-	}
-}
 
 void	run_server_tcp(t_server *server)
 {
-	char	*line;
-	int		r;
+	int				r;
 
 	while (1)
 	{
-		get_new_clients(server);
-		while (is_input_waiting(0, server->timeout))
+		server->io_max = 0;
+		set_input(server);
+		set_output(server);
+		if ((r = select(server->io_max + 1, &server->in, &server->out, NULL,
+			&server->timeout)) < 0)
+			error(0, 0, NULL);
+		else if (r > 0)
 		{
-			ft_get_next_line(0, &line);
-			ft_putendl(line);
-			free(line);
+			read_input(server, &r);
+			write_output(server, &r);
 		}
 	}
 }
@@ -49,6 +49,7 @@ void	run_server(t_server *server)
 void	start_server(t_server *server)
 {
 	struct sockaddr_in	addr;
+	int					n;
 
 	if (server->protocol == TCP)
 	{
@@ -57,7 +58,10 @@ void	start_server(t_server *server)
 		addr.sin_family = AF_INET;
 		addr.sin_port = htons(server->port);
 		addr.sin_addr.s_addr = INADDR_ANY;
-		if (bind(server->socket, (void*)&addr, sizeof(addr)) < 0 ||
+		n = 1;
+		if (setsockopt(server->socket, SOL_SOCKET, SO_REUSEADDR, &n,
+			sizeof(int)) < 0 ||
+			bind(server->socket, (void*)&addr, sizeof(addr)) < 0 ||
 			listen(server->socket, server->queue_max) < 0)
 			error(0, 1, NULL);
 	}
