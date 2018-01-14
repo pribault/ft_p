@@ -6,17 +6,15 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/13 11:04:44 by pribault          #+#    #+#             */
-/*   Updated: 2018/01/13 20:51:07 by pribault         ###   ########.fr       */
+/*   Updated: 2018/01/14 21:41:19 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "client.h"
 
-t_client	*g_global = NULL;
-
 void		my_exit(void)
 {
-	ft_putstr("exiting...\n");
+	ft_putstr("\n\e[1A\e[Kexiting...\n");
 	if (g_global)
 		close(g_global->socket);
 }
@@ -35,6 +33,7 @@ t_client	*init_client(void)
 	client.protocol = TCP;
 	client.port = 4242;
 	client.timeout = (struct timeval){1, 0};
+	client.state = STATE_IDLE;
 	if (!(client.write_queue = ft_vector_new(sizeof(t_towrite), 0)))
 		error(1, 1, NULL);
 	return (&client);

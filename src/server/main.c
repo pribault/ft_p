@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/13 11:04:44 by pribault          #+#    #+#             */
-/*   Updated: 2018/01/14 16:55:34 by pribault         ###   ########.fr       */
+/*   Updated: 2018/01/14 18:26:09 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void		my_exit(void)
 	t_client	*client;
 	size_t		i;
 
-	ft_putstr("exiting...\n");
+	ft_putstr("\n\e[1A\e[Kexiting...\n");
 	if (g_global)
 	{
 		close(g_global->socket);
@@ -48,6 +48,7 @@ t_server	*init_server(void)
 	server.opt = VERBOSE;
 	server.queue_max = 10;
 	server.timeout = (struct timeval){1, 0};
+	server.root = getcwd(NULL, 0);
 	if (!(server.clients = ft_vector_new(sizeof(t_client), 0)) ||
 		!(server.write_queue = ft_vector_new(sizeof(t_towrite), 0)))
 		error(1, 1, NULL);
@@ -65,6 +66,7 @@ void		print_config(t_server *server)
 		server->timeout.tv_sec, server->timeout.tv_usec);
 	ft_printf("\tverbose: \e[2m%s\e[0m\n", (server->opt & VERBOSE) ?
 		"yes" : "no");
+	ft_printf("\troot: \e[2m%s\e[0m\n", server->root);
 }
 
 int			main(int argc, char **argv)
@@ -78,7 +80,7 @@ int			main(int argc, char **argv)
 	if (server->opt & VERBOSE)
 		print_config(server);
 	start_server(server);
-	// g_global = server;
+	g_global = server;
 	run_server(server);
 	return (0);
 }

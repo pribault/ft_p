@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/14 14:22:43 by pribault          #+#    #+#             */
-/*   Updated: 2018/01/14 16:18:06 by pribault         ###   ########.fr       */
+/*   Updated: 2018/01/14 21:00:45 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,10 @@ typedef enum	e_type
 	TYPE_RAW_TEXT,
 	TYPE_FILE,
 	TYPE_SHELL_CMD,
+	TYPE_LS,
+	TYPE_CD,
+	TYPE_PWD,
+	TYPE_AUTH,
 	TYPE_MAX
 }				t_type;
 
@@ -28,6 +32,7 @@ typedef enum	e_state
 	STATE_IDLE,
 	STATE_WAITING,
 	STATE_DOWNLOADING,
+	STATE_WAITING_FOR_RAW_TEXT,
 	STATE_MAX
 }				t_state;
 

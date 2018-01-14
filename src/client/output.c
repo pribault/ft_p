@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/13 18:18:05 by pribault          #+#    #+#             */
-/*   Updated: 2018/01/14 16:17:05 by pribault         ###   ########.fr       */
+/*   Updated: 2018/01/14 21:15:04 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@ void	write_output(t_client *client, int *n)
 	t_towrite	*data;
 	t_vector	*vector;
 	size_t		i;
-	int			r;
 
 	i = (size_t)-1;
 	vector = client->write_queue;
@@ -26,10 +25,8 @@ void	write_output(t_client *client, int *n)
 		data = ft_vector_get(vector, i);
 		if (FD_ISSET(data->fd, &client->out))
 		{
-			if ((r = write(data->fd, data->data, data->size)) < 0)
+			if (write(data->fd, data->data, data->size) < 0)
 				error(0, 0, NULL);
-			else
-				ft_printf("write: %d\n", r);
 			free(data->data);
 			ft_vector_del_one(vector, i--);
 			(*n)--;

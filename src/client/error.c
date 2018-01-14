@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/13 11:04:44 by pribault          #+#    #+#             */
-/*   Updated: 2018/01/14 16:17:32 by pribault         ###   ########.fr       */
+/*   Updated: 2018/01/14 19:32:02 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ char	*error_2(int error, void *param, char *s)
 		s = ft_joinf("unknown command '%s'", param);
 	else if (error == 201)
 		s = ft_strdup("command send raw take only one parameter");
+	else if (error == 202)
+		s = ft_strdup("command pwd take only one parameter");
 	else
 		s = ft_strdup("unknown error");
 	return (s);

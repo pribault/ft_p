@@ -5,30 +5,19 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/01/14 14:19:56 by pribault          #+#    #+#             */
-/*   Updated: 2018/01/14 21:19:12 by pribault         ###   ########.fr       */
+/*   Created: 2018/01/14 21:09:43 by pribault          #+#    #+#             */
+/*   Updated: 2018/01/14 21:16:43 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "server.h"
+#include "client.h"
 
-void	do_nothing(t_server *server, t_client *client, void *msg, size_t size)
-{
-	(void)server;
-	(void)client;
-	(void)msg;
-	(void)size;
-}
-
-void	execute(t_server *server, t_client *client, t_header *msg)
+void	execute(t_client *client, t_header *msg)
 {
 	if (msg->type < TYPE_MAX)
 	{
-		ft_printf("[%s] executing %s\n",
-			inet_ntoa(((struct sockaddr_in *)&client->addr)->sin_addr),
-			g_types_name[msg->type]);
 		if (g_state_machine[client->state][msg->type])
-			g_state_machine[client->state][msg->type](server, client,
+			g_state_machine[client->state][msg->type](client,
 				(void*)msg + sizeof(t_header), msg->size);
 		else
 			error(102, 0, &msg->type);
@@ -51,7 +40,7 @@ void	enter_wait_state(t_client *client, void *data, size_t size)
 	client->state = STATE_WAITING;
 }
 
-void	wait_state(t_server *server, t_client *client, void *data, size_t size)
+void	wait_state(t_client *client, void *data, size_t size)
 {
 	t_waiting	*waiting;
 
@@ -71,22 +60,21 @@ void	wait_state(t_server *server, t_client *client, void *data, size_t size)
 			waiting->exp - waiting->size);
 		client->state = waiting->state;
 		client->data = NULL;
-		execute(server, client, waiting->data);
-		treat_message(server, client, data + waiting->exp - waiting->size,
+		execute(client, waiting->data);
+		treat_message(client, data + waiting->exp - waiting->size,
 			size + waiting->size - waiting->exp);
 		free(waiting);
 	}
 }
 
-void	treat_message(t_server *server, t_client *client,
-		t_header *msg, size_t size)
+void	treat_message(t_client *client, t_header *msg, size_t size)
 {
 	if (client->state == STATE_WAITING)
-		wait_state(server, client, msg, size);
+		wait_state(client, msg, size);
 	else if (size >= sizeof(t_header))
 	{
 		if (msg->size <= size - sizeof(t_header))
-			execute(server, client, msg);
+			execute(client, msg);
 		else if (msg->type < TYPE_MAX)
 			enter_wait_state(client, msg, size);
 		else

@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/13 11:04:44 by pribault          #+#    #+#             */
-/*   Updated: 2018/01/14 17:19:10 by pribault         ###   ########.fr       */
+/*   Updated: 2018/01/14 20:56:17 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@
 
 # define READ_BUFFER_SIZE	1024
 
+# define WHITESPACES		"\a\b\t\n\v\f\r "
+
 typedef struct		s_towrite
 {
 	int				fd;
@@ -45,6 +47,7 @@ typedef struct		s_client
 	int				fd;
 	int				state;
 	void			*data;
+	char			*dir;
 }					t_client;
 
 typedef struct		s_server
@@ -53,6 +56,7 @@ typedef struct		s_server
 	int				protocol;
 	int				queue_max;
 	struct timeval	timeout;
+	char			*root;
 	t_vector		*clients;
 	t_vector		*write_queue;
 	uint16_t		port;
@@ -64,17 +68,11 @@ typedef struct		s_server
 
 typedef struct		s_waiting
 {
-	void			*data;
+	t_header		*data;
 	size_t			size;
-	t_header		header;
+	size_t			exp;
+	uint8_t			state;
 }					t_waiting;
-
-typedef struct		s_writing
-{
-	int				fd;
-	size_t			size;
-	size_t			expected;
-}					t_writing;
 
 typedef void		(*t_function)(t_server*, t_client*, void*, size_t);
 
@@ -93,6 +91,8 @@ void				read_from_terminal(t_server *server, int *n);
 void				read_from_socket(t_server *server, int *n);
 void				read_input(t_server *server, int *n);
 
+void				interpret_command_line(t_server *server, char *line);
+
 void				set_output(t_server *server);
 void				write_output(t_server *server, int *n);
 
@@ -104,7 +104,11 @@ void				enqueue_write(t_server *server,
 void				treat_message(t_server *server, t_client *client,
 					t_header *msg, size_t size);
 
+void				do_nothing(t_server *server, t_client *client,
+					void *msg, size_t size);
 void				get_raw_text(t_server *server, t_client *client, void *msg,
+					size_t size);
+void				do_pwd(t_server *server, t_client *client, void *msg,
 					size_t size);
 
 extern t_server		*g_global;

@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/13 11:04:44 by pribault          #+#    #+#             */
-/*   Updated: 2018/01/13 20:53:52 by pribault         ###   ########.fr       */
+/*   Updated: 2018/01/14 21:40:54 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,11 +31,12 @@ void	connect_to_server(t_client *client)
 		{
 			ft_printf("connected to %s\n",
 			inet_ntoa(((struct sockaddr_in *)addr->ai_addr)->sin_addr));
-			return ;
+			return (freeaddrinfo(result));
 		}
 		else
 			error(0, 0, NULL);
 		addr = addr->ai_next;
 	}
+	freeaddrinfo(result);
 	error(100, 1, client->addr);
 }

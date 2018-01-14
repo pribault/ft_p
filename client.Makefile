@@ -7,8 +7,9 @@ INCLUDES = $(INCLUDE:%.h=$(INC)/%.h)
 OBJ = src/client_obj
 SRC = src/client
 SRCS =	main.c flags.c error.c\
-		client.c connect.c\
-		input.c output.c
+		client.c globals.c connect.c\
+		input.c output.c message.c\
+		action.c
 OBJS = $(SRCS:%.c=$(OBJ)/%.o)
 LIBFT = libft
 INCLUDE_LIBS = -I $(LIBFT)/include

@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/13 14:47:40 by pribault          #+#    #+#             */
-/*   Updated: 2018/01/14 17:02:03 by pribault         ###   ########.fr       */
+/*   Updated: 2018/01/14 21:25:34 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,18 +14,19 @@
 
 void	read_from_terminal(t_server *server, int *n)
 {
-	size_t	size;
+	int		size;
 	char	buffer[READ_BUFFER_SIZE];
-	char	*s;
 
 	if (FD_ISSET(0, &server->in))
 	{
 		ft_bzero(&buffer, sizeof(buffer));
-		size = read(0, &buffer, READ_BUFFER_SIZE);
-		buffer[size] = '\0';
-		s = ft_joinf("receiving [%s]\n", &buffer);
-		enqueue_write(server, 1, s, ft_strlen(s));
-		free(s);
+		if ((size = read(0, &buffer, READ_BUFFER_SIZE - 1)) < 0)
+			error(0, 0, NULL);
+		else
+		{
+			buffer[size] = '\0';
+			interpret_command_line(server, (char*)&buffer);
+		}
 		(*n)--;
 	}
 }
@@ -33,6 +34,7 @@ void	read_from_terminal(t_server *server, int *n)
 void	read_from_socket(t_server *server, int *n)
 {
 	t_client	client;
+	char		*s;
 
 	if (FD_ISSET(server->socket, &server->in))
 	{
@@ -44,18 +46,28 @@ void	read_from_socket(t_server *server, int *n)
 			error(0, 0, NULL);
 		else
 		{
-			ft_printf("client %s added\n",
-			inet_ntoa(((struct sockaddr_in *)&client.addr)->sin_addr));
+			client.dir = ft_strdup(server->root);
+			if (!(s = ft_joinf("[%s] connected",
+			inet_ntoa(((struct sockaddr_in *)&client.addr)->sin_addr))))
+				error(1, 1, NULL);
+			enqueue_putendl(server, 1, s, ft_strlen(s));
+			free(s);
 			ft_vector_add(server->clients, &client);
 		}
 		(*n)--;
 	}
 }
 
-void	close_connexion(t_vector *vector, t_client *client, size_t i)
+void	close_connexion(t_server *server, t_vector *vector, t_client *client,
+		size_t i)
 {
-	ft_printf("connexion closed for %s\n",
-		inet_ntoa(((struct sockaddr_in *)&client->addr)->sin_addr));
+	char	*s;
+
+	if (!(s = ft_joinf("[%s] disconnected",
+		inet_ntoa(((struct sockaddr_in *)&client->addr)->sin_addr))))
+		error(1, 1, NULL);
+	enqueue_putendl(server, 1, s, ft_strlen(s));
+	free(s);
 	close(client->fd);
 	ft_vector_del_one(vector, i--);
 }
@@ -75,10 +87,10 @@ void	read_input(t_server *server, int *n)
 		client = ft_vector_get(vector, i);
 		if (FD_ISSET(client->fd, &server->in))
 		{
-			if ((r = read(client->fd, &buffer, sizeof(buffer))) < 0)
+			if ((r = read(client->fd, &buffer, READ_BUFFER_SIZE - 1)) < 0)
 				error(0, 0, NULL);
 			else if (!r)
-				close_connexion(vector, client, i);
+				close_connexion(server, vector, client, i);
 			else
 				treat_message(server, client, ft_memdup(&buffer, r), r);
 			(*n)--;

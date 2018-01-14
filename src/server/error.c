@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/13 11:04:44 by pribault          #+#    #+#             */
-/*   Updated: 2018/01/14 16:23:41 by pribault         ###   ########.fr       */
+/*   Updated: 2018/01/14 18:16:09 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,20 @@ void	print_usage(void)
 	exit(0);
 }
 
+char	*error_3(int error, void *param, char *s)
+{
+	if (error == 50)
+		s = ft_joinf("unknown command '%s'", param);
+	else
+		s = ft_strdup("unknown error");
+	return (s);
+}
+
 char	*error_2(int error, void *param, char *s)
 {
-	if (error == 13)
+	if (error == 12)
+		s = ft_joinf("unknown option '%s'", param);
+	else if (error == 13)
 		s = ft_strdup("option '%s' must take exactly one argument");
 	else if (error == 14)
 		s = ft_joinf("unknown protocol '%s', allowed: tcp, udp", param);
@@ -46,8 +57,10 @@ char	*error_2(int error, void *param, char *s)
 		s = ft_strdup("receiving abnormally small packet, ignoring");
 	else if (error == 101)
 		s = ft_strdup("receiving packet of unknown type, ignoring");
+	else if (error == 102)
+		s = ft_joinf("unknown data type %d", *(uint8_t*)param);
 	else
-		s = ft_strdup("unknown error");
+		s = error_3(error, param, s);
 	return (s);
 }
 
@@ -66,8 +79,6 @@ void	error(int error, int state, void *param)
 		t = ft_joinf("'%s' must be a number in interval [0;65536]", param);
 	else if (error == 11)
 		t = ft_joinf("unknown parameter '%s', allowed: on, off", param);
-	else if (error == 12)
-		t = ft_joinf("unknown option '%s'", param);
 	else
 		t = error_2(error, param, NULL);
 	s = ft_joinf("%s%s", "\e[38;5;124m\e[4mError:\e[0m ", t);

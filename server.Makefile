@@ -8,7 +8,8 @@ OBJ = src/server_obj
 SRC = src/server
 SRCS =	main.c flags.c flags_2.c\
 		error.c server.c globals.c\
-		input.c output.c message.c
+		input.c output.c message.c\
+		command_line.c action.c
 OBJS = $(SRCS:%.c=$(OBJ)/%.o)
 LIBFT = libft
 INCLUDE_LIBS = -I $(LIBFT)/include

@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/13 15:53:16 by pribault          #+#    #+#             */
-/*   Updated: 2018/01/14 16:45:47 by pribault         ###   ########.fr       */
+/*   Updated: 2018/01/14 21:14:50 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,8 @@ void	write_output(t_server *server, int *n)
 		data = ft_vector_get(vector, i);
 		if (FD_ISSET(data->fd, &server->out))
 		{
-			write(data->fd, data->data, data->size);
+			if (write(data->fd, data->data, data->size) < 0)
+				error(0, 0, NULL);
 			free(data->data);
 			ft_vector_del_one(vector, i--);
 			(*n)--;

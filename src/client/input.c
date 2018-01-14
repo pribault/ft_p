@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/13 18:16:47 by pribault          #+#    #+#             */
-/*   Updated: 2018/01/14 16:17:55 by pribault         ###   ########.fr       */
+/*   Updated: 2018/01/14 21:13:46 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,15 +21,29 @@ void	send_raw(t_client *client, char **cmd, size_t size)
 	header.type = TYPE_RAW_TEXT;
 	header.size = ft_strlen(cmd[1]);
 	enqueue_write(client, client->socket, &header, sizeof(t_header));
-	enqueue_write(client, client->socket, cmd[1], ft_strlen(cmd[1]));
+	enqueue_write(client, client->socket, cmd[1], header.size);
+}
+
+void	send_pwd_request(t_client *client, char **cmd, size_t size)
+{
+	t_header	header;
+
+	(void)cmd;
+	if (size != 1)
+		return (error(202, 0, NULL));
+	header.type = TYPE_PWD;
+	header.size = 0;
+	enqueue_write(client, client->socket, &header, sizeof(t_header));
 }
 
 void	treat_command(t_client *client, char **cmd, size_t size)
 {
-	if (!ft_strcmp(cmd[0], "/quit") || !ft_strcmp(cmd[0], "/exit"))
+	if (!ft_strcmp(cmd[0], "quit") || !ft_strcmp(cmd[0], "exit"))
 		exit(0);
-	else if (!ft_strcmp(cmd[0], "/send_raw") || !ft_strcmp(cmd[0], "/sr"))
+	else if (!ft_strcmp(cmd[0], "send_raw") || !ft_strcmp(cmd[0], "sr"))
 		send_raw(client, cmd, size);
+	else if (!ft_strcmp(cmd[0], "pwd"))
+		send_pwd_request(client, cmd, size);
 	else
 		error(200, 0, cmd[0]);
 }
@@ -54,7 +68,7 @@ void	read_from_terminal(t_client *client, int *n)
 			len = ft_arraylen(cmd);
 			if (len)
 				treat_command(client, cmd, len);
-			ft_free_array((void**)cmd, len);
+			ft_free_array((void**)cmd, len + 1);
 		}
 		(*n)--;
 	}
@@ -76,10 +90,7 @@ void	read_from_socket(t_client *client, int *n)
 			exit(0);
 		}
 		else
-		{
-			ft_printf("message received:\n");
-			ft_memdump(&buffer, r);
-		}
+			treat_message(client, (void*)&buffer, r);
 		(*n)--;
 	}
 }
