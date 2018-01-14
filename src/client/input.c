@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/13 18:16:47 by pribault          #+#    #+#             */
-/*   Updated: 2018/01/14 21:13:46 by pribault         ###   ########.fr       */
+/*   Updated: 2018/01/14 22:03:29 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ void	read_from_terminal(t_client *client, int *n)
 			len = ft_arraylen(cmd);
 			if (len)
 				treat_command(client, cmd, len);
+			ft_putstr("$> ");
 			ft_free_array((void**)cmd, len + 1);
 		}
 		(*n)--;
@@ -85,7 +86,7 @@ void	read_from_socket(t_client *client, int *n)
 			error(0, 0, NULL);
 		else if (!r)
 		{
-			ft_printf("closing connexion\n");
+			ft_printf("\e[2K\rserver disconnected, closing connexion\n");
 			close(client->socket);
 			exit(0);
 		}

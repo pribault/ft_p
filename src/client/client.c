@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/13 11:04:44 by pribault          #+#    #+#             */
-/*   Updated: 2018/01/13 19:40:09 by pribault         ###   ########.fr       */
+/*   Updated: 2018/01/14 21:48:23 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ void	run_client(t_client *client)
 {
 	int	r;
 
+	ft_putstr("$> ");
 	while (1)
 	{
 		set_fds(client);

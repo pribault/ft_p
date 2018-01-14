@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/13 11:04:44 by pribault          #+#    #+#             */
-/*   Updated: 2018/01/14 21:41:19 by pribault         ###   ########.fr       */
+/*   Updated: 2018/01/14 22:01:21 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void		my_exit(void)
 {
-	ft_putstr("\n\e[1A\e[Kexiting...\n");
+	ft_putstr("\e[2K\rexiting...\n");
 	if (g_global)
 		close(g_global->socket);
 }
