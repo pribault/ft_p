@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/13 14:47:40 by pribault          #+#    #+#             */
-/*   Updated: 2018/01/13 20:59:12 by pribault         ###   ########.fr       */
+/*   Updated: 2018/01/14 17:02:03 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,14 +36,28 @@ void	read_from_socket(t_server *server, int *n)
 
 	if (FD_ISSET(server->socket, &server->in))
 	{
+		ft_bzero(&client, sizeof(t_client));
+		client.addr_len = sizeof(client.addr);
+		client.state = STATE_IDLE;
 		if ((client.fd = accept(server->socket, &client.addr,
 			&client.addr_len)) < 0)
 			error(0, 0, NULL);
-		ft_vector_add(server->clients, &client);
-		ft_printf("client %s added\n",
+		else
+		{
+			ft_printf("client %s added\n",
 			inet_ntoa(((struct sockaddr_in *)&client.addr)->sin_addr));
+			ft_vector_add(server->clients, &client);
+		}
 		(*n)--;
 	}
+}
+
+void	close_connexion(t_vector *vector, t_client *client, size_t i)
+{
+	ft_printf("connexion closed for %s\n",
+		inet_ntoa(((struct sockaddr_in *)&client->addr)->sin_addr));
+	close(client->fd);
+	ft_vector_del_one(vector, i--);
 }
 
 void	read_input(t_server *server, int *n)
@@ -54,8 +68,6 @@ void	read_input(t_server *server, int *n)
 	size_t		i;
 	int			r;
 
-	read_from_terminal(server, n);
-	read_from_socket(server, n);
 	i = (size_t)-1;
 	vector = server->clients;
 	while (*n && ++i < vector->n)
@@ -66,18 +78,9 @@ void	read_input(t_server *server, int *n)
 			if ((r = read(client->fd, &buffer, sizeof(buffer))) < 0)
 				error(0, 0, NULL);
 			else if (!r)
-			{
-				ft_printf("connexion closed for %s\n",
-					inet_ntoa(((struct sockaddr_in *)&client->addr)->sin_addr));
-				close(client->fd);
-				ft_vector_del_one(vector, i--);
-			}
+				close_connexion(vector, client, i);
 			else
-			{
-				ft_printf("message received from %s:\n",
-					inet_ntoa(((struct sockaddr_in *)&client->addr)->sin_addr));
-				ft_memdump(&buffer, r);
-			}
+				treat_message(server, client, ft_memdup(&buffer, r), r);
 			(*n)--;
 		}
 	}

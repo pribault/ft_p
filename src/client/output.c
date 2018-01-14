@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/13 18:18:05 by pribault          #+#    #+#             */
-/*   Updated: 2018/01/13 19:40:39 by pribault         ###   ########.fr       */
+/*   Updated: 2018/01/14 16:17:05 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,13 @@ void	write_output(t_client *client, int *n)
 			(*n)--;
 		}
 	}
+}
+
+void	enqueue_putendl(t_client *client, int fd, char *s, size_t len)
+{
+	s[len] = '\n';
+	enqueue_write(client, fd, s, len + 1);
+	s[len] = '\0';
 }
 
 void	enqueue_write(t_client *client, int fd, void *data, size_t size)

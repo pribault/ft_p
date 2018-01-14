@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/13 18:16:47 by pribault          #+#    #+#             */
-/*   Updated: 2018/01/13 19:11:35 by pribault         ###   ########.fr       */
+/*   Updated: 2018/01/14 16:17:55 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,14 @@
 
 void	send_raw(t_client *client, char **cmd, size_t size)
 {
-	size_t	i;
+	t_header	header;
 
-	i = 0;
-	if (size == 1)
+	if (size != 2)
 		return (error(201, 0, NULL));
-	while (++i < size)
-		enqueue_write(client, client->socket, cmd[i], ft_strlen(cmd[i]));
+	header.type = TYPE_RAW_TEXT;
+	header.size = ft_strlen(cmd[1]);
+	enqueue_write(client, client->socket, &header, sizeof(t_header));
+	enqueue_write(client, client->socket, cmd[1], ft_strlen(cmd[1]));
 }
 
 void	treat_command(t_client *client, char **cmd, size_t size)

@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/13 11:04:44 by pribault          #+#    #+#             */
-/*   Updated: 2018/01/13 20:48:00 by pribault         ###   ########.fr       */
+/*   Updated: 2018/01/14 13:46:14 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@ void	run_server_tcp(t_server *server)
 			error(0, 0, NULL);
 		else if (r > 0)
 		{
+			read_from_terminal(server, &r);
+			read_from_socket(server, &r);
 			read_input(server, &r);
 			write_output(server, &r);
 		}

@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/13 11:04:44 by pribault          #+#    #+#             */
-/*   Updated: 2018/01/13 20:52:09 by pribault         ###   ########.fr       */
+/*   Updated: 2018/01/14 16:17:26 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,11 @@
 # include <sys/select.h>
 # include <sys/socket.h>
 # include <arpa/inet.h>
+# include <signal.h>
 # include <errno.h>
 # include <netdb.h>
 # include "libft.h"
+# include "protocol.h"
 
 # define TCP	SOCK_STREAM
 # define UDP	SOCK_DGRAM
@@ -59,6 +61,8 @@ void				read_from_terminal(t_client *client, int *n);
 void				read_from_socket(t_client *client, int *n);
 
 void				write_output(t_client *client, int *n);
+void				enqueue_putendl(t_client *client, int fd, char *s,
+					size_t len);
 void				enqueue_write(t_client *client, int fd, void *data,
 					size_t size);
 

@@ -6,13 +6,11 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/13 11:04:44 by pribault          #+#    #+#             */
-/*   Updated: 2018/01/13 19:27:50 by pribault         ###   ########.fr       */
+/*   Updated: 2018/01/14 16:55:34 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "server.h"
-
-t_server	*g_global = NULL;
 
 void		my_exit(void)
 {
@@ -80,7 +78,7 @@ int			main(int argc, char **argv)
 	if (server->opt & VERBOSE)
 		print_config(server);
 	start_server(server);
-	g_global = server;
+	// g_global = server;
 	run_server(server);
 	return (0);
 }

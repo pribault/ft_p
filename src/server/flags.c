@@ -6,26 +6,11 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/13 11:04:44 by pribault          #+#    #+#             */
-/*   Updated: 2018/01/13 14:38:44 by pribault         ###   ########.fr       */
+/*   Updated: 2018/01/14 14:35:35 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "server.h"
-
-void	get_protocol(t_server *server, int argc, char **argv, int *i)
-{
-	if (*i + 1 < argc)
-	{
-		if (!ft_strcmp(argv[++(*i)], "tcp"))
-			server->protocol = TCP;
-		else if (!ft_strcmp	(argv[*i], "udp"))
-			server->protocol = UDP;
-		else
-			error(14, 0, argv[*i]);
-	}
-	else
-		error(13, 0, argv[*i]);
-}
 
 void	get_verbose(t_server *server, int argc, char **argv, int *i)
 {
@@ -33,7 +18,7 @@ void	get_verbose(t_server *server, int argc, char **argv, int *i)
 	{
 		if (!ft_strcmp(argv[++(*i)], "on"))
 			server->opt += (server->opt & VERBOSE) ? 0 : VERBOSE;
-		else if (!ft_strcmp	(argv[*i], "off"))
+		else if (!ft_strcmp(argv[*i], "off"))
 			server->opt -= (server->opt & VERBOSE) ? VERBOSE : 0;
 		else
 			error(11, 0, argv[*i]);

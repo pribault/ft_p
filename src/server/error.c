@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/13 11:04:44 by pribault          #+#    #+#             */
-/*   Updated: 2018/01/13 14:38:47 by pribault         ###   ########.fr       */
+/*   Updated: 2018/01/14 16:23:41 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,11 @@ void	print_usage(void)
 
 char	*error_2(int error, void *param, char *s)
 {
-	if (error == 15)
+	if (error == 13)
+		s = ft_strdup("option '%s' must take exactly one argument");
+	else if (error == 14)
+		s = ft_joinf("unknown protocol '%s', allowed: tcp, udp", param);
+	else if (error == 15)
 		s = ft_joinf("'%s' is not a number", param);
 	else if (error == 16)
 		s = ft_joinf("'%s' number must be in interval [0;2147483647]", param);
@@ -38,6 +42,10 @@ char	*error_2(int error, void *param, char *s)
 	else if (error == 18)
 		s = ft_joinf("port already set to %d, overwriting",
 			*(uint16_t*)param);
+	else if (error == 100)
+		s = ft_strdup("receiving abnormally small packet, ignoring");
+	else if (error == 101)
+		s = ft_strdup("receiving packet of unknown type, ignoring");
 	else
 		s = ft_strdup("unknown error");
 	return (s);
@@ -46,27 +54,28 @@ char	*error_2(int error, void *param, char *s)
 void	error(int error, int state, void *param)
 {
 	char	*s;
+	char	*t;
 
-	ft_putstr_fd("\e[38;5;124m\e[4mError:\e[0m ", 2);
 	if (error == -1)
-		s = ft_strdup(param);
+		t = ft_strdup(param);
 	else if (error == 0)
-		s = strerror(errno);
+		t = strerror(errno);
 	else if (error == 1)
-		s = ft_strdup("cannot allocate memory");
+		t = ft_strdup("cannot allocate memory");
 	else if (error == 10)
-		s = ft_joinf("'%s' must be a number in interval [0;65536]", param);
+		t = ft_joinf("'%s' must be a number in interval [0;65536]", param);
 	else if (error == 11)
-		s = ft_joinf("unknown parameter '%s', allowed: on, off", param);
+		t = ft_joinf("unknown parameter '%s', allowed: on, off", param);
 	else if (error == 12)
-		s = ft_joinf("unknown option '%s'", param);
-	else if (error == 13)
-		s = ft_strdup("option '%s' must take exactly one argument");
-	else if (error == 14)
-		s = ft_joinf("unknown protocol '%s', allowed: tcp, udp", param);
+		t = ft_joinf("unknown option '%s'", param);
 	else
-		s = error_2(error, param, NULL);
-	ft_putendl_fd(s, 2);
+		t = error_2(error, param, NULL);
+	s = ft_joinf("%s%s", "\e[38;5;124m\e[4mError:\e[0m ", t);
+	if (g_global)
+		enqueue_putendl(g_global, 2, s, ft_strlen(s));
+	else
+		ft_putendl_fd(s, 2);
+	free(t);
 	free(s);
 	if (state)
 		exit(state);

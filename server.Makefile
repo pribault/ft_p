@@ -2,12 +2,13 @@ NAME = server
 CC = clang
 FLAGS = -Wall -Wextra
 INC = include
-INCLUDE = server.h
+INCLUDE = server.h protocol.h
 INCLUDES = $(INCLUDE:%.h=$(INC)/%.h)
 OBJ = src/server_obj
 SRC = src/server
-SRCS =	main.c flags.c error.c\
-		server.c input.c output.c
+SRCS =	main.c flags.c flags_2.c\
+		error.c server.c globals.c\
+		input.c output.c message.c
 OBJS = $(SRCS:%.c=$(OBJ)/%.o)
 LIBFT = libft
 INCLUDE_LIBS = -I $(LIBFT)/include

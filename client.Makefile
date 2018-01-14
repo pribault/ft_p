@@ -2,7 +2,7 @@ NAME = client
 CC = clang
 FLAGS = -Wall -Wextra
 INC = include
-INCLUDE = client.h
+INCLUDE = client.h protocol.h
 INCLUDES = $(INCLUDE:%.h=$(INC)/%.h)
 OBJ = src/client_obj
 SRC = src/client

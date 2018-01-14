@@ -1,23 +1,44 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_memdup.c                                        :+:      :+:    :+:   */
+/*   protocol.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/10/08 16:13:54 by pribault          #+#    #+#             */
-/*   Updated: 2018/01/14 16:30:11 by pribault         ###   ########.fr       */
+/*   Created: 2018/01/14 14:22:43 by pribault          #+#    #+#             */
+/*   Updated: 2018/01/14 16:18:06 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#ifndef PROTOCOL_H
+# define PROTOCOL_H
 
-void	*ft_memdup(void *ptr, size_t size)
+# include "libft.h"
+
+typedef enum	e_type
 {
-	void	*new;
+	TYPE_RAW_TEXT,
+	TYPE_FILE,
+	TYPE_SHELL_CMD,
+	TYPE_MAX
+}				t_type;
 
-	if (!ptr || !(new = malloc(size)))
-		return (NULL);
-	ft_memcpy(new, ptr, size);
-	return (new);
-}
+typedef enum	e_state
+{
+	STATE_IDLE,
+	STATE_WAITING,
+	STATE_DOWNLOADING,
+	STATE_MAX
+}				t_state;
+
+# pragma pack(1)
+
+typedef struct	s_header
+{
+	uint8_t		type;
+	uint64_t	size;
+}				t_header;
+
+# pragma pack()
+
+#endif

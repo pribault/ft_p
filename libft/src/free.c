@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/07/12 15:20:52 by pribault          #+#    #+#             */
-/*   Updated: 2017/10/18 19:59:04 by pribault         ###   ########.fr       */
+/*   Updated: 2018/01/14 17:06:34 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,8 @@
 
 char	is_in_alloc(t_alloc *alloc, void *ptr)
 {
-	if (ptr >= alloc->ptr && (ptr < alloc->ptr + alloc->size || !alloc->size))
+	if ((ptr >= alloc->ptr && ptr < alloc->ptr + alloc->size) ||
+		(ptr == alloc->ptr && !alloc->size))
 		return (1);
 	return (0);
 }
