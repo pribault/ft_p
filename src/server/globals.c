@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/14 15:15:11 by pribault          #+#    #+#             */
-/*   Updated: 2018/01/14 19:33:43 by pribault         ###   ########.fr       */
+/*   Updated: 2018/01/15 20:48:17 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ t_server	*g_global = NULL;
 
 t_function	g_state_machine[STATE_MAX][TYPE_MAX] =
 {
-	{&get_raw_text, &do_nothing, &do_nothing, &do_nothing, &do_nothing,
+	{&get_raw_text, &do_nothing, &do_nothing, &do_ls, &do_nothing,
 		&do_pwd, &do_nothing},
 	{&do_nothing, &do_nothing, &do_nothing, &do_nothing, &do_nothing,
 		&do_nothing, &do_nothing},

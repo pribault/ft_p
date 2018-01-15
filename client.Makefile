@@ -9,7 +9,7 @@ SRC = src/client
 SRCS =	main.c flags.c error.c\
 		client.c globals.c connect.c\
 		input.c output.c message.c\
-		action.c
+		action.c request.c
 OBJS = $(SRCS:%.c=$(OBJ)/%.o)
 LIBFT = libft
 INCLUDE_LIBS = -I $(LIBFT)/include

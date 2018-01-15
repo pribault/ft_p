@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/13 18:16:47 by pribault          #+#    #+#             */
-/*   Updated: 2018/01/14 22:03:29 by pribault         ###   ########.fr       */
+/*   Updated: 2018/01/15 20:40:35 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,18 +24,6 @@ void	send_raw(t_client *client, char **cmd, size_t size)
 	enqueue_write(client, client->socket, cmd[1], header.size);
 }
 
-void	send_pwd_request(t_client *client, char **cmd, size_t size)
-{
-	t_header	header;
-
-	(void)cmd;
-	if (size != 1)
-		return (error(202, 0, NULL));
-	header.type = TYPE_PWD;
-	header.size = 0;
-	enqueue_write(client, client->socket, &header, sizeof(t_header));
-}
-
 void	treat_command(t_client *client, char **cmd, size_t size)
 {
 	if (!ft_strcmp(cmd[0], "quit") || !ft_strcmp(cmd[0], "exit"))
@@ -44,6 +32,8 @@ void	treat_command(t_client *client, char **cmd, size_t size)
 		send_raw(client, cmd, size);
 	else if (!ft_strcmp(cmd[0], "pwd"))
 		send_pwd_request(client, cmd, size);
+	else if (!ft_strcmp(cmd[0], "ls"))
+		send_ls_request(client, cmd, size);
 	else
 		error(200, 0, cmd[0]);
 }

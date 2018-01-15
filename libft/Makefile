@@ -22,10 +22,12 @@ SRC =	ft_joinf.c\
 		ft_atou.c\
 		ft_atof.c\
 		ft_bzero.c\
+		ft_execute.c\
 		ft_factorial.c\
 		ft_free_array.c\
 		ft_get_all_lines.c\
 		ft_get_next_line.c\
+		ft_implode.c\
 		ft_isalnum.c\
 		ft_isalpha.c\
 		ft_isascii.c\

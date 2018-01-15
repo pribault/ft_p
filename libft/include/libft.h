@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/03 16:13:23 by pribault          #+#    #+#             */
-/*   Updated: 2018/01/13 14:32:44 by pribault         ###   ########.fr       */
+/*   Updated: 2018/01/15 21:03:44 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ int					ft_atoi(char *str);
 int					ft_atoi_base(char *str, char *base);
 unsigned int		ft_atou(char *str);
 void				ft_bzero(void *s, size_t n);
+char				*ft_execute(char *file, char **arg, char **env);
 char				ft_get_all_lines(int fd, char **str);
 int					ft_get_next_line(int const fd, char **line);
 char				*ft_itoa(int n);
@@ -145,6 +146,7 @@ void				*ft_memset(void *b, int c, size_t len);
 void				**ft_alloc_array(size_t h, size_t w, size_t size);
 int					ft_arraylen(char **array);
 void				ft_free_array(void **array, size_t len);
+char				*ft_implode(char **array, char c);
 char				**ft_ls(char *name);
 
 /*

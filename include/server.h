@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/13 11:04:44 by pribault          #+#    #+#             */
-/*   Updated: 2018/01/14 20:56:17 by pribault         ###   ########.fr       */
+/*   Updated: 2018/01/15 20:51:21 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ typedef struct		s_client
 
 typedef struct		s_server
 {
+	char			**env;
 	int				socket;
 	int				protocol;
 	int				queue_max;
@@ -65,14 +66,6 @@ typedef struct		s_server
 	fd_set			out;
 	int				io_max;
 }					t_server;
-
-typedef struct		s_waiting
-{
-	t_header		*data;
-	size_t			size;
-	size_t			exp;
-	uint8_t			state;
-}					t_waiting;
 
 typedef void		(*t_function)(t_server*, t_client*, void*, size_t);
 
@@ -109,6 +102,8 @@ void				do_nothing(t_server *server, t_client *client,
 void				get_raw_text(t_server *server, t_client *client, void *msg,
 					size_t size);
 void				do_pwd(t_server *server, t_client *client, void *msg,
+					size_t size);
+void				do_ls(t_server *server, t_client *client, void *msg,
 					size_t size);
 
 extern t_server		*g_global;

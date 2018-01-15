@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/13 11:04:44 by pribault          #+#    #+#             */
-/*   Updated: 2018/01/14 18:26:09 by pribault         ###   ########.fr       */
+/*   Updated: 2018/01/15 20:51:49 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,11 +37,12 @@ void		my_sig(int sig)
 	exit(sig);
 }
 
-t_server	*init_server(void)
+t_server	*init_server(char **env)
 {
 	static t_server	server;
 
 	ft_bzero(&server, sizeof(t_server));
+	server.env = env;
 	server.socket = -1;
 	server.protocol = TCP;
 	server.port = 4242;
@@ -69,13 +70,13 @@ void		print_config(t_server *server)
 	ft_printf("\troot: \e[2m%s\e[0m\n", server->root);
 }
 
-int			main(int argc, char **argv)
+int			main(int argc, char **argv, char **env)
 {
 	t_server	*server;
 
 	atexit(&my_exit);
 	signal(SIGINT, &my_sig);
-	server = init_server();
+	server = init_server(env);
 	get_flags(server, argc, argv);
 	if (server->opt & VERBOSE)
 		print_config(server);
