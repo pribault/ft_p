@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/14 14:19:56 by pribault          #+#    #+#             */
-/*   Updated: 2018/01/14 21:19:12 by pribault         ###   ########.fr       */
+/*   Updated: 2018/01/15 08:39:04 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,11 @@ void	execute(t_server *server, t_client *client, t_header *msg)
 			g_state_machine[client->state][msg->type](server, client,
 				(void*)msg + sizeof(t_header), msg->size);
 		else
+		{
+			g_state_machine[client->state][0](server, client,
+				(void*)msg + sizeof(t_header), msg->size);
 			error(102, 0, &msg->type);
+		}
 	}
 	else
 		error(101, 0, NULL);
