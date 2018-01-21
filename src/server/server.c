@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/21 14:38:58 by pribault          #+#    #+#             */
-/*   Updated: 2018/01/21 17:05:12 by pribault         ###   ########.fr       */
+/*   Updated: 2018/01/21 19:33:28 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,12 +29,14 @@ void	server_init(t_server *server, int argc, char **argv, char **env)
 	server->env = env;
 	if (!(server->server = server_new()))
 		return (error(1, 1, NULL));
+	if (!(server->root = ft_getenv(env, "PWD")))
+		return (error(-1, 1, "cannot find PWD in environnement"));
 	server_set_callback(server->server, SERVER_CLIENT_ADD_CB, &add_client);
 	server_set_callback(server->server, SERVER_CLIENT_DEL_CB, &del_client);
 	server_set_callback(server->server, SERVER_MSG_RECV_CB, &msg_recv);
 	server_set_callback(server->server, SERVER_MSG_SEND_CB, &msg_send);
-	server_add_client_by_fd(server->server, 0);
 	server_attach_data(server->server, server);
+	server_add_client_by_fd(server->server, 0);
 	get_flags(server, argc, argv);
 }
 

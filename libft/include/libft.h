@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/03 16:13:23 by pribault          #+#    #+#             */
-/*   Updated: 2018/01/21 16:47:03 by pribault         ###   ########.fr       */
+/*   Updated: 2018/01/21 19:21:38 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -184,6 +184,7 @@ void				ft_vector_resize(t_vector *vector, size_t new_size);
 **	string functions
 */
 
+char				*ft_getenv(char **env, char *name);
 char				**ft_multisplit(char *str, char *sep);
 char				*ft_strcat(char *s1, const char *s2);
 char				*ft_strchr(const char *s, int c);

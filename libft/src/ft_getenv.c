@@ -1,40 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_implode.c                                       :+:      :+:    :+:   */
+/*   ft_getenv.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/01/15 20:22:33 by pribault          #+#    #+#             */
-/*   Updated: 2018/01/21 20:36:27 by pribault         ###   ########.fr       */
+/*   Created: 2018/01/21 19:10:15 by pribault          #+#    #+#             */
+/*   Updated: 2018/01/21 19:21:56 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_implode(char **array, char c)
+char	*ft_getenv(char **env, char *name)
 {
-	size_t	size;
+	size_t	len[2];
 	size_t	i;
-	char	*s;
 
-	if (!array)
+	if (!env || !name)
 		return (NULL);
-	size = 0;
-	i = (size_t)-1;
-	while (array[++i])
-		size += ft_strlen(array[i]);
-	if (!size)
-		return (ft_strdup(""));
-	if (!(s = malloc(sizeof(char) * (size + ft_arraylen(array)))))
-		return (NULL);
-	size = 0;
-	i = (size_t)-1;
-	while (array[++i])
+	i = ft_arraylen(env);
+	len[0] = ft_strlen(name);
+	while (--i != (size_t)-1)
 	{
-		ft_memcpy(s + size + i, array[i], ft_strlen(array[i]));
-		size += ft_strlen(array[i]);
-		s[size + i] = c;
+		len[1] = ft_strlen(env[i]);
+		if (len[1] > len[0] &&
+			!ft_strncmp(env[i], name, len[0]) &&
+			env[i][len[0]] == '=')
+			return (&env[i][len[0] + 1]);
 	}
-	return (s);
+	return (NULL);
 }

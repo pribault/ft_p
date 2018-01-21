@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/13 11:04:44 by pribault          #+#    #+#             */
-/*   Updated: 2018/01/21 16:44:31 by pribault         ###   ########.fr       */
+/*   Updated: 2018/01/21 19:35:01 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,20 @@
 # include "libft.h"
 # include <errno.h>
 
+typedef struct	s_data
+{
+	char		*pwd;
+	void		*data;
+	size_t		size;
+	size_t		expected;
+}				t_data;
+
 typedef struct	s_server
 {
 	void		*server;
 	char		**env;
 	char		*port;
+	char		*root;
 }				t_server;
 
 void			error(int error, int state, void *param);

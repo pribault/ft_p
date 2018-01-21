@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/19 10:31:22 by pribault          #+#    #+#             */
-/*   Updated: 2018/01/21 13:45:27 by pribault         ###   ########.fr       */
+/*   Updated: 2018/01/21 19:06:59 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ void		server_poll_events(t_server *server)
 	int		fd_max;
 	int		ret;
 
-	if (!server || !(server->opt & SERVER_RUNNING))
+	if (!server)
 		return ;
 	set_sets(server, (fd_set*)&set, &fd_max);
 	if ((ret = select(fd_max + 1, &set[0], &set[1], &set[2],

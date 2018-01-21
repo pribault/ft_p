@@ -6,7 +6,8 @@ INCLUDE = client.h protocol.h
 INCLUDES = $(INCLUDE:%.h=$(INC)/%.h)
 OBJ = src/client_obj
 SRC = src/client
-SRCS =	client.c
+SRCS =	client.c flags.c error.c\
+		clients.c message.c commands.c
 OBJS = $(SRCS:%.c=$(OBJ)/%.o)
 LIBFT = libft
 LIBSOCKET = libsocket

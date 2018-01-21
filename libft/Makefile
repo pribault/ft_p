@@ -27,6 +27,7 @@ SRC =	ft_joinf.c\
 		ft_free_array.c\
 		ft_get_all_lines.c\
 		ft_get_next_line.c\
+		ft_getenv.c\
 		ft_implode.c\
 		ft_isalnum.c\
 		ft_isalpha.c\

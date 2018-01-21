@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/15 20:52:30 by pribault          #+#    #+#             */
-/*   Updated: 2018/01/15 21:36:07 by pribault         ###   ########.fr       */
+/*   Updated: 2018/01/21 20:43:30 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ char	*ft_execute(char *file, char **arg, char **env)
 	int		ret;
 
 	s = NULL;
-	if (!arg || ! env || ! file || pipe(fd) < 0 || (pid = fork()) < 0)
+	if (!arg || !env || !file || pipe(fd) < 0 || (pid = fork()) < 0)
 		return (NULL);
 	if (!pid)
 	{

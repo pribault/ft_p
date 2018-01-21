@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/20 16:33:12 by pribault          #+#    #+#             */
-/*   Updated: 2018/01/21 11:16:54 by pribault         ###   ########.fr       */
+/*   Updated: 2018/01/21 19:04:46 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,8 @@ static int	iter_on_addresses(t_server *server, t_client *client,
 	return (0);
 }
 
-int			server_connect(t_server *server, char *address, char *port)
+int			server_connect(t_server *server, t_protocol protocol,
+			char *address, char *port)
 {
 	t_client		client;
 	struct addrinfo	hints;
@@ -48,10 +49,10 @@ int			server_connect(t_server *server, char *address, char *port)
 	ft_bzero(&hints, sizeof(struct addrinfo));
 	ft_bzero(&client, sizeof(t_client));
 	hints.ai_family = AF_INET;
-	hints.ai_socktype = server->protocol;
+	hints.ai_socktype = protocol;
 	result = NULL;
 	if (getaddrinfo(address, port, &hints, &result) != 0 ||
-		(client.fd = socket(AF_INET, server->protocol, 0)) < 0)
+		(client.fd = socket(AF_INET, protocol, 0)) < 0)
 	{
 		if (result)
 			freeaddrinfo(result);
