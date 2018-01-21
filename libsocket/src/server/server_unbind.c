@@ -1,20 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   client.c                                           :+:      :+:    :+:   */
+/*   server_unbind.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/01/21 14:38:53 by pribault          #+#    #+#             */
-/*   Updated: 2018/01/21 15:00:08 by pribault         ###   ########.fr       */
+/*   Created: 2018/01/21 10:46:26 by pribault          #+#    #+#             */
+/*   Updated: 2018/01/21 10:55:33 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "client.h"
+#include "server.h"
 
-int	main(int argc, char **argv, char **env)
+void	server_unbind(t_server *server)
 {
-	t_client	client;
-
-	return (0);
+	if (!server || !(server->opt & SERVER_BIND))
+		return ;
+	server->opt &= ~SERVER_BIND;
+	close(server->sockfd);
+	return ;
 }

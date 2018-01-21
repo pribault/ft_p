@@ -1,20 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   client.c                                           :+:      :+:    :+:   */
+/*   clients.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/01/21 14:38:53 by pribault          #+#    #+#             */
-/*   Updated: 2018/01/21 15:00:08 by pribault         ###   ########.fr       */
+/*   Created: 2018/01/21 16:28:35 by pribault          #+#    #+#             */
+/*   Updated: 2018/01/21 17:00:37 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "client.h"
+#include "server.h"
 
-int	main(int argc, char **argv, char **env)
+void	add_client(void *server, void *client)
 {
-	t_client	client;
+	(void)server;
+	(void)client;
+	ft_printf("client [%d] added\n", server_get_client_fd(client));
+}
 
-	return (0);
+void	del_client(void *server, void *client)
+{
+	(void)server;
+	(void)client;
+	ft_printf("client [%d] removed\n", server_get_client_fd(client));
 }

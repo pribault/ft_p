@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/03 16:13:23 by pribault          #+#    #+#             */
-/*   Updated: 2018/01/15 21:03:44 by pribault         ###   ########.fr       */
+/*   Updated: 2018/01/21 16:47:03 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@
 # define VECTOR_SIZE	4096
 # define BUFF_SIZE 		4096
 # define COS_MAX		4096
+
+# define WHITESPACES	"\a\b\t\n\v\f\r "
 
 /*
 ** structures

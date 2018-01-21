@@ -1,20 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   client.c                                           :+:      :+:    :+:   */
+/*   server_client_attach_data.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/01/21 14:38:53 by pribault          #+#    #+#             */
-/*   Updated: 2018/01/21 15:00:08 by pribault         ###   ########.fr       */
+/*   Created: 2018/01/20 13:46:52 by pribault          #+#    #+#             */
+/*   Updated: 2018/01/20 13:47:45 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "client.h"
+#include "server.h"
 
-int	main(int argc, char **argv, char **env)
+void	server_client_attach_data(t_client *client, void *data)
 {
-	t_client	client;
-
-	return (0);
+	if (client)
+		client->data = data;
 }

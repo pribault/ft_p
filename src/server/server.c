@@ -5,66 +5,53 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/01/13 11:04:44 by pribault          #+#    #+#             */
-/*   Updated: 2018/01/14 13:46:14 by pribault         ###   ########.fr       */
+/*   Created: 2018/01/21 14:38:58 by pribault          #+#    #+#             */
+/*   Updated: 2018/01/21 17:05:12 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "server.h"
 
-void	run_server_tcp(t_server *server)
+void	my_exit(void)
 {
-	int				r;
+	ft_printf("exiting...\n");
+}
 
+void	my_sig(int sig)
+{
+	ft_printf("receiving signal %d\n", sig);
+	exit(1);
+}
+
+void	server_init(t_server *server, int argc, char **argv, char **env)
+{
+	ft_bzero(server, sizeof(t_server));
+	server->env = env;
+	if (!(server->server = server_new()))
+		return (error(1, 1, NULL));
+	server_set_callback(server->server, SERVER_CLIENT_ADD_CB, &add_client);
+	server_set_callback(server->server, SERVER_CLIENT_DEL_CB, &del_client);
+	server_set_callback(server->server, SERVER_MSG_RECV_CB, &msg_recv);
+	server_set_callback(server->server, SERVER_MSG_SEND_CB, &msg_send);
+	server_add_client_by_fd(server->server, 0);
+	server_attach_data(server->server, server);
+	get_flags(server, argc, argv);
+}
+
+int		main(int argc, char **argv, char **env)
+{
+	t_server	server;
+
+	atexit(&my_exit);
+	signal(SIGINT, &my_sig);
+	server_init(&server, argc, argv, env);
+	if (!server.port)
+	{
+		print_usage();
+		return (1);
+	}
+	server_start(server.server, TCP, server.port);
 	while (1)
-	{
-		server->io_max = 0;
-		set_input(server);
-		set_output(server);
-		if ((r = select(server->io_max + 1, &server->in, &server->out, NULL,
-			&server->timeout)) < 0)
-			error(0, 0, NULL);
-		else if (r > 0)
-		{
-			read_from_terminal(server, &r);
-			read_from_socket(server, &r);
-			read_input(server, &r);
-			write_output(server, &r);
-		}
-	}
-}
-
-void	run_server_udp(t_server *server)
-{
-	(void)server;
-	error(-1, 1, "udp not implemented, dabisous <3");
-}
-
-void	run_server(t_server *server)
-{
-	if (server->protocol == TCP)
-		run_server_tcp(server);
-	else
-		run_server_udp(server);
-}
-
-void	start_server(t_server *server)
-{
-	struct sockaddr_in	addr;
-	int					n;
-
-	if (server->protocol == TCP)
-	{
-		if ((server->socket = socket(AF_INET, server->protocol, 0)) < 0)
-			error(0, 1, NULL);
-		addr.sin_family = AF_INET;
-		addr.sin_port = htons(server->port);
-		addr.sin_addr.s_addr = INADDR_ANY;
-		n = 1;
-		if (setsockopt(server->socket, SOL_SOCKET, SO_REUSEADDR, &n,
-			sizeof(int)) < 0 ||
-			bind(server->socket, (void*)&addr, sizeof(addr)) < 0 ||
-			listen(server->socket, server->queue_max) < 0)
-			error(0, 1, NULL);
-	}
+		server_poll_events(server.server);
+	return (0);
 }

@@ -5,94 +5,36 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/01/14 14:19:56 by pribault          #+#    #+#             */
-/*   Updated: 2018/01/14 21:19:12 by pribault         ###   ########.fr       */
+/*   Created: 2018/01/21 16:32:55 by pribault          #+#    #+#             */
+/*   Updated: 2018/01/21 17:01:06 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "server.h"
 
-void	do_nothing(t_server *server, t_client *client, void *msg, size_t size)
+void	msg_recv(void *server, void *client, t_msg *msg)
+{
+	char	*s;
+	int		fd;
+
+	fd = server_get_client_fd(client);
+	if (fd == 0)
+	{
+		if (!(s = ft_memdup(msg->ptr, msg->size)))
+			return (error(1, 1, NULL));
+		s[msg->size - 1] = '\0';
+		treat_command(server_get_data(server), s);
+		free(s);
+	}
+	else
+		ft_printf("message received from [%d]\n",
+		server_get_client_fd(client));
+}
+
+void	msg_send(void *server, void *client, t_msg *msg)
 {
 	(void)server;
 	(void)client;
 	(void)msg;
-	(void)size;
-}
-
-void	execute(t_server *server, t_client *client, t_header *msg)
-{
-	if (msg->type < TYPE_MAX)
-	{
-		ft_printf("[%s] executing %s\n",
-			inet_ntoa(((struct sockaddr_in *)&client->addr)->sin_addr),
-			g_types_name[msg->type]);
-		if (g_state_machine[client->state][msg->type])
-			g_state_machine[client->state][msg->type](server, client,
-				(void*)msg + sizeof(t_header), msg->size);
-		else
-			error(102, 0, &msg->type);
-	}
-	else
-		error(101, 0, NULL);
-}
-
-void	enter_wait_state(t_client *client, void *data, size_t size)
-{
-	t_waiting	waiting;
-
-	waiting.state = client->state;
-	waiting.size = size;
-	if (!(waiting.data = ft_memdup(data, size)))
-		error(1, 1, NULL);
-	waiting.exp = waiting.data->size + sizeof(t_header);
-	if (!(client->data = ft_memdup(&waiting, sizeof(t_waiting))))
-		error(1, 1, NULL);
-	client->state = STATE_WAITING;
-}
-
-void	wait_state(t_server *server, t_client *client, void *data, size_t size)
-{
-	t_waiting	*waiting;
-
-	waiting = client->data;
-	if (waiting->size + size < waiting->exp)
-	{
-		if (!(waiting->data = realloc(waiting->data, waiting->size + size)))
-			error(1, 1, NULL);
-		ft_memcpy(waiting->data + waiting->size, data, size);
-		waiting->size += size;
-	}
-	else
-	{
-		if (!(waiting->data = realloc(waiting->data, waiting->exp)))
-			error(1, 1, NULL);
-		ft_memcpy((void*)waiting->data + waiting->size, data,
-			waiting->exp - waiting->size);
-		client->state = waiting->state;
-		client->data = NULL;
-		execute(server, client, waiting->data);
-		treat_message(server, client, data + waiting->exp - waiting->size,
-			size + waiting->size - waiting->exp);
-		free(waiting);
-	}
-}
-
-void	treat_message(t_server *server, t_client *client,
-		t_header *msg, size_t size)
-{
-	if (client->state == STATE_WAITING)
-		wait_state(server, client, msg, size);
-	else if (size >= sizeof(t_header))
-	{
-		if (msg->size <= size - sizeof(t_header))
-			execute(server, client, msg);
-		else if (msg->type < TYPE_MAX)
-			enter_wait_state(client, msg, size);
-		else
-			error(102, 0, &msg->type);
-	}
-	else if (size != 0)
-		error(100, 0, NULL);
-	free(msg);
+	ft_printf("message sended to [%d]\n", server_get_client_fd(client));
 }

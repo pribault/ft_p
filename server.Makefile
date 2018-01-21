@@ -6,14 +6,13 @@ INCLUDE = server.h protocol.h
 INCLUDES = $(INCLUDE:%.h=$(INC)/%.h)
 OBJ = src/server_obj
 SRC = src/server
-SRCS =	main.c flags.c flags_2.c\
-		error.c server.c globals.c\
-		input.c output.c message.c\
-		command_line.c action.c
+SRCS =	server.c error.c flags.c\
+		clients.c message.c commands.c
 OBJS = $(SRCS:%.c=$(OBJ)/%.o)
 LIBFT = libft
-INCLUDE_LIBS = -I $(LIBFT)/include
-COMPILE_LIBS = -L $(LIBFT) -lft
+LIBSOCKET = libsocket
+INCLUDE_LIBS = -I $(LIBFT)/include -I $(LIBSOCKET)/include
+COMPILE_LIBS = -L $(LIBFT) -lft -L $(LIBSOCKET) -lsocket
 
 .PHONY: all clean fclean re export
 
@@ -36,9 +35,11 @@ $(NAME): $(OBJS)
 
 clean:
 	@rm -f $(OBJS)
+	@echo "\033[0m\033[38;5;45mobject files removed\033[0m"
 
 fclean: clean
 	@rm -f $(NAME)
+	@echo "\033[0m\033[38;5;87m$(NAME) removed\033[0m"
 
 norme:
 	@norminette $(OBJS:%.o=%.c) $(INCLUDES)

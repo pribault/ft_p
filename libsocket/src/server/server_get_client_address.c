@@ -1,20 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   client.c                                           :+:      :+:    :+:   */
+/*   server_get_client_address.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/01/21 14:38:53 by pribault          #+#    #+#             */
-/*   Updated: 2018/01/21 15:00:08 by pribault         ###   ########.fr       */
+/*   Created: 2018/01/20 13:33:21 by pribault          #+#    #+#             */
+/*   Updated: 2018/01/20 13:37:55 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "client.h"
+#include "server.h"
 
-int	main(int argc, char **argv, char **env)
+char	*server_get_client_address(t_client *client)
 {
-	t_client	client;
-
-	return (0);
+	return ((client) ?
+		inet_ntoa(((struct sockaddr_in*)&client->addr)->sin_addr) :
+		NULL);
 }

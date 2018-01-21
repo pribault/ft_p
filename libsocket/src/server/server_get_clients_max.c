@@ -1,20 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   client.c                                           :+:      :+:    :+:   */
+/*   server_get_clients_max.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/01/21 14:38:53 by pribault          #+#    #+#             */
-/*   Updated: 2018/01/21 15:00:08 by pribault         ###   ########.fr       */
+/*   Created: 2018/01/20 14:37:48 by pribault          #+#    #+#             */
+/*   Updated: 2018/01/20 14:47:39 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "client.h"
+#include "server.h"
 
-int	main(int argc, char **argv, char **env)
+size_t	server_get_clients_max(t_server *server)
 {
-	t_client	client;
-
-	return (0);
+	return ((server) ? server->clients_max : 0);
 }
