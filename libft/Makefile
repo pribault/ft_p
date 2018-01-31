@@ -1,6 +1,6 @@
 NAME = libft.a
 LIBSO = $(NAME:%.a=%.so)
-CC = gcc
+CC = clang
 SRC =	ft_joinf.c\
 		ft_printj.c\
 		number_join.c\
@@ -16,16 +16,19 @@ SRC =	ft_joinf.c\
 		long.c\
 		other.c\
 		ft_abs.c\
+		ft_add_errors.c\
 		ft_alloc_array.c\
 		ft_arraylen.c\
 		ft_atoi.c\
 		ft_atou.c\
 		ft_atof.c\
 		ft_bzero.c\
+		ft_error.c\
 		ft_execute.c\
 		ft_factorial.c\
 		ft_free_array.c\
 		ft_get_all_lines.c\
+		ft_get_flags.c\
 		ft_get_next_line.c\
 		ft_getenv.c\
 		ft_implode.c\
@@ -118,10 +121,12 @@ OBJ = $(SRC:%.c=obj/%.o)
 FLAGS = -Wall -Wextra
 INCLUDES =	libft.h ft_printf.h ft_joinf.h malloc.h prototypes.h structs.h
 INCLUDE = $(INCLUDES:%.h=include/%.h)
+JOBS = 4
 
 .PHONY: clean fclean all re norme
 
-all: $(NAME)
+all:
+	@make $(NAME) -j$(JOBS)
 
 obj:
 	@mkdir obj
@@ -129,29 +134,24 @@ obj:
 obj/%.o: src/%.c $(INCLUDE) | obj
 	@echo "\033[0m🌶  \033[38;5;226mmaking $@\033[0m"
 	@$(CC) $(FLAGS) -fPIC -I include -o $@ -c $<
-	@echo "\033[1A\033[K\033[0m🌶  \033[38;5;226m$@ done\033[0m"
 
 $(LIBSO): $(OBJ)
 	@echo "\033[0m🦁  \033[38;5;214mmaking $@\033[0m"
 	@$(CC) $(FLAGS) -shared -o $(LIBSO) $(OBJ)
-	@echo "\033[1A\033[K\033[0m🦁  \033[38;5;214m$@ done\033[0m"
 
 $(NAME): $(OBJ)
 	@echo "\033[0m🐹  \033[38;5;214mmaking $@\033[0m"
 	@ar rc $(NAME) $(OBJ)
 	@ranlib $(NAME)
-	@echo "\033[1A\033[K\033[0m🐹  \033[38;5;214m$@ done\033[0m"
 
 clean:
 	@echo "\033[0m\033[38;5;45mremoving object files\033[0m"
 	@rm -rf obj
-	@echo "\033[1A\033[K\033[0m\033[38;5;45mobject files removed\033[0m"
 
 fclean: clean
 	@echo "\033[0m\033[38;5;87mremoving $(NAME) and $(LIBSO)\033[0m"
 	@rm -f $(NAME)
 	@rm -f $(LIBSO)
-	@echo "\033[1A\033[K\033[0m\033[38;5;87m$(NAME) and $(LIBSO) removed\033[0m"
 
 norme:
 	@norminette $(OBJ:%.o=%.c) $(INCLUDE)

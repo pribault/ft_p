@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/03 16:13:23 by pribault          #+#    #+#             */
-/*   Updated: 2018/01/21 19:21:38 by pribault         ###   ########.fr       */
+/*   Updated: 2018/01/31 15:24:08 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@
 # include <string.h>
 # include <fcntl.h>
 # include <dirent.h>
+# include <sys/wait.h>
+# include <inttypes.h>
 # include "ft_printf.h"
 # include "malloc.h"
 
@@ -31,9 +33,12 @@
 
 # define VECTOR_SIZE	4096
 # define BUFF_SIZE 		4096
-# define COS_MAX		4096
 
 # define WHITESPACES	"\a\b\t\n\v\f\r "
+
+# define ERROR_EXIT		(1 << 0)
+
+# define FLAG_PARAM_MAX	4
 
 /*
 ** structures
@@ -60,10 +65,53 @@ typedef struct		s_gnl_stack
 	int				fd;
 }					t_gnl_stack;
 
+typedef enum		s_param_type
+{
+	PARAM_STR,
+	PARAM_INTEGER,
+	PARAM_UNSIGNED,
+	PARAM_FLOAT,
+	PARAM_MAX
+}					t_param_type;
+
+typedef struct		s_flag
+{
+	char			*str;
+	int				n_params;
+	t_param_type	params_type[FLAG_PARAM_MAX];
+	void			(*function)(void *main, char **args, int n);
+}					t_flag;
+
+typedef enum		e_default_error
+{
+	ERROR_ALLOCATION,
+	ERROR_FILE,
+	ERROR_UNKNOWN,
+	ERROR_STR,
+	ERROR_INTEGER,
+	ERROR_UNSIGNED,
+	ERROR_FLOAT
+}					t_default_error;
+
+typedef struct		s_error
+{
+	int				error_code;
+	char			*format;
+	uint8_t			opt;
+}					t_error;
+
+typedef enum		e_bool
+{
+	FT_FALSE,
+	FT_TRUE
+}					t_bool;
+
 /*
 ** prototypes
 */
 
+void				ft_error(int fd, int error, uint64_t param);
+void				ft_add_errors(t_error *array);
 double				ft_atof(char *str);
 int					ft_atoi(char *str);
 int					ft_atoi_base(char *str, char *base);
@@ -216,5 +264,12 @@ char				*ft_strstr(const char *big, const char *little);
 char				*ft_strsub(char const *s, unsigned int start, size_t len);
 char				*ft_strtrim(char const *s);
 void				ft_swap(void **a, void **b);
+
+/*
+**	global variables
+*/
+
+extern t_error		g_default_errors[];
+extern t_error		*g_errors;
 
 #endif
