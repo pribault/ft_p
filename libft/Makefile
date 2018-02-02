@@ -28,6 +28,7 @@ SRC =	ft_joinf.c\
 		ft_factorial.c\
 		ft_free_array.c\
 		ft_get_all_lines.c\
+		ft_get_flag_array.c\
 		ft_get_flags.c\
 		ft_get_next_line.c\
 		ft_getenv.c\
@@ -36,9 +37,12 @@ SRC =	ft_joinf.c\
 		ft_isalpha.c\
 		ft_isascii.c\
 		ft_isdigit.c\
+		ft_isfloat.c\
+		ft_isinteger.c\
 		ft_isnumeric.c\
 		ft_isprime.c\
 		ft_isprint.c\
+		ft_isunsigned.c\
 		ft_itoa.c\
 		ft_ls.c\
 		ft_lstadd.c\

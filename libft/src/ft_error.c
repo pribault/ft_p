@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/31 13:15:41 by pribault          #+#    #+#             */
-/*   Updated: 2018/01/31 15:21:47 by pribault         ###   ########.fr       */
+/*   Updated: 2018/02/02 13:16:46 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,17 @@ t_error	g_default_errors[] =
 	{ERROR_INTEGER, "'%s' is not a valid integer", 0},
 	{ERROR_UNSIGNED, "'%s' is not a valid unsigned", 0},
 	{ERROR_FLOAT, "'%s' is not a valid float", 0},
+	{ERROR_CUSTOM, "%s", 0},
+	{ERROR_NOT_ENOUGHT_PARAM, "not enought param for '%s'", 0},
+	{ERROR_TOO_MUSH_PARAMS, "n_params cannot exceed FLAG_PARAM_MAX", 0},
+	{ERROR_UNKNOW_PARAMETER_TYPE, "unknown parameter type '%ld'", 0},
+	{ERROR_UNKNOWN_PARAMETER, "unknown parameter '%s'", 0},
+	{ERROR_UNKNOWN_SHORT_FLAG, "unknown short flag '%c'", 0},
+	{ERROR_UNKNOWN_LONG_FLAG, "unknown long flag '%s'", 0},
 	{0, NULL, 0}
 };
 
-t_error	*g_errors = NULL;
+t_error	*g_ft_errors = NULL;
 
 static int	init_array(void)
 {
@@ -33,25 +40,25 @@ static int	init_array(void)
 	i = (size_t)-1;
 	while (g_default_errors[++i].format)
 		;
-	if (!(g_errors = malloc(sizeof(t_error) * (i + 1))))
+	if (!(g_ft_errors = malloc(sizeof(t_error) * (i + 1))))
 		return (0);
-	ft_memcpy(g_errors, &g_default_errors, sizeof(t_error) * (i + 1));
+	ft_memcpy(g_ft_errors, &g_default_errors, sizeof(t_error) * (i + 1));
 	return (1);
 }
 
-void		ft_error(int fd, int error, uint64_t param)
+void		ft_error(int fd, int error, void *param)
 {
 	char	*format;
 	char	*s;
 	size_t	i;
 
-	if (!g_errors && !init_array())
+	if (!g_ft_errors && !init_array())
 		return ;
 	i = (size_t)-1;
-	while (g_errors[++i].format)
-		if (error == g_errors[i].error_code && (format =
+	while (g_ft_errors[++i].format)
+		if (error == g_ft_errors[i].error_code && (format =
 			ft_joinf("\e[0m\e[38;5;124m\e[4mError:\e[0m %s\e[0m\n",
-			g_errors[i].format)))
+			g_ft_errors[i].format)))
 		{
 			if ((s = ft_joinf(format, param)))
 			{
@@ -59,7 +66,7 @@ void		ft_error(int fd, int error, uint64_t param)
 				free(s);
 			}
 			free(format);
-			if (g_errors[i].opt & ERROR_EXIT)
+			if (g_ft_errors[i].opt & ERROR_EXIT)
 				exit(1);
 		}
 }

@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/03 16:13:23 by pribault          #+#    #+#             */
-/*   Updated: 2018/01/31 15:24:08 by pribault         ###   ########.fr       */
+/*   Updated: 2018/02/02 14:25:40 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,13 +74,26 @@ typedef enum		s_param_type
 	PARAM_MAX
 }					t_param_type;
 
-typedef struct		s_flag
+typedef struct		s_short_flag
+{
+	char			c;
+	void			(*function)(void *data);
+}					t_short_flag;
+
+typedef struct		s_long_flag
 {
 	char			*str;
 	int				n_params;
 	t_param_type	params_type[FLAG_PARAM_MAX];
-	void			(*function)(void *main, char **args, int n);
-}					t_flag;
+	void			(*function)(char **args, int n, void *data);
+}					t_long_flag;
+
+typedef struct		s_flags
+{
+	t_short_flag	*shorts;
+	t_long_flag		*longs;
+	void			(*def)(char *s, void *data);
+}					t_flags;
 
 typedef enum		e_default_error
 {
@@ -90,7 +103,15 @@ typedef enum		e_default_error
 	ERROR_STR,
 	ERROR_INTEGER,
 	ERROR_UNSIGNED,
-	ERROR_FLOAT
+	ERROR_FLOAT,
+	ERROR_CUSTOM,
+	ERROR_NOT_ENOUGHT_PARAM,
+	ERROR_TOO_MUSH_PARAMS,
+	ERROR_UNKNOW_PARAMETER_TYPE,
+	ERROR_UNKNOWN_PARAMETER,
+	ERROR_UNKNOWN_SHORT_FLAG,
+	ERROR_UNKNOWN_LONG_FLAG,
+	ERROR_FT_MAX
 }					t_default_error;
 
 typedef struct		s_error
@@ -99,6 +120,12 @@ typedef struct		s_error
 	char			*format;
 	uint8_t			opt;
 }					t_error;
+
+typedef struct		s_enum_func
+{
+	int				id;
+	int				(*function)(void*);
+}					t_enum_func;
 
 typedef enum		e_bool
 {
@@ -110,8 +137,12 @@ typedef enum		e_bool
 ** prototypes
 */
 
-void				ft_error(int fd, int error, uint64_t param);
+void				ft_error(int fd, int error, void *param);
 void				ft_add_errors(t_error *array);
+void				ft_get_flags(int argc, char **argv, t_flags *flags,
+					void *data);
+t_flags				*ft_get_flag_array(t_short_flag *chars, t_long_flag *strs,
+					void (*def)(char*, void*));
 double				ft_atof(char *str);
 int					ft_atoi(char *str);
 int					ft_atoi_base(char *str, char *base);
@@ -156,10 +187,13 @@ int					ft_isalnum(int c);
 int					ft_isalpha(int c);
 int					ft_isascii(int c);
 int					ft_isdigit(int c);
+int					ft_isfloat(char *s);
+int					ft_isinteger(char *s);
 int					ft_isnumeric(char *s);
 char				ft_isof(int c, char *str);
 int					ft_isprime(int n);
 int					ft_isprint(int c);
+int					ft_isunsigned(char *s);
 
 /*
 **	maths functions
@@ -270,6 +304,6 @@ void				ft_swap(void **a, void **b);
 */
 
 extern t_error		g_default_errors[];
-extern t_error		*g_errors;
+extern t_error		*g_ft_errors;
 
 #endif
