@@ -16,6 +16,7 @@
 # include "libsocket.h"
 # include "libft.h"
 # include <errno.h>
+# include <signal.h>
 
 typedef struct	s_client
 {

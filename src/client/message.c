@@ -6,11 +6,11 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/21 16:32:55 by pribault          #+#    #+#             */
-/*   Updated: 2018/01/21 20:41:14 by pribault         ###   ########.fr       */
+/*   Updated: 2018/02/02 15:51:06 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "server.h"
+#include "client.h"
 
 void	msg_recv(void *server, void *client, t_msg *msg)
 {

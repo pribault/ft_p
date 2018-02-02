@@ -12,7 +12,7 @@ OBJS = $(SRCS:%.c=$(OBJ)/%.o)
 LIBFT = libft
 LIBSOCKET = libsocket
 INCLUDE_LIBS = -I $(LIBFT)/include -I $(LIBSOCKET)/include
-COMPILE_LIBS = -L $(LIBFT) -lft -L $(LIBSOCKET) -lsocket
+COMPILE_LIBS = -L $(LIBSOCKET) -lsocket -L $(LIBFT) -lft
 
 .PHONY: all clean fclean re export
 
@@ -36,7 +36,7 @@ $(NAME): $(OBJS)
 	@echo "\033[1A\033[K\033[38;5;125m🐼  $(NAME) done\033[0m"
 
 clean:
-	@rm -f $(OBJS)
+	@rm -rf $(OBJ)
 	@echo "\033[0m\033[38;5;45mobject files removed\033[0m"
 
 fclean: clean

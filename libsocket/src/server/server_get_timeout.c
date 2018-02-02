@@ -1,19 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   commands.c                                         :+:      :+:    :+:   */
+/*   server_get_timeout.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/01/21 16:43:12 by pribault          #+#    #+#             */
-/*   Updated: 2018/02/02 16:15:16 by pribault         ###   ########.fr       */
+/*   Created: 2018/02/02 16:06:27 by pribault          #+#    #+#             */
+/*   Updated: 2018/02/02 16:08:50 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "server.h"
 
-void	treat_command(t_server *server, char *cmd)
+struct timeval	server_get_timeout(t_server *server)
 {
-	(void)server;
-	(void)cmd;
+	return ((server) ? server->timeout : (struct timeval){0, 0});
 }

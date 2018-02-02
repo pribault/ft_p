@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/21 16:32:55 by pribault          #+#    #+#             */
-/*   Updated: 2018/01/21 20:23:03 by pribault         ###   ########.fr       */
+/*   Updated: 2018/02/02 15:42:44 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	msg_recv(void *server, void *client, t_msg *msg)
 	if (fd == 0)
 	{
 		if (!(s = ft_memdup(msg->ptr, msg->size)))
-			return (error(1, 1, NULL));
+			return (ft_error(2, ERROR_ALLOCATION, NULL));
 		s[msg->size - 1] = '\0';
 		treat_command(server_get_data(server), s);
 		free(s);

@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/03 16:13:23 by pribault          #+#    #+#             */
-/*   Updated: 2018/02/02 14:25:40 by pribault         ###   ########.fr       */
+/*   Updated: 2018/02/02 15:57:06 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,9 @@
 
 # define WHITESPACES	"\a\b\t\n\v\f\r "
 
-# define ERROR_EXIT		(1 << 0)
+# define BYTE(x)		((1 << x))
+
+# define ERROR_EXIT		BYTE(0)
 
 # define FLAG_PARAM_MAX	4
 

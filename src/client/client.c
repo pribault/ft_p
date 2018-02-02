@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/21 14:38:53 by pribault          #+#    #+#             */
-/*   Updated: 2018/01/21 19:06:10 by pribault         ###   ########.fr       */
+/*   Updated: 2018/01/22 17:21:41 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ int		main(int argc, char **argv, char **env)
 	}
 	if (!server_connect(client.server, TCP, client.address, client.port))
 		error(4, 1, &client);
+	server_set_clients_max(client.server, 0);
 	while (1)
 		server_poll_events(client.server);
 	return (0);

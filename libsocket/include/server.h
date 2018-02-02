@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/18 22:51:48 by pribault          #+#    #+#             */
-/*   Updated: 2018/01/21 20:43:05 by pribault         ###   ########.fr       */
+/*   Updated: 2018/02/02 16:08:12 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,6 +154,9 @@ void				server_set_clients_max(t_server *server, size_t max);
 size_t				server_get_clients_max(t_server *server);
 int					server_connect(t_server *server, t_protocol protocol,
 					char *address, char *port);
+void				server_set_timeout(t_server *server,
+					struct timeval timeout);
+struct timeval		server_get_timeout(t_server *server);
 
 /*
 **	private functions, used for internal management

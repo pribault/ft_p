@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/31 12:51:11 by pribault          #+#    #+#             */
-/*   Updated: 2018/02/02 15:20:43 by pribault         ###   ########.fr       */
+/*   Updated: 2018/02/02 15:50:01 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static void	ft_get_short_flag(char c, t_short_flag *flags, void *data)
 		return ;
 	while (flags[++i].function)
 		if (flags[i].c == c)
-			return (flags[i].function(data));
+			return ((flags[i].function) ? flags[i].function(data) : (void)0);
 	ft_error(2, ERROR_UNKNOWN_SHORT_FLAG, (void*)(x = c));
 }
 
@@ -58,7 +58,8 @@ static int	ft_test_long_flag(t_long_flag *flag, char **argv)
 			ft_error(2, ERROR_UNKNOW_PARAMETER_TYPE, (void*)(x = type));
 			boolean = FT_FALSE;
 		}
-		else if (!g_test_func[type].function(argv[j]))
+		else if (g_test_func[type].function &&
+			!g_test_func[type].function(argv[j]))
 		{
 			ft_error(2, g_error_codes[type], argv[j]);
 			boolean = FT_FALSE;
