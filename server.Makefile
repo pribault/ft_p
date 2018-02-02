@@ -6,7 +6,7 @@ INCLUDE = server.h protocol.h
 INCLUDES = $(INCLUDE:%.h=$(INC)/%.h)
 OBJ = src/server_obj
 SRC = src/server
-SRCS =	server.c flags.c\
+SRCS =	server.c flags.c flags_2.c\
 		clients.c message.c commands.c
 OBJS = $(SRCS:%.c=$(OBJ)/%.o)
 LIBFT = libft
