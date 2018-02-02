@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/13 11:04:44 by pribault          #+#    #+#             */
-/*   Updated: 2018/02/02 16:12:55 by pribault         ###   ########.fr       */
+/*   Updated: 2018/02/02 16:30:38 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 # include <errno.h>
 # include <signal.h>
 
-#define OPT_VERBOSE	BYTE(0)
+# define OPT_VERBOSE	BYTE(0)
 
 typedef struct	s_data
 {

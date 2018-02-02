@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/21 16:32:55 by pribault          #+#    #+#             */
-/*   Updated: 2018/02/02 15:42:44 by pribault         ###   ########.fr       */
+/*   Updated: 2018/02/02 16:38:53 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,16 +28,17 @@ void	msg_recv(void *server, void *client, t_msg *msg)
 	}
 	else
 	{
-		ft_printf("message received from [%d]:\n",
-		server_get_client_fd(client));
+		if (((t_server*)server_get_data(server))->opt & OPT_VERBOSE)
+			ft_printf("message received from [%d]:\n",
+			server_get_client_fd(client));
 		ft_memdump(msg->ptr, msg->size);
 	}
 }
 
 void	msg_send(void *server, void *client, t_msg *msg)
 {
-	(void)server;
 	(void)client;
 	(void)msg;
-	ft_printf("message sended to [%d]\n", server_get_client_fd(client));
+	if (((t_server*)server_get_data(server))->opt & OPT_VERBOSE)
+		ft_printf("message sended to [%d]\n", server_get_client_fd(client));
 }

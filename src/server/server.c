@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/21 14:38:58 by pribault          #+#    #+#             */
-/*   Updated: 2018/02/02 16:13:55 by pribault         ###   ########.fr       */
+/*   Updated: 2018/02/02 16:39:44 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,18 +55,19 @@ void	server_init(t_server *server, int argc, char **argv, char **env)
 	ft_bzero(server, sizeof(t_server));
 	server->env = env;
 	server->protocol = TCP;
+	server->opt = OPT_VERBOSE;
 	if (!(server->server = server_new()))
 		return (ft_error(2, ERROR_ALLOCATION, NULL));
 	if (!(server->root = ft_getenv(env, "PWD")))
 		return (ft_error(2, ERROR_CUSTOM, "cannot find PWD in environnement"));
+	ft_get_flags(argc, argv, ft_get_flag_array((t_short_flag*)&g_short_flags,
+	(t_long_flag*)&g_long_flags, (void*)&get_default), server);
 	server_set_callback(server->server, SERVER_CLIENT_ADD_CB, &add_client);
 	server_set_callback(server->server, SERVER_CLIENT_DEL_CB, &del_client);
 	server_set_callback(server->server, SERVER_MSG_RECV_CB, &msg_recv);
 	server_set_callback(server->server, SERVER_MSG_SEND_CB, &msg_send);
 	server_attach_data(server->server, server);
 	server_add_client_by_fd(server->server, 0);
-	ft_get_flags(argc, argv, ft_get_flag_array((t_short_flag*)&g_short_flags,
-	(t_long_flag*)&g_long_flags, (void*)&get_default), server);
 }
 
 int		main(int argc, char **argv, char **env)

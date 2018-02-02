@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/21 15:12:21 by pribault          #+#    #+#             */
-/*   Updated: 2018/02/02 16:18:26 by pribault         ###   ########.fr       */
+/*   Updated: 2018/02/02 16:39:34 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	print_usage(void)
 	ft_putstr("\e[0m\e[3m\e[1m./server <port> <options>\e[0m\n");
 	ft_putstr(" \e[2mavailable options:\e[0m\n");
 	ft_putstr("  --\e[4mhelp\e[0m or -h: \e[2mprint usage\e[0m\n");
-	ft_putstr("  --\e[4mverbose\e[0m or -v: \e[2mturn verbose mode on\e[0m\n");
+	ft_putstr("  --\e[4mverbose\e[0m or -v: \e[2mturn verbose on/off\e[0m\n");
 	ft_putstr("  --\e[4mprotocol\e[0m: \e[2mtcp/udp\e[0m\n");
 	ft_putstr("  --\e[4mmax\e[0m: \e[2m<n>\e[0m\n");
 	ft_putstr("  --\e[4mtimeout\e[0m: \e[2m<n second> ");
@@ -33,7 +33,7 @@ void	print_usage(void)
 
 void	set_verbose(t_server *server)
 {
-	server->opt |= OPT_VERBOSE;
+	server->opt ^= OPT_VERBOSE;
 }
 
 void	get_default(char *s, t_server *server)
