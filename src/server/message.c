@@ -5,94 +5,56 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/01/14 14:19:56 by pribault          #+#    #+#             */
-/*   Updated: 2018/01/14 21:19:12 by pribault         ###   ########.fr       */
+/*   Created: 2018/01/21 16:32:55 by pribault          #+#    #+#             */
+/*   Updated: 2018/02/03 15:37:28 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "server.h"
 
-void	do_nothing(t_server *server, t_client *client, void *msg, size_t size)
+t_msg	new_msg(void *ptr, size_t size)
 {
-	(void)server;
+	return ((t_msg){ptr, size});
+}
+
+void	enqueue_msg(t_server *server, void *client, t_msg msg, uint8_t type)
+{
+	static t_msg	new_msg;
+
+	if (!(new_msg.ptr = malloc(sizeof(t_header) + msg.size)))
+		ft_error(2, ERROR_ALLOCATION, NULL);
+	new_msg.size = sizeof(t_header) + msg.size;
+	((t_header*)new_msg.ptr)->type = type;
+	((t_header*)new_msg.ptr)->size = new_msg.size;
+	ft_memcpy(new_msg.ptr + sizeof(t_header), msg.ptr, msg.size);
+	server_enqueue_write_by_fd(server->server, server_get_client_fd(client),
+	&new_msg);
+}
+
+void	msg_recv(void *server, void *client, t_msg *msg)
+{
+	char	*s;
+	int		fd;
+
+	fd = server_get_client_fd(client);
+	if (fd == 0)
+	{
+		if (!(s = ft_memdup(msg->ptr, msg->size)))
+			return (ft_error(2, ERROR_ALLOCATION, NULL));
+		s[msg->size - 1] = '\0';
+		treat_command(server_get_data(server), s);
+		free(s);
+	}
+	else
+		manage_received_msg(server_get_data(server), client, msg->ptr,
+		msg->size);
+}
+
+void	msg_send(void *server, void *client, t_msg *msg)
+{
 	(void)client;
 	(void)msg;
-	(void)size;
-}
-
-void	execute(t_server *server, t_client *client, t_header *msg)
-{
-	if (msg->type < TYPE_MAX)
-	{
-		ft_printf("[%s] executing %s\n",
-			inet_ntoa(((struct sockaddr_in *)&client->addr)->sin_addr),
-			g_types_name[msg->type]);
-		if (g_state_machine[client->state][msg->type])
-			g_state_machine[client->state][msg->type](server, client,
-				(void*)msg + sizeof(t_header), msg->size);
-		else
-			error(102, 0, &msg->type);
-	}
-	else
-		error(101, 0, NULL);
-}
-
-void	enter_wait_state(t_client *client, void *data, size_t size)
-{
-	t_waiting	waiting;
-
-	waiting.state = client->state;
-	waiting.size = size;
-	if (!(waiting.data = ft_memdup(data, size)))
-		error(1, 1, NULL);
-	waiting.exp = waiting.data->size + sizeof(t_header);
-	if (!(client->data = ft_memdup(&waiting, sizeof(t_waiting))))
-		error(1, 1, NULL);
-	client->state = STATE_WAITING;
-}
-
-void	wait_state(t_server *server, t_client *client, void *data, size_t size)
-{
-	t_waiting	*waiting;
-
-	waiting = client->data;
-	if (waiting->size + size < waiting->exp)
-	{
-		if (!(waiting->data = realloc(waiting->data, waiting->size + size)))
-			error(1, 1, NULL);
-		ft_memcpy(waiting->data + waiting->size, data, size);
-		waiting->size += size;
-	}
-	else
-	{
-		if (!(waiting->data = realloc(waiting->data, waiting->exp)))
-			error(1, 1, NULL);
-		ft_memcpy((void*)waiting->data + waiting->size, data,
-			waiting->exp - waiting->size);
-		client->state = waiting->state;
-		client->data = NULL;
-		execute(server, client, waiting->data);
-		treat_message(server, client, data + waiting->exp - waiting->size,
-			size + waiting->size - waiting->exp);
-		free(waiting);
-	}
-}
-
-void	treat_message(t_server *server, t_client *client,
-		t_header *msg, size_t size)
-{
-	if (client->state == STATE_WAITING)
-		wait_state(server, client, msg, size);
-	else if (size >= sizeof(t_header))
-	{
-		if (msg->size <= size - sizeof(t_header))
-			execute(server, client, msg);
-		else if (msg->type < TYPE_MAX)
-			enter_wait_state(client, msg, size);
-		else
-			error(102, 0, &msg->type);
-	}
-	else if (size != 0)
-		error(100, 0, NULL);
-	free(msg);
+	if (((t_server*)server_get_data(server))->opt & OPT_VERBOSE)
+		ft_printf("message of size %lu sended to [%d]\n", msg->size,
+		server_get_client_fd(client));
 }

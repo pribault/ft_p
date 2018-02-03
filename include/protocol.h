@@ -6,33 +6,35 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/14 14:22:43 by pribault          #+#    #+#             */
-/*   Updated: 2018/01/14 21:00:45 by pribault         ###   ########.fr       */
+/*   Updated: 2018/02/03 15:58:15 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PROTOCOL_H
 # define PROTOCOL_H
 
+# include "libsocket.h"
 # include "libft.h"
+
+# define FILE_NAME_MAX_SIZE	123
 
 typedef enum	e_type
 {
-	TYPE_RAW_TEXT,
-	TYPE_FILE,
-	TYPE_SHELL_CMD,
+	TYPE_STR,
+	TYPE_RAW,
 	TYPE_LS,
 	TYPE_CD,
 	TYPE_PWD,
-	TYPE_AUTH,
+	TYPE_PUT,
+	TYPE_GET,
 	TYPE_MAX
 }				t_type;
 
 typedef enum	e_state
 {
-	STATE_IDLE,
-	STATE_WAITING,
-	STATE_DOWNLOADING,
-	STATE_WAITING_FOR_RAW_TEXT,
+	STATE_NONE,
+	STATE_WAITING_FOR_STR,
+	STATE_WAITING_FOR_FILE,
 	STATE_MAX
 }				t_state;
 
@@ -41,8 +43,14 @@ typedef enum	e_state
 typedef struct	s_header
 {
 	uint8_t		type;
-	uint64_t	size;
+	uint32_t	size;
 }				t_header;
+
+typedef struct	s_file_data
+{
+	char		name[FILE_NAME_MAX_SIZE];
+	mode_t		prot;
+}				t_file_data;
 
 # pragma pack()
 

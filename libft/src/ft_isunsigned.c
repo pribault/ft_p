@@ -1,30 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   command_line.c                                     :+:      :+:    :+:   */
+/*   ft_isunsigned.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/01/14 18:07:16 by pribault          #+#    #+#             */
-/*   Updated: 2018/01/14 18:21:52 by pribault         ###   ########.fr       */
+/*   Created: 2018/02/02 14:03:29 by pribault          #+#    #+#             */
+/*   Updated: 2018/02/02 14:10:19 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "server.h"
+#include "libft.h"
 
-void	interpret_command_line(t_server *server, char *line)
+int	ft_isunsigned(char *s)
 {
-	char	**cmd;
-	size_t	len;
+	int		i;
 
-	(void)server;
-	if (ft_strlen(line) && (cmd = ft_multisplit(line, WHITESPACES)))
+	i = 0;
+	while (s[i] && s[i] > 8 && s[i] < 14)
+		i++;
+	while (s[i])
 	{
-		len = ft_arraylen(cmd);
-		if (!ft_strcmp(cmd[0], "quit") || !ft_strcmp(cmd[0], "exit"))
-			exit(0);
-		else
-			error(50, 0, line);
-		ft_free_array((void**)cmd, len + 1);
+		if (s[i] < '0' || s[i] > '9')
+			return (FT_FALSE);
+		i++;
 	}
+	return (FT_TRUE);
 }

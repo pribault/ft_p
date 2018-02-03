@@ -5,82 +5,56 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/01/14 21:09:43 by pribault          #+#    #+#             */
-/*   Updated: 2018/01/14 21:16:43 by pribault         ###   ########.fr       */
+/*   Created: 2018/01/21 16:32:55 by pribault          #+#    #+#             */
+/*   Updated: 2018/02/03 14:00:12 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "client.h"
 
-void	execute(t_client *client, t_header *msg)
+void	enqueue_msg(t_client *client, void *data, size_t size, uint8_t type)
 {
-	if (msg->type < TYPE_MAX)
+	static t_msg	msg;
+
+	if (!(msg.ptr = malloc(sizeof(t_header) + size)))
+		ft_error(2, ERROR_ALLOCATION, NULL);
+	msg.size = sizeof(t_header) + size;
+	((t_header*)msg.ptr)->type = type;
+	((t_header*)msg.ptr)->size = msg.size;
+	ft_memcpy(msg.ptr + sizeof(t_header), data, size);
+	server_enqueue_write_by_fd(client->server, client->fd, &msg);
+}
+
+void	msg_recv(void *server, void *client, t_msg *msg)
+{
+	size_t	i;
+	char	**array;
+	char	*s;
+	int		fd;
+
+	fd = server_get_client_fd(client);
+	if (fd == 0)
 	{
-		if (g_state_machine[client->state][msg->type])
-			g_state_machine[client->state][msg->type](client,
-				(void*)msg + sizeof(t_header), msg->size);
-		else
-			error(102, 0, &msg->type);
+		if (!(s = ft_memdup(msg->ptr, msg->size)) ||
+			(s[msg->size - 1] = '\0') ||
+			!(array = ft_multisplit(s, "\n")))
+			return (ft_error(2, ERROR_ALLOCATION, NULL));
+		i = ft_arraylen(array);
+		while (--i != (size_t)-1)
+			treat_command(server_get_data(server), array[i]);
+		ft_free_array((void**)array, ft_arraylen(array));
+		free(s);
 	}
 	else
-		error(101, 0, NULL);
+		manage_received_msg(server_get_data(server), msg->ptr, msg->size);
 }
 
-void	enter_wait_state(t_client *client, void *data, size_t size)
+void	msg_send(void *server, void *client, t_msg *msg)
 {
-	t_waiting	waiting;
-
-	waiting.state = client->state;
-	waiting.size = size;
-	if (!(waiting.data = ft_memdup(data, size)))
-		error(1, 1, NULL);
-	waiting.exp = waiting.data->size + sizeof(t_header);
-	if (!(client->data = ft_memdup(&waiting, sizeof(t_waiting))))
-		error(1, 1, NULL);
-	client->state = STATE_WAITING;
-}
-
-void	wait_state(t_client *client, void *data, size_t size)
-{
-	t_waiting	*waiting;
-
-	waiting = client->data;
-	if (waiting->size + size < waiting->exp)
-	{
-		if (!(waiting->data = realloc(waiting->data, waiting->size + size)))
-			error(1, 1, NULL);
-		ft_memcpy(waiting->data + waiting->size, data, size);
-		waiting->size += size;
-	}
-	else
-	{
-		if (!(waiting->data = realloc(waiting->data, waiting->exp)))
-			error(1, 1, NULL);
-		ft_memcpy((void*)waiting->data + waiting->size, data,
-			waiting->exp - waiting->size);
-		client->state = waiting->state;
-		client->data = NULL;
-		execute(client, waiting->data);
-		treat_message(client, data + waiting->exp - waiting->size,
-			size + waiting->size - waiting->exp);
-		free(waiting);
-	}
-}
-
-void	treat_message(t_client *client, t_header *msg, size_t size)
-{
-	if (client->state == STATE_WAITING)
-		wait_state(client, msg, size);
-	else if (size >= sizeof(t_header))
-	{
-		if (msg->size <= size - sizeof(t_header))
-			execute(client, msg);
-		else if (msg->type < TYPE_MAX)
-			enter_wait_state(client, msg, size);
-		else
-			error(102, 0, &msg->type);
-	}
-	else if (size != 0)
-		error(100, 0, NULL);
-	free(msg);
+	(void)client;
+	free(msg->ptr);
+	if (server_get_client_fd(client) != 1 &&
+		((t_client*)server_get_data(server))->opt & OPT_VERBOSE)
+		ft_printf("message sended to [%d]\n",
+		server_get_client_fd(client));
 }

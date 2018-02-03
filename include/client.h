@@ -6,86 +6,106 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/13 11:04:44 by pribault          #+#    #+#             */
-/*   Updated: 2018/01/14 21:13:09 by pribault         ###   ########.fr       */
+/*   Updated: 2018/02/03 17:27:55 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CLIENT_H
 # define CLIENT_H
 
-# include <sys/select.h>
-# include <sys/socket.h>
-# include <arpa/inet.h>
-# include <signal.h>
-# include <errno.h>
-# include <netdb.h>
-# include "libft.h"
 # include "protocol.h"
+# include <errno.h>
+# include <signal.h>
+# include <sys/stat.h>
+# include <sys/mman.h>
 
-# define TCP	SOCK_STREAM
-# define UDP	SOCK_DGRAM
+# define OPT_VERBOSE	BYTE(0)
 
-# define READ_BUFFER_SIZE	1024
-
-# define WHITESPACES		"\a\b\t\n\v\f\r "
-
-typedef struct		s_towrite
+typedef enum	e_client_error
 {
-	int				fd;
-	void			*data;
-	size_t			size;
-}					t_towrite;
+	ERROR_NOT_IN_PORT_RANGE = ERROR_FT_MAX,
+	ERROR_ADDRESS_ALREADY_SET,
+	ERROR_PORT_ALREADY_SET,
+	ERROR_PARAMS_ALREADY_SET,
+	ERROR_NO_ADDRESS_SET,
+	ERROR_NO_PORT_SET,
+	ERROR_INVALID_PROTOCOL,
+	ERROR_CANNOT_CONNECT,
+	ERROR_MSG_TOO_SMALL,
+	ERROR_UNEXPECTED_MSG,
+	ERROR_UNKNOWN_MSG_TYPE,
+	ERROR_EXPECTING_STR,
+	ERROR_LS_PARAMS,
+	ERROR_CD_PARAMS,
+	ERROR_PWD_PARAMS,
+	ERROR_PUT_PARAMS,
+	ERROR_GET_PARAMS,
+	ERROR_EXIT_PARAMS,
+	ERROR_UNKNOWN_COMMAND,
+	ERROR_FILE_ALREADY_EXIST,
+	ERROR_FILE_NAME_TOO_LONG
+}				t_client_error;
 
-typedef struct		s_client
+typedef struct	s_data
 {
-	char			*addr;
-	char			*service;
-	int				socket;
-	int				protocol;
-	uint16_t		port;
-	struct timeval	timeout;
-	t_vector		*write_queue;
-	fd_set			in;
-	fd_set			out;
-	int				state;
-	void			*data;
-}					t_client;
+	void		*ptr;
+	uint32_t	size;
+	uint32_t	expected;
+}				t_data;
 
-typedef struct		s_waiting
+typedef struct	s_client
 {
-	t_header		*data;
-	size_t			size;
-	size_t			exp;
-	uint8_t			state;
-}					t_waiting;
+	void		*server;
+	char		*address;
+	char		*port;
+	char		**env;
+	t_protocol	protocol;
+	int			fd;
+	uint8_t		opt;
+	t_data		data;
+	int			state;
+	t_file_data	*file;
+}				t_client;
 
-typedef void		(*t_function)(t_client*, void*, size_t);
+typedef struct	s_state_func
+{
+	t_state		state;
+	void		(*function)(t_client *client, t_header *ptr, size_t size);
+}				t_state_func;
 
-void				error(int error, int state, void *param);
+typedef void	(*t_msg_handler)(t_client *, t_header *, size_t);
 
-void				get_flags(t_client *client, int argc, char **argv);
+void			print_usage(void);
+void			set_verbose(t_client *client);
+void			set_long_verbose(char **args, int n_params,
+				t_client *client);
+void			get_default(char *s, t_client *client);
+void			get_port(char **args, int n_params, t_client *client);
+void			get_address(char **args, int n_params, t_client *client);
+void			get_protocol(char **args, int n_params, t_client *client);
+void			get_timeout(char **args, int n_params, t_client *client);
 
-void				connect_to_server(t_client *client);
+void			add_client(void *server, void *client);
+void			del_client(void *server, void *client);
 
-void				run_client(t_client *client);
+void			msg_recv(void *server, void *client, t_msg *msg);
+void			msg_send(void *server, void *client, t_msg *msg);
 
-void				read_from_terminal(t_client *client, int *n);
-void				read_from_socket(t_client *client, int *n);
+void			enqueue_msg(t_client *client, void *data, size_t size,
+				uint8_t type);
 
-void				write_output(t_client *client, int *n);
-void				enqueue_putendl(t_client *client, int fd, char *s,
-					size_t len);
-void				enqueue_write(t_client *client, int fd, void *data,
-					size_t size);
+void			manage_received_msg(t_client *client, t_header *ptr,
+				size_t size);
 
-void				treat_message(t_client *client, t_header *msg,
-					size_t size);
+void			quit(t_client *client, char **cmds, size_t len);
+void			send_ls_request(t_client *client, char **cmds, size_t len);
+void			send_cd_request(t_client *client, char **cmds, size_t len);
+void			send_pwd_request(t_client *client, char **cmds, size_t len);
 
-void				do_nothing(t_client *client, void *msg, size_t size);
-void				get_raw_text(t_client *client, void *msg, size_t size);
+void			recv_state(t_client *client, t_header *ptr, size_t size);
+void			recv_str(t_client *client, t_header *ptr, size_t size);
+void			recv_file(t_client *client, t_header *ptr, size_t size);
 
-extern t_client		*g_global;
-extern t_function	g_state_machine[STATE_MAX][TYPE_MAX];
-extern char			*g_types_name[TYPE_MAX];
+void			treat_command(t_client *client, char *cmd);
 
 #endif
