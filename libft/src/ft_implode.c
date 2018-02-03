@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/15 20:22:33 by pribault          #+#    #+#             */
-/*   Updated: 2018/01/21 20:36:27 by pribault         ###   ########.fr       */
+/*   Updated: 2018/02/03 14:46:08 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,5 +36,6 @@ char	*ft_implode(char **array, char c)
 		size += ft_strlen(array[i]);
 		s[size + i] = c;
 	}
+	s[size + i - 1] = '\0';
 	return (s);
 }

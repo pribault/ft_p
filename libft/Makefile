@@ -28,6 +28,7 @@ SRC =	ft_joinf.c\
 		ft_factorial.c\
 		ft_free_array.c\
 		ft_get_all_lines.c\
+		ft_get_file_name_from_path.c\
 		ft_get_flag_array.c\
 		ft_get_flags.c\
 		ft_get_next_line.c\
@@ -125,12 +126,10 @@ OBJ = $(SRC:%.c=obj/%.o)
 FLAGS = -Wall -Wextra
 INCLUDES =	libft.h ft_printf.h ft_joinf.h malloc.h prototypes.h structs.h
 INCLUDE = $(INCLUDES:%.h=include/%.h)
-JOBS = 4
 
 .PHONY: clean fclean all re norme
 
-all:
-	@make $(NAME) -j$(JOBS)
+all: $(NAME)
 
 obj:
 	@mkdir obj

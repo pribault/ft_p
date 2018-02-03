@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/03 16:13:23 by pribault          #+#    #+#             */
-/*   Updated: 2018/02/02 15:57:06 by pribault         ###   ########.fr       */
+/*   Updated: 2018/02/03 17:24:54 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ typedef struct		s_gnl_stack
 	int				fd;
 }					t_gnl_stack;
 
-typedef enum		s_param_type
+typedef enum		e_param_type
 {
 	PARAM_STR,
 	PARAM_INTEGER,
@@ -268,6 +268,7 @@ void				ft_vector_resize(t_vector *vector, size_t new_size);
 **	string functions
 */
 
+char				*ft_get_file_name_from_path(char *path);
 char				*ft_getenv(char **env, char *name);
 char				**ft_multisplit(char *str, char *sep);
 char				*ft_strcat(char *s1, const char *s2);

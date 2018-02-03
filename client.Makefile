@@ -6,13 +6,16 @@ INCLUDE = client.h protocol.h
 INCLUDES = $(INCLUDE:%.h=$(INC)/%.h)
 OBJ = src/client_obj
 SRC = src/client
-SRCS =	client.c flags.c error.c\
-		clients.c message.c commands.c
+SRCS =	client.c flags.c flags_2.c\
+		clients.c message.c commands.c\
+		receive.c handle_message.c\
+		commands_2.c
 OBJS = $(SRCS:%.c=$(OBJ)/%.o)
 LIBFT = libft
 LIBSOCKET = libsocket
 INCLUDE_LIBS = -I $(LIBFT)/include -I $(LIBSOCKET)/include
 COMPILE_LIBS = -L $(LIBSOCKET) -lsocket -L $(LIBFT) -lft
+JOBS = 4
 
 .PHONY: all clean fclean re export
 

@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/07 11:15:22 by pribault          #+#    #+#             */
-/*   Updated: 2018/02/02 16:11:08 by pribault         ###   ########.fr       */
+/*   Updated: 2018/02/02 21:36:15 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,6 +120,6 @@ int				server_connect(void *server, t_protocol protocol,
 				char *address, char *port);
 void			server_set_timeout(void *server,
 				struct timeval timeout);
-struct timeval	server_get_timeout(void *server);;
+struct timeval	server_get_timeout(void *server);
 
 #endif

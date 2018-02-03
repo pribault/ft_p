@@ -7,12 +7,14 @@ INCLUDES = $(INCLUDE:%.h=$(INC)/%.h)
 OBJ = src/server_obj
 SRC = src/server
 SRCS =	server.c flags.c flags_2.c\
-		clients.c message.c commands.c
+		clients.c message.c commands.c\
+		receive.c handle_message.c
 OBJS = $(SRCS:%.c=$(OBJ)/%.o)
 LIBFT = libft
 LIBSOCKET = libsocket
 INCLUDE_LIBS = -I $(LIBFT)/include -I $(LIBSOCKET)/include
 COMPILE_LIBS = -L $(LIBSOCKET) -lsocket -L $(LIBFT) -lft
+JOBS = 4
 
 .PHONY: all clean fclean re export
 

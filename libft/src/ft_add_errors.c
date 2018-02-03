@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/31 15:16:33 by pribault          #+#    #+#             */
-/*   Updated: 2018/02/01 18:30:29 by pribault         ###   ########.fr       */
+/*   Updated: 2018/02/02 21:35:34 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static int	init_array(void)
 	return (1);
 }
 
-void	ft_add_errors(t_error *array)
+void		ft_add_errors(t_error *array)
 {
 	size_t	i;
 	size_t	j;

@@ -6,73 +6,91 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/21 16:43:12 by pribault          #+#    #+#             */
-/*   Updated: 2018/01/21 20:33:38 by pribault         ###   ########.fr       */
+/*   Updated: 2018/02/03 17:51:32 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "client.h"
 
-void	command_exit(t_client *client, char **cmds, size_t len)
+void	send_put_request_2(t_client *client, char *file, void *data,
+		struct stat *buff)
 {
-	(void)client;
-	if (len == 1)
-		exit(1);
+	t_file_data	*final;
+	char		*name;
+
+	if (!(final = malloc(buff->st_size + sizeof(t_file_data))))
+		ft_error(2, ERROR_ALLOCATION, NULL);
+	name = ft_get_file_name_from_path(file);
+	ft_memcpy(&final->name, name, ft_strlen(name) + 1);
+	final->prot = buff->st_mode;
+	ft_memcpy((void*)final + sizeof(t_file_data), data, buff->st_size);
+	enqueue_msg(client, final, buff->st_size + sizeof(t_file_data),
+	TYPE_PUT);
+	free(final);
+}
+
+void	send_put_request(t_client *client, char **cmds, size_t len)
+{
+	struct stat	buff;
+	char		*s;
+	int			fd;
+
 	if (len == 2)
 	{
-		if (ft_isnumeric(cmds[1]))
-			exit(ft_atoi(cmds[1]));
-		else
-			error(5, 0, cmds[1]);
+		if (ft_strlen(cmds[1]) >= FILE_NAME_MAX_SIZE)
+			return (ft_error(2, ERROR_FILE_NAME_TOO_LONG, cmds[1]));
+		if ((fd = open(cmds[1], O_RDWR)) == -1 ||
+			fstat(fd, &buff) == -1)
+			return (ft_error(2, ERROR_FILE, cmds[1]));
+		if (!(s = mmap(NULL, buff.st_size, PROT_READ,
+			MAP_FILE | MAP_PRIVATE, fd, 0)))
+			return (ft_error(2, ERROR_ALLOCATION, NULL));
+		send_put_request_2(client, cmds[1], s, &buff);
+		munmap(s, buff.st_size);
+		close(fd);
 	}
 	else
-		error(101, 0, cmds[0]);
+		ft_error(2, ERROR_PUT_PARAMS, NULL);
+	client->state = STATE_WAITING_FOR_STR;
 }
 
-void	command_pwd(t_client *client, char **cmds, size_t len)
+void	send_get_request(t_client *client, char **cmds, size_t len)
 {
-	t_msg	msg;
+	char	*file;
+	size_t	name_len;
 
-	if (len != 1)
-		return (error(102, 0, cmds[0]));
-	msg.size = sizeof(uint64_t) + 4;
-	if (!(msg.ptr = malloc(msg.size)))
-		error(1, 1, NULL);
-	*(uint64_t*)msg.ptr = msg.size;
-	ft_memcpy(msg.ptr + sizeof(uint64_t), cmds[0], 4);
-	server_enqueue_write_by_fd(client->server, client->fd, &msg);
-	free(msg.ptr);
-}
-
-void	command_ls(t_client *client, char **cmds, size_t len)
-{
-	t_msg	msg;
-	char	*s;
-
-	if (len > 2)
-		return (error(101, 0, cmds[0]));
-	if (!(s = ft_implode(cmds, ' ')))
-		error(1, 1, NULL);
-	len = ft_strlen(s);
-	msg.size = sizeof(uint64_t) + len + 1;
-	if (!(msg.ptr = malloc(msg.size)))
-		error(1, 1, NULL);
-	*(uint64_t*)msg.ptr = msg.size;
-	ft_memcpy(msg.ptr + sizeof(uint64_t), s, len + 1);
-	server_enqueue_write_by_fd(client->server, client->fd, &msg);
-	free(msg.ptr);
-	free(s);
-}
-
-void	treat_command_2(t_client *client, char **cmds, size_t len)
-{
-	if (!ft_strcmp(cmds[0], "exit"))
-		command_exit(client, cmds, len);
-	else if (!ft_strcmp(cmds[0], "pwd"))
-		command_pwd(client, cmds, len);
-	else if (!ft_strcmp(cmds[0], "ls"))
-		command_ls(client, cmds, len);
+	if (len == 2)
+		enqueue_msg(client, cmds[1], ft_strlen(cmds[1]), TYPE_GET);
 	else
-		error(100, 0, cmds[0]);
+		return (ft_error(2, ERROR_GET_PARAMS, NULL));
+	file = ft_get_file_name_from_path(cmds[1]);
+	name_len = ft_strlen(file);
+	if (name_len >= FILE_NAME_MAX_SIZE)
+		return (ft_error(2, ERROR_FILE_NAME_TOO_LONG, cmds[1]));
+	if (!(client->file = malloc(sizeof(t_file_data))))
+		ft_error(2, ERROR_ALLOCATION, NULL);
+	ft_memcpy(&client->file->name, file, name_len);
+	client->file->name[name_len] = '\0';
+	client->file->prot = 0;
+	client->state = STATE_WAITING_FOR_STR;
+}
+
+void	get_command(t_client *client, char **cmds, size_t len)
+{
+	if (!ft_strcmp(cmds[0], "ls"))
+		send_ls_request(client, cmds, len);
+	else if (!ft_strcmp(cmds[0], "cd"))
+		send_cd_request(client, cmds, len);
+	else if (!ft_strcmp(cmds[0], "pwd"))
+		send_pwd_request(client, cmds, len);
+	else if (!ft_strcmp(cmds[0], "quit"))
+		quit(client, cmds, len);
+	else if (!ft_strcmp(cmds[0], "put"))
+		send_put_request(client, cmds, len);
+	else if (!ft_strcmp(cmds[0], "get"))
+		send_get_request(client, cmds, len);
+	else
+		ft_error(2, ERROR_UNKNOWN_COMMAND, cmds[0]);
 }
 
 void	treat_command(t_client *client, char *cmd)
@@ -80,10 +98,11 @@ void	treat_command(t_client *client, char *cmd)
 	char	**cmds;
 	size_t	len;
 
+	(void)client;
 	if (!(cmds = ft_multisplit(cmd, WHITESPACES)))
-		error(1, 1, NULL);
+		ft_error(2, ERROR_ALLOCATION, NULL);
 	len = ft_arraylen(cmds);
 	if (len)
-		treat_command_2(client, cmds, len);
-	ft_free_array((void**)cmds, len + 1);
+		get_command(client, cmds, len);
+	ft_free_array((void**)cmds, len);
 }

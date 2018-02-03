@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/07/12 15:20:52 by pribault          #+#    #+#             */
-/*   Updated: 2018/01/14 17:06:34 by pribault         ###   ########.fr       */
+/*   Updated: 2018/02/02 20:05:13 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ void	free(void *ptr)
 	t_zone	*zone;
 
 	pthread_mutex_lock(&g_env.mutex[1]);
-	if (!ptr || search_and_free(&g_env.large, ptr, 1))
+	if (search_and_free(&g_env.large, ptr, 1))
 		return ((void)pthread_mutex_unlock(&g_env.mutex[1]));
 	zone = g_env.tiny;
 	while (zone)
