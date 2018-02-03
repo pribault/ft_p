@@ -157,6 +157,6 @@ fclean: clean
 	@rm -f $(LIBSO)
 
 norme:
-	@norminette $(OBJ:%.o=%.c) $(INCLUDE)
+	@norminette $(OBJ:obj/%.o=src/%.c) $(INCLUDE)
 
 re: fclean all

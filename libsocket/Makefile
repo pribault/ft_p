@@ -83,6 +83,6 @@ fclean: clean
 	@echo "\033[0m\033[38;5;87m$(NAME) and $(LIBSO) removed\033[0m"
 
 norme:
-	@norminette $(OBJ:%.o=%.c) $(INCLUDE)
+	@norminette $(OBJ:obj/%.o=src/%.c) $(INCLUDE)
 
 re: fclean all
