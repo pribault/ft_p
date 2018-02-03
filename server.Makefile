@@ -8,7 +8,8 @@ OBJ = src/server_obj
 SRC = src/server
 SRCS =	server.c flags.c flags_2.c\
 		clients.c message.c commands.c\
-		receive.c handle_message.c
+		receive.c handle_message.c\
+		handle_message_2.c
 OBJS = $(SRCS:%.c=$(OBJ)/%.o)
 LIBFT = libft
 LIBSOCKET = libsocket

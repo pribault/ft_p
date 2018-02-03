@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/21 14:38:58 by pribault          #+#    #+#             */
-/*   Updated: 2018/02/03 18:05:48 by pribault         ###   ########.fr       */
+/*   Updated: 2018/02/03 18:24:13 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ static t_long_flag	g_long_flags[] =
 	{"protocol", 1, {PARAM_STR}, (void*)&get_protocol},
 	{"max", 1, {PARAM_INTEGER}, (void*)&get_max},
 	{"timeout", 2, {PARAM_UNSIGNED, PARAM_UNSIGNED}, (void*)&get_timeout},
+	{"root", 1, {PARAM_STR}, (void*)get_root},
 	{NULL, 0, {0}, NULL}
 };
 
@@ -40,6 +41,7 @@ static t_error	g_errors[] =
 	{ERROR_UNEXPECTED_MSG, "unexpected message received", 0},
 	{ERROR_UNKNOWN_MSG_TYPE, "unkown message type %ld", 0},
 	{ERROR_FILE_ALREADY_EXIST, "file '%s' already exist", 0},
+	{ERROR_INVALID_ROOT, "invalid path '%s'", ERROR_EXIT},
 	{0, NULL, 0}
 };
 

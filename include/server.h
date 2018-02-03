@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/13 11:04:44 by pribault          #+#    #+#             */
-/*   Updated: 2018/02/03 17:44:03 by pribault         ###   ########.fr       */
+/*   Updated: 2018/02/03 18:48:02 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,8 @@ typedef enum	e_server_error
 	ERROR_MSG_TOO_SMALL,
 	ERROR_UNEXPECTED_MSG,
 	ERROR_UNKNOWN_MSG_TYPE,
-	ERROR_FILE_ALREADY_EXIST
+	ERROR_FILE_ALREADY_EXIST,
+	ERROR_INVALID_ROOT
 }				t_server_error;
 
 typedef struct	s_data
@@ -60,6 +61,7 @@ void			get_default(char *s, t_server *server);
 void			set_verbose(t_server *server);
 void			set_long_verbose(char **args, int n_params,
 				t_server *server);
+void			get_root(char **args, int n_params, t_server *server);
 void			get_port(char **args, int n, t_server *server);
 void			get_protocol(char **args, int n_params, t_server *server);
 void			get_max(char **args, int n_params, t_server *server);
@@ -75,6 +77,7 @@ void			treat_command(t_server *server, char *cmd);
 void			manage_received_msg(t_server *server, void *client,
 				t_header *ptr, size_t size);
 
+int				path_is_valid(t_server *server, t_data *data, char *file);
 void			recv_cd(t_server *server, void *client, t_header *ptr,
 				size_t size);
 void			recv_ls(t_server *server, void *client, t_header *ptr,
