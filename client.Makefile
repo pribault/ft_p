@@ -1,6 +1,6 @@
 NAME = client
 CC = clang
-FLAGS = -Wall -Wextra
+FLAGS = -Wall -Wextra -Werror
 INC = include
 INCLUDE = client.h protocol.h
 INCLUDES = $(INCLUDE:%.h=$(INC)/%.h)
