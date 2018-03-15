@@ -1,22 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_swap.c                                          :+:      :+:    :+:   */
+/*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/10/25 16:03:37 by pribault          #+#    #+#             */
-/*   Updated: 2017/10/25 16:38:43 by pribault         ###   ########.fr       */
+/*   Created: 2018/03/08 23:02:19 by pribault          #+#    #+#             */
+/*   Updated: 2018/03/10 15:01:21 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "prototypes.h"
 
-void	ft_swap(void **a, void **b)
+void	malloc_error(int error, void *param)
 {
-	if (!a || !b || *a == *b)
-		return ;
-	*(size_t*)a ^= *(size_t*)b;
-	*(size_t*)b ^= *(size_t*)a;
-	*(size_t*)a ^= *(size_t*)b;
+	char		*debug;
+	uint32_t	level;
+
+	if ((debug = getenv("MALLOC_DEBUG")))
+		level = ft_atou(debug);
+	else
+		level = 0;
+	pthread_mutex_unlock(&g_env.mutex);
+	if (level & 1)
+		ft_error(2, error, param);
+	pthread_mutex_lock(&g_env.mutex);
+	if (level & 2)
+		abort();
 }

@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/18 22:51:55 by pribault          #+#    #+#             */
-/*   Updated: 2018/01/21 14:17:06 by pribault         ###   ########.fr       */
+/*   Updated: 2018/03/11 23:11:49 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ typedef struct		s_client
 	struct sockaddr	addr;
 	socklen_t		addr_len;
 	struct timeval	timeout;
-	t_vector		*write_queue;
+	t_vector		write_queue;
 	uint8_t			opt;
 	void			(*connect)(struct s_client*);
 	void			(*disconnect)(struct s_client*);

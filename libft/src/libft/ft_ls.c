@@ -1,30 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_vector_resize.c                                 :+:      :+:    :+:   */
+/*   ft_ls.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/09/01 01:15:55 by pribault          #+#    #+#             */
-/*   Updated: 2017/10/18 19:54:19 by pribault         ###   ########.fr       */
+/*   Created: 2017/11/02 12:10:42 by pribault          #+#    #+#             */
+/*   Updated: 2018/03/15 22:47:24 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_vector_resize(t_vector *vector, size_t new_size)
+char	**ft_ls(char *dir)
 {
-	size_t	mem;
+	char			**files;
+	struct dirent	*dirent;
+	DIR				*ptr;
+	size_t			i;
 
-	if (!vector)
-		return ;
-	if (new_size * vector->type > vector->size)
-	{
-		mem = VECTOR_SIZE * ((new_size * vector->type - 1) /
-		VECTOR_SIZE) + VECTOR_SIZE;
-		if (!(vector->ptr = realloc(vector->ptr, mem)))
-			return ;
-		vector->size = mem;
-	}
-	vector->n = new_size;
+	if (!(ptr = opendir(dir)) ||
+		!(files = (char**)malloc(sizeof(char*))))
+		return (NULL);
+	i = 0;
+	while ((dirent = readdir(ptr)))
+		if (!(files = (char**)realloc(files, sizeof(char*) * (i + 2))) ||
+			!(files[i++] = ft_strdup((char*)&dirent->d_name)))
+			return (NULL);
+	files[i] = NULL;
+	closedir(ptr);
+	return (files);
 }

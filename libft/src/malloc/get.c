@@ -1,32 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strdup.c                                        :+:      :+:    :+:   */
+/*   get.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/11/03 17:56:59 by pribault          #+#    #+#             */
-/*   Updated: 2017/10/11 22:42:01 by pribault         ###   ########.fr       */
+/*   Created: 2018/03/03 10:33:03 by pribault          #+#    #+#             */
+/*   Updated: 2018/03/09 20:22:50 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "prototypes.h"
 
-char	*ft_strdup(const char *s1)
+void	*get_in_zone(t_zone *zone, void *ptr, size_t size)
 {
-	char	*s2;
-	int		i;
-
-	i = ft_strlen(s1);
-	s2 = (char *)malloc(sizeof(char) * (i + 1));
-	if (s2 == NULL)
+	if (!zone || ptr < (void*)&zone[1] ||
+		ptr + size > (void*)&zone[1] + zone->size)
 		return (NULL);
-	s2[i] = '\0';
-	i--;
-	while (i >= 0)
-	{
-		s2[i] = s1[i];
-		i--;
-	}
-	return (s2);
+	return (ptr);
 }

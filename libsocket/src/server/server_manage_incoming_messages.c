@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/19 17:18:48 by pribault          #+#    #+#             */
-/*   Updated: 2018/01/21 13:48:55 by pribault         ###   ########.fr       */
+/*   Updated: 2018/03/11 23:16:17 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void		server_manage_incoming_messages(t_server *server, fd_set *set,
 	t_client	*client;
 	size_t		i;
 
-	if ((*n_evts) < 1 || !(vector = server->clients))
+	if ((*n_evts) < 1 || !(vector = &server->clients))
 		return ;
 	i = vector->n;
 	while (--i != (size_t)-1 && (*n_evts))

@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/19 17:18:05 by pribault          #+#    #+#             */
-/*   Updated: 2018/02/03 13:02:46 by pribault         ###   ########.fr       */
+/*   Updated: 2018/03/11 23:16:32 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	server_manage_write_requests(t_server *server, fd_set *set,
 	t_vector	*vector;
 	size_t		i;
 
-	if ((*n_evts) < 1 || !(vector = server->write_queue))
+	if ((*n_evts) < 1 || !(vector = &server->write_queue))
 		return ;
 	i = (size_t)-1;
 	while (++i < vector->n && (*n_evts))

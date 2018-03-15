@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/02 20:30:31 by pribault          #+#    #+#             */
-/*   Updated: 2018/02/03 17:00:47 by pribault         ###   ########.fr       */
+/*   Updated: 2018/03/15 22:53:42 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ void	save_message(t_client *client, t_header *ptr, size_t size)
 		ft_memcpy(client->data.ptr + client->data.size, ptr, size);
 		client->data.size += size;
 	}
+	ft_printf("%lu/%lu bytes\n", client->data.size, client->data.expected);
 }
 
 void	message_complete(t_client *client, t_header *ptr, size_t size)

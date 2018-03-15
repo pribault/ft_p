@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/03 13:17:45 by pribault          #+#    #+#             */
-/*   Updated: 2018/02/03 17:44:17 by pribault         ###   ########.fr       */
+/*   Updated: 2018/03/15 22:51:54 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,8 @@ void	save_message(t_data *data, t_header *ptr, size_t size)
 		ft_memcpy(data->ptr + data->size, ptr, size);
 		data->size += size;
 	}
+	ft_printf("message received %lu/%lu bytes\n",
+	data->size, data->expected);
 }
 
 void	message_complete(t_server *server, void *client, t_header *ptr,
@@ -73,6 +75,7 @@ void	message_complete(t_server *server, void *client, t_header *ptr,
 	{
 		ft_printf("message received from [%d]:\n",
 		server_get_client_fd(client));
+		ft_printf("%lu\n", ptr->type);
 	}
 	if (g_func[data->state][ptr->type])
 		g_func[data->state][ptr->type](server, client, ptr, size);

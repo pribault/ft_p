@@ -1,28 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   server_add_client_by_fd.c                          :+:      :+:    :+:   */
+/*   ft_bzero.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/01/20 09:50:47 by pribault          #+#    #+#             */
-/*   Updated: 2018/03/11 23:17:26 by pribault         ###   ########.fr       */
+/*   Created: 2016/11/05 17:04:26 by pribault          #+#    #+#             */
+/*   Updated: 2018/02/17 14:01:47 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "server.h"
+#include "libft.h"
 
-void	server_add_client_by_fd(t_server *server, int fd)
+void	ft_bzero(void *s, size_t n)
 {
-	t_client	client;
+	size_t	i;
 
-	if (!server || server->clients.n >= server->clients_max)
-		return ;
-	ft_bzero(&client, sizeof(t_client));
-	client.fd = fd;
-	ft_vector_add(&server->clients, &client);
-	if (server->client_add)
-		server->client_add(server, &client);
-	if (server->clients.n >= server->clients_max)
-		server_unbind(server);
+	i = 0;
+	while (i + 7 < n)
+	{
+		*(uint64_t*)(s + i) = (uint64_t)0;
+		i += (8);
+	}
+	while (i + 3 < n)
+	{
+		*(uint32_t*)(s + i) = (uint32_t)0;
+		i += (4);
+	}
+	while (i + 1 < n)
+	{
+		*(uint16_t*)(s + i) = (uint16_t)0;
+		i += (2);
+	}
+	while (i < n)
+	{
+		*(uint8_t*)(s + i) = (uint8_t)0;
+		i++;
+	}
 }

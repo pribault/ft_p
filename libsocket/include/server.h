@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/18 22:51:48 by pribault          #+#    #+#             */
-/*   Updated: 2018/02/02 16:08:12 by pribault         ###   ########.fr       */
+/*   Updated: 2018/03/11 23:11:43 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,8 +105,8 @@ typedef struct		s_server
 	int				queue_max;
 	size_t			clients_max;
 	struct timeval	timeout;
-	t_vector		*clients;
-	t_vector		*write_queue;
+	t_vector		clients;
+	t_vector		write_queue;
 	uint16_t		port;
 	uint8_t			opt;
 	void			*data;

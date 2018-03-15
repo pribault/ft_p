@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/15 20:22:33 by pribault          #+#    #+#             */
-/*   Updated: 2018/02/03 14:46:08 by pribault         ###   ########.fr       */
+/*   Updated: 2018/03/11 23:36:10 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ char	*ft_implode(char **array, char c)
 		size += ft_strlen(array[i]);
 	if (!size)
 		return (ft_strdup(""));
-	if (!(s = malloc(sizeof(char) * (size + ft_arraylen(array)))))
+	if (!(s = malloc(sizeof(char) * (size + i + 1))))
 		return (NULL);
 	size = 0;
 	i = (size_t)-1;

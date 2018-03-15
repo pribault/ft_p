@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/20 16:33:12 by pribault          #+#    #+#             */
-/*   Updated: 2018/01/21 19:04:46 by pribault         ###   ########.fr       */
+/*   Updated: 2018/03/11 23:17:56 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static int	iter_on_addresses(t_server *server, t_client *client,
 		{
 			client->addr = *addr->ai_addr;
 			client->addr_len = addr->ai_addrlen;
-			ft_vector_add(server->clients, client);
+			ft_vector_add(&server->clients, client);
 			if (server->client_add)
 				server->client_add(server, client);
 			freeaddrinfo(result);
@@ -44,7 +44,7 @@ int			server_connect(t_server *server, t_protocol protocol,
 	struct addrinfo	*result;
 
 	if (!server || !address || !port ||
-		server->clients->n >= server->clients_max)
+		server->clients.n >= server->clients_max)
 		return (0);
 	ft_bzero(&hints, sizeof(struct addrinfo));
 	ft_bzero(&client, sizeof(t_client));

@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/03 13:50:38 by pribault          #+#    #+#             */
-/*   Updated: 2018/02/03 18:47:46 by pribault         ###   ########.fr       */
+/*   Updated: 2018/03/15 23:08:19 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ void	recv_ls_2(t_server *server, void *client, char *file)
 		28), TYPE_STR);
 	else
 	{
+		ft_memdump(ret, sizeof(char*) * (ft_arraylen(ret) + 1));
 		if (!(to_send = ft_implode(ret, '\n')))
 			ft_error(2, ERROR_ALLOCATION, NULL);
 		ft_free_array((void**)ret, ft_arraylen(ret));

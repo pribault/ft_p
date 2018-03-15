@@ -1,33 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_ls.c                                            :+:      :+:    :+:   */
+/*   ft_execute.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/11/02 12:10:42 by pribault          #+#    #+#             */
-/*   Updated: 2017/11/02 12:26:16 by pribault         ###   ########.fr       */
+/*   Created: 2018/01/15 20:52:30 by pribault          #+#    #+#             */
+/*   Updated: 2018/02/10 20:58:31 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	**ft_ls(char *dir)
+char	*ft_execute(char *file, char **arg, char **env)
 {
-	char			**files;
-	struct dirent	*dirent;
-	DIR				*ptr;
-	size_t			i;
+	int		fd[2];
+	char	*s;
+	pid_t	pid;
+	int		ret;
 
-	if (!(ptr = opendir(dir)) ||
-		!(files = (char**)malloc(sizeof(char*))))
+	s = NULL;
+	if (!arg || !env || !file || pipe(fd) < 0 || (pid = fork()) < 0)
 		return (NULL);
-	i = 0;
-	while ((dirent = readdir(ptr)))
-		if (!(files = (char**)realloc(files, sizeof(char*) * (i + 2))) ||
-			!(files[i++] = ft_strdup(dirent->d_name)))
-			return (NULL);
-	files[i] = NULL;
-	closedir(ptr);
-	return (files);
+	if (!pid)
+	{
+		dup2(fd[1], 1);
+		if (execve(file, arg, env) < 0)
+			exit(1);
+	}
+	else
+		wait4(pid, &ret, 0, NULL);
+	close(fd[1]);
+	ft_get_all_lines(fd[0], &s);
+	close(fd[0]);
+	return (s);
 }

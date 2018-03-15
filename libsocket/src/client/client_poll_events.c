@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/21 13:32:57 by pribault          #+#    #+#             */
-/*   Updated: 2018/01/21 13:44:35 by pribault         ###   ########.fr       */
+/*   Updated: 2018/03/11 23:13:17 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ static void	set_sets(t_client *client, fd_set *set, int *fd_max)
 	}
 	else
 		*fd_max = 0;
-	client_add_write_request_to_set(&set[1], client->write_queue, fd_max);
+	client_add_write_request_to_set(&set[1], &client->write_queue, fd_max);
 }
 
 void		client_poll_events(t_client *client)

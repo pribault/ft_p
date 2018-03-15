@@ -1,18 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_bzero.c                                         :+:      :+:    :+:   */
+/*   ft_vector_init.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pribault <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/11/05 17:04:26 by pribault          #+#    #+#             */
-/*   Updated: 2016/11/09 21:37:27 by pribault         ###   ########.fr       */
+/*   Created: 2018/03/03 11:31:27 by pribault          #+#    #+#             */
+/*   Updated: 2018/03/03 11:33:24 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_bzero(void *s, size_t n)
+void	ft_vector_init(t_vector *vector, size_t type)
 {
-	ft_memset(s, '\0', n);
+	vector->ptr = NULL;
+	vector->type = type;
+	vector->n = 0;
+	vector->size = 0;
 }

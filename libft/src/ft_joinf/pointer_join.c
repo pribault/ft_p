@@ -1,38 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_execute.c                                       :+:      :+:    :+:   */
+/*   pointer_join.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/01/15 20:52:30 by pribault          #+#    #+#             */
-/*   Updated: 2018/01/21 20:43:30 by pribault         ###   ########.fr       */
+/*   Created: 2018/03/09 08:46:45 by pribault          #+#    #+#             */
+/*   Updated: 2018/03/10 14:59:47 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "ft_joinf.h"
 
-char	*ft_execute(char *file, char **arg, char **env)
+void			print_pointer(va_list va, char *new, size_t *j)
 {
-	int		fd[2];
-	char	*s;
-	pid_t	pid;
-	int		ret;
+	new[(*j)++] = '0';
+	new[(*j)++] = 'x';
+	print_unsigned_base_join(va, new, j, "0123456789abcdef");
+}
 
-	s = NULL;
-	if (!arg || !env || !file || pipe(fd) < 0 || (pid = fork()) < 0)
-		return (NULL);
-	if (!pid)
-	{
-		dup2(fd[1], 1);
-		if (execve(file, arg, env) < 0)
-			exit(1);
-	}
-	else
-		wait4(pid, &ret, 0, NULL);
-	close(fd[1]);
-	ft_get_all_lines(fd[0], &s);
-	close(fd[0]);
-	free(fd);
-	return (s);
+size_t			get_pointer_len(va_list va, char *base)
+{
+	int		nbr;
+
+	nbr = va_arg(va, int);
+	return (ft_nbrlen_base(nbr, ft_strlen(base)) + 2);
 }

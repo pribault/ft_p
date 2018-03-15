@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/15 14:06:03 by pribault          #+#    #+#             */
-/*   Updated: 2017/07/17 20:36:11 by pribault         ###   ########.fr       */
+/*   Updated: 2018/03/10 14:59:59 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,12 @@ size_t		get_next_arg(va_list va, const char *format, size_t *i)
 {
 	if (format[*i] == 'd' || format[*i] == 'i')
 		return (get_number_len(va, "0123456789"));
+	else if (format[*i] == 'u')
+		return (get_unsigned_len(va, "0123456789"));
 	else if (format[*i] == 'x')
 		return (get_number_len(va, "0123456789abcdef"));
+	else if (format[*i] == 'p')
+		return (get_pointer_len(va, "0123456789abcdef"));
 	else if (format[*i] == 'o')
 		return (get_number_len(va, "01234567"));
 	else if (format[*i] == 'b')
@@ -35,6 +39,8 @@ void		print_next_arg(va_list va, char *new, size_t *j, char c)
 		print_number(va, new, j, "0123456789");
 	else if (c == 'x')
 		print_number(va, new, j, "0123456789abcdef");
+	else if (c == 'p')
+		print_pointer(va, new, j);
 	else if (c == 'o')
 		print_number(va, new, j, "01234567");
 	else if (c == 'b')

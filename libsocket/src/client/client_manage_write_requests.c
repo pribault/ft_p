@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/21 13:46:53 by pribault          #+#    #+#             */
-/*   Updated: 2018/01/21 13:56:40 by pribault         ###   ########.fr       */
+/*   Updated: 2018/03/11 23:13:28 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	client_manage_write_requests(t_client *client, fd_set *set,
 	t_vector	*vector;
 	size_t		i;
 
-	if ((*n_evts) < 1 || !(vector = client->write_queue))
+	if ((*n_evts) < 1 || !(vector = &client->write_queue))
 		return ;
 	i = vector->n;
 	while (--i != (size_t)-1 && (*n_evts))

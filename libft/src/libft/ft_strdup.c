@@ -1,32 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_vector_new.c                                    :+:      :+:    :+:   */
+/*   ft_strdup.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/08/31 23:37:46 by pribault          #+#    #+#             */
-/*   Updated: 2017/10/18 18:47:51 by pribault         ###   ########.fr       */
+/*   Created: 2016/11/03 17:56:59 by pribault          #+#    #+#             */
+/*   Updated: 2018/03/11 23:31:07 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-t_vector	*ft_vector_new(size_t type, size_t n)
+char	*ft_strdup(const char *s1)
 {
-	t_vector	*new;
+	char	*s2;
+	size_t	i;
 
-	if (!(new = (t_vector*)malloc(sizeof(t_vector))))
+	i = ft_strlen(s1);
+	if (!(s2 = (char*)malloc(sizeof(char) * (i + 1))))
 		return (NULL);
-	new->n = n;
-	new->type = type;
-	new->size = VECTOR_SIZE * ((type * n - 1) / VECTOR_SIZE) +
-	VECTOR_SIZE;
-	if (!(new->ptr = malloc(new->size)))
-	{
-		free(new);
-		return (NULL);
-	}
-	ft_bzero(new->ptr, new->size);
-	return (new);
+	ft_memcpy(s2, s1, sizeof(char) * (i + 1));
+	return (s2);
 }

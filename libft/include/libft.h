@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/03 16:13:23 by pribault          #+#    #+#             */
-/*   Updated: 2018/02/03 17:24:54 by pribault         ###   ########.fr       */
+/*   Updated: 2018/03/15 22:34:26 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 # include <fcntl.h>
 # include <dirent.h>
 # include <sys/wait.h>
+# include <sys/mman.h>
 # include <inttypes.h>
 # include "ft_printf.h"
 # include "malloc.h"
@@ -41,6 +42,8 @@
 # define ERROR_EXIT		BYTE(0)
 
 # define FLAG_PARAM_MAX	4
+
+# define DEFAULT_VECTOR	(t_vector){0, 0, 0, NULL}
 
 /*
 ** structures
@@ -87,7 +90,7 @@ typedef struct		s_long_flag
 	char			*str;
 	int				n_params;
 	t_param_type	params_type[FLAG_PARAM_MAX];
-	void			(*function)(char **args, int n, void *data);
+	void			(*function)(void *data, char **args, int n);
 }					t_long_flag;
 
 typedef struct		s_flags
@@ -113,6 +116,9 @@ typedef enum		e_default_error
 	ERROR_UNKNOWN_PARAMETER,
 	ERROR_UNKNOWN_SHORT_FLAG,
 	ERROR_UNKNOWN_LONG_FLAG,
+	ERROR_MMAP,
+	ERROR_INVALID_FREE,
+	ERROR_INVALID_POINTER,
 	ERROR_FT_MAX
 }					t_default_error;
 
@@ -256,11 +262,11 @@ void				ft_lstsort(t_list *head, int (*sort)(void*, void*));
 **	vector functions
 */
 
+void				ft_vector_init(t_vector *vector, size_t type);
+void				ft_vector_del(t_vector *vector);
 void				ft_vector_add(t_vector *vector, void *ptr);
-void				ft_vector_del(t_vector **vector);
 void				ft_vector_del_one(t_vector *vector, size_t i);
 void				*ft_vector_get(t_vector *vector, size_t n);
-t_vector			*ft_vector_new(size_t type, size_t n);
 void				ft_vector_printhex(t_vector *vector);
 void				ft_vector_resize(t_vector *vector, size_t new_size);
 
@@ -300,7 +306,7 @@ char				**ft_strsplit(char const *s, char c);
 char				*ft_strstr(const char *big, const char *little);
 char				*ft_strsub(char const *s, unsigned int start, size_t len);
 char				*ft_strtrim(char const *s);
-void				ft_swap(void **a, void **b);
+void				ft_swap(void *a, void *b, size_t size);
 
 /*
 **	global variables
