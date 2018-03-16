@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/02 20:30:31 by pribault          #+#    #+#             */
-/*   Updated: 2018/03/15 22:53:42 by pribault         ###   ########.fr       */
+/*   Updated: 2018/03/16 06:56:40 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,10 +69,7 @@ void	save_message(t_client *client, t_header *ptr, size_t size)
 void	message_complete(t_client *client, t_header *ptr, size_t size)
 {
 	if (client->opt & OPT_VERBOSE)
-	{
-		ft_printf("message received:\n");
-		ft_memdump(ptr, size);
-	}
+		ft_printf("message received of size %lu bytes\n", size);
 	if (g_func[client->state][ptr->type])
 		g_func[client->state][ptr->type](client, ptr, size);
 	else

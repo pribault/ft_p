@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/03 13:17:45 by pribault          #+#    #+#             */
-/*   Updated: 2018/03/15 22:51:54 by pribault         ###   ########.fr       */
+/*   Updated: 2018/03/16 06:59:00 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ void	message_complete(t_server *server, void *client, t_header *ptr,
 	{
 		ft_printf("message received from [%d]:\n",
 		server_get_client_fd(client));
-		ft_printf("%lu\n", ptr->type);
+		ft_printf("type=%lu\nsize=%lu\n", ptr->type, size);
 	}
 	if (g_func[data->state][ptr->type])
 		g_func[data->state][ptr->type](server, client, ptr, size);

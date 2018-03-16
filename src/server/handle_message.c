@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/03 13:50:38 by pribault          #+#    #+#             */
-/*   Updated: 2018/03/15 23:08:19 by pribault         ###   ########.fr       */
+/*   Updated: 2018/03/16 06:48:13 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ int		path_is_valid(t_server *server, t_data *data, char *file)
 			state++;
 	}
 	ft_free_array((void**)array, len);
+	ft_printf("state=%d\n", state);
 	return ((state >= 0) ? 1 : 0);
 }
 
