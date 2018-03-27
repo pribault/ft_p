@@ -12,7 +12,7 @@
 
 #include "client.h"
 
-void	enqueue_msg(t_client *client, void *data, size_t size, uint8_t type)
+void	enqueue_msg(t_cli *client, void *data, size_t size, uint8_t type)
 {
 	static t_msg	msg;
 
@@ -54,7 +54,7 @@ void	msg_send(void *server, void *client, t_msg *msg)
 	(void)client;
 	free(msg->ptr);
 	if (server_get_client_fd(client) != 1 &&
-		((t_client*)server_get_data(server))->opt & OPT_VERBOSE)
+		((t_cli*)server_get_data(server))->opt & OPT_VERBOSE)
 		ft_printf("message sended to [%d]\n",
 		server_get_client_fd(client));
 }

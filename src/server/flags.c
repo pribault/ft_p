@@ -31,24 +31,24 @@ void	print_usage(void)
 	printed = FT_TRUE;
 }
 
-void	set_verbose(t_server *server)
+void	set_verbose(t_serv *server)
 {
 	server->opt ^= OPT_VERBOSE;
 }
 
-void	set_long_verbose(char **args, int n_params, t_server *server)
+void	set_long_verbose(char **args, int n_params, t_serv *server)
 {
 	(void)args;
 	(void)n_params;
 	server->opt ^= OPT_VERBOSE;
 }
 
-void	get_default(char *s, t_server *server)
+void	get_default(char *s, t_serv *server)
 {
 	get_port(&s, 1, server);
 }
 
-void	get_port(char **args, int n_params, t_server *server)
+void	get_port(char **args, int n_params, t_serv *server)
 {
 	unsigned int	n;
 

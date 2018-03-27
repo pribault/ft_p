@@ -12,7 +12,7 @@
 
 #include "client.h"
 
-void	quit(t_client *client, char **cmds, size_t len)
+void	quit(t_cli *client, char **cmds, size_t len)
 {
 	(void)client;
 	(void)cmds;
@@ -21,7 +21,7 @@ void	quit(t_client *client, char **cmds, size_t len)
 	exit(0);
 }
 
-void	send_ls_request(t_client *client, char **cmds, size_t len)
+void	send_ls_request(t_cli *client, char **cmds, size_t len)
 {
 	if (len == 1)
 		enqueue_msg(client, ".", 1, TYPE_LS);
@@ -32,7 +32,7 @@ void	send_ls_request(t_client *client, char **cmds, size_t len)
 	client->state = STATE_WAITING_FOR_STR;
 }
 
-void	send_cd_request(t_client *client, char **cmds, size_t len)
+void	send_cd_request(t_cli *client, char **cmds, size_t len)
 {
 	if (len == 1)
 		enqueue_msg(client, "/", 1, TYPE_CD);
@@ -43,7 +43,7 @@ void	send_cd_request(t_client *client, char **cmds, size_t len)
 	client->state = STATE_WAITING_FOR_STR;
 }
 
-void	send_pwd_request(t_client *client, char **cmds, size_t len)
+void	send_pwd_request(t_cli *client, char **cmds, size_t len)
 {
 	(void)cmds;
 	if (len == 1)

@@ -66,15 +66,15 @@ void	my_sig(int sig)
 	exit(1);
 }
 
-void	client_init(t_client *client, int argc, char **argv, char **env)
+void	client_init(t_cli *client, int argc, char **argv, char **env)
 {
 	ft_add_errors((t_error*)&g_errors);
-	ft_bzero(client, sizeof(t_client));
+	ft_bzero(client, sizeof(t_cli));
 	client->env = env;
 	client->protocol = TCP;
 	client->opt = OPT_VERBOSE;
 	client->state = STATE_NONE;
-	if (!(client->server = server_new()))
+	if (!(client->server = server_new(TCP)))
 		return (ft_error(2, ERROR_ALLOCATION, NULL));
 	ft_get_flags(argc, argv, ft_get_flag_array((t_short_flag*)&g_short_flags,
 	(t_long_flag*)&g_long_flags, (void*)&get_default), client);
@@ -83,13 +83,13 @@ void	client_init(t_client *client, int argc, char **argv, char **env)
 	server_set_callback(client->server, SERVER_CLIENT_DEL_CB, &del_client);
 	server_set_callback(client->server, SERVER_MSG_RECV_CB, &msg_recv);
 	server_set_callback(client->server, SERVER_MSG_SEND_CB, &msg_send);
-	server_set_clients_max(client->server, 2);
+	// server_set_clients_max(client->server, 2);
 	server_add_client_by_fd(client->server, 0);
 }
 
 int		main(int argc, char **argv, char **env)
 {
-	t_client	client;
+	t_cli	client;
 
 	setenv("MALLOC_DEBUG", "1", 1);
 	atexit(&my_exit);
@@ -99,9 +99,9 @@ int		main(int argc, char **argv, char **env)
 		ft_error(2, ERROR_NO_ADDRESS_SET, NULL);
 	if (!client.port)
 		ft_error(2, ERROR_NO_PORT_SET, NULL);
-	if (!server_connect(client.server, TCP, client.address, client.port))
+	if (!server_connect(client.server, client.address, client.port))
 		ft_error(2, ERROR_CANNOT_CONNECT, client.address);
-	server_set_clients_max(client.server, 0);
+	// server_set_clients_max(client.server, 0);
 	while (1)
 		server_poll_events(client.server);
 	return (0);

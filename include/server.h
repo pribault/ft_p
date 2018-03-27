@@ -44,53 +44,53 @@ typedef struct	s_data
 	t_file_data	*file;
 }				t_data;
 
-typedef struct	s_server
+typedef struct	s_serv
 {
-	void		*server;
+	t_server	*server;
 	char		**env;
 	char		*port;
 	char		*root;
 	t_protocol	protocol;
 	uint8_t		opt;
-}				t_server;
+}				t_serv;
 
-typedef void	(*t_msg_handler)(t_server *, void *, t_header *, size_t);
+typedef void	(*t_msg_handler)(t_serv *, void *, t_header *, size_t);
 
 void			print_usage(void);
-void			get_default(char *s, t_server *server);
-void			set_verbose(t_server *server);
+void			get_default(char *s, t_serv *server);
+void			set_verbose(t_serv *server);
 void			set_long_verbose(char **args, int n_params,
-				t_server *server);
-void			get_root(char **args, int n_params, t_server *server);
-void			get_port(char **args, int n, t_server *server);
-void			get_protocol(char **args, int n_params, t_server *server);
-void			get_max(char **args, int n_params, t_server *server);
-void			get_timeout(char **args, int n_params, t_server *server);
+				t_serv *server);
+void			get_root(char **args, int n_params, t_serv *server);
+void			get_port(char **args, int n, t_serv *server);
+void			get_protocol(char **args, int n_params, t_serv *server);
+void			get_max(char **args, int n_params, t_serv *server);
+void			get_timeout(char **args, int n_params, t_serv *server);
 
 void			add_client(void *server, void *client);
 void			del_client(void *server, void *client);
 void			msg_recv(void *server, void *client, t_msg *msg);
 void			msg_send(void *server, void *client, t_msg *msg);
 
-void			treat_command(t_server *server, char *cmd);
+void			treat_command(t_serv *server, char *cmd);
 
-void			manage_received_msg(t_server *server, void *client,
+void			manage_received_msg(t_serv *server, void *client,
 				t_header *ptr, size_t size);
 
-int				path_is_valid(t_server *server, t_data *data, char *file);
-void			recv_cd(t_server *server, void *client, t_header *ptr,
+int				path_is_valid(t_serv *server, t_data *data, char *file);
+void			recv_cd(t_serv *server, void *client, t_header *ptr,
 				size_t size);
-void			recv_ls(t_server *server, void *client, t_header *ptr,
+void			recv_ls(t_serv *server, void *client, t_header *ptr,
 				size_t size);
-void			recv_pwd(t_server *server, void *client, t_header *ptr,
+void			recv_pwd(t_serv *server, void *client, t_header *ptr,
 				size_t size);
-void			recv_put(t_server *server, void *client, t_header *ptr,
+void			recv_put(t_serv *server, void *client, t_header *ptr,
 				size_t size);
-void			recv_get(t_server *server, void *client, t_header *ptr,
+void			recv_get(t_serv *server, void *client, t_header *ptr,
 				size_t size);
 
 t_msg			new_msg(void *ptr, size_t size);
-void			enqueue_msg(t_server *server, void *client, t_msg msg,
+void			enqueue_msg(t_serv *server, void *client, t_msg msg,
 				uint8_t type);
 
 #endif

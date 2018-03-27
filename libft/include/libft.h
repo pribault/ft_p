@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/03 16:13:23 by pribault          #+#    #+#             */
-/*   Updated: 2018/03/15 22:34:26 by pribault         ###   ########.fr       */
+/*   Updated: 2018/03/27 08:30:24 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@
 # include <sys/mman.h>
 # include <inttypes.h>
 # include "ft_printf.h"
-# include "malloc.h"
 
 /*
 ** macros
@@ -63,6 +62,16 @@ typedef struct		s_vector
 	size_t			n;
 	void			*ptr;
 }					t_vector;
+
+typedef struct		s_circ_buffer
+{
+	uint32_t		write_idx;
+	uint32_t		read_idx;
+	uint32_t		n;
+	uint64_t		type;
+	uint64_t		elems;
+	void			*ptr;
+}					t_circ_buffer;
 
 typedef struct		s_gnl_stack
 {
@@ -269,6 +278,18 @@ void				ft_vector_del_one(t_vector *vector, size_t i);
 void				*ft_vector_get(t_vector *vector, size_t n);
 void				ft_vector_printhex(t_vector *vector);
 void				ft_vector_resize(t_vector *vector, size_t new_size);
+
+/*
+**	circular buffer functions
+*/
+
+void				ft_circ_buffer_init(t_circ_buffer *buffer,
+					uint64_t type_size, uint64_t n_elements);
+void				ft_circ_buffer_del(t_circ_buffer *buffer);
+void				ft_circ_buffer_enqueue(t_circ_buffer *buffer, void *data);
+void				*ft_circ_buffer_dequeue(t_circ_buffer *dequeue);
+void				*ft_circ_buffer_get(t_circ_buffer *buffer, uint32_t idx);
+uint64_t			ft_circ_buffer_get_size(t_circ_buffer *buffer);
 
 /*
 **	string functions

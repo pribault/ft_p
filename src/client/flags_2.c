@@ -12,7 +12,7 @@
 
 #include "client.h"
 
-void	get_default(char *s, t_client *client)
+void	get_default(char *s, t_cli *client)
 {
 	if (!client->address)
 		get_address(&s, 1, client);
@@ -22,7 +22,7 @@ void	get_default(char *s, t_client *client)
 		ft_error(2, ERROR_PARAMS_ALREADY_SET, s);
 }
 
-void	get_protocol(char **args, int n_params, t_client *client)
+void	get_protocol(char **args, int n_params, t_cli *client)
 {
 	(void)n_params;
 	if (!ft_strcmp(args[0], "tcp"))
@@ -33,9 +33,11 @@ void	get_protocol(char **args, int n_params, t_client *client)
 		ft_error(2, ERROR_INVALID_PROTOCOL, args[0]);
 }
 
-void	get_timeout(char **args, int n_params, t_client *client)
+void	get_timeout(char **args, int n_params, t_cli *client)
 {
 	(void)n_params;
-	server_set_timeout(client->server,
-	(struct timeval){ft_atou(args[0]), ft_atou(args[1])});
+	(void)args;
+	(void)client;
+	// server_set_timeout(client->server,
+	// (struct timeval){ft_atou(args[0]), ft_atou(args[1])});
 }

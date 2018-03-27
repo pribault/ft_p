@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/02 12:10:42 by pribault          #+#    #+#             */
-/*   Updated: 2018/03/15 22:47:24 by pribault         ###   ########.fr       */
+/*   Updated: 2017/11/02 12:26:16 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ char	**ft_ls(char *dir)
 	i = 0;
 	while ((dirent = readdir(ptr)))
 		if (!(files = (char**)realloc(files, sizeof(char*) * (i + 2))) ||
-			!(files[i++] = ft_strdup((char*)&dirent->d_name)))
+			!(files[i++] = ft_strdup(dirent->d_name)))
 			return (NULL);
 	files[i] = NULL;
 	closedir(ptr);

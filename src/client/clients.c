@@ -14,19 +14,19 @@
 
 void	add_client(void *server, void *client)
 {
-	t_client	*cl;
+	t_cli	*cl;
 
 	if (!(cl = server_get_data(server)))
 		return ;
 	if (server_get_client_fd(client))
 		cl->fd = server_get_client_fd(client);
-	if (((t_client*)server_get_data(server))->opt & OPT_VERBOSE)
+	if (((t_cli*)server_get_data(server))->opt & OPT_VERBOSE)
 		ft_printf("client [%d] added\n", server_get_client_fd(client));
 }
 
 void	del_client(void *server, void *client)
 {
 	(void)client;
-	if (((t_client*)server_get_data(server))->opt & OPT_VERBOSE)
+	if (((t_cli*)server_get_data(server))->opt & OPT_VERBOSE)
 		ft_printf("client [%d] removed\n", server_get_client_fd(client));
 }

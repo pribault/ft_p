@@ -64,7 +64,7 @@ void	save_message(t_data *data, t_header *ptr, size_t size)
 	data->size, data->expected);
 }
 
-void	message_complete(t_server *server, void *client, t_header *ptr,
+void	message_complete(t_serv *server, void *client, t_header *ptr,
 		size_t size)
 {
 	t_data	*data;
@@ -88,7 +88,7 @@ void	message_complete(t_server *server, void *client, t_header *ptr,
 	}
 }
 
-void	waiting_for_message(t_server *server, void *client, t_header *ptr,
+void	waiting_for_message(t_serv *server, void *client, t_header *ptr,
 		size_t size)
 {
 	t_data	*data;
@@ -107,7 +107,7 @@ void	waiting_for_message(t_server *server, void *client, t_header *ptr,
 		save_message(client, ptr, size);
 }
 
-void	manage_received_msg(t_server *server, void *client, t_header *ptr,
+void	manage_received_msg(t_serv *server, void *client, t_header *ptr,
 		size_t size)
 {
 	t_data	*data;

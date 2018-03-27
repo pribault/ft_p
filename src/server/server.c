@@ -56,7 +56,7 @@ void	my_sig(int sig)
 	exit(1);
 }
 
-void	verify_root(t_server *server)
+void	verify_root(t_serv *server)
 {
 	char	*new;
 	size_t	len;
@@ -71,14 +71,14 @@ void	verify_root(t_server *server)
 	}
 }
 
-void	server_init(t_server *server, int argc, char **argv, char **env)
+void	server_init(t_serv *server, int argc, char **argv, char **env)
 {
 	ft_add_errors((t_error*)&g_errors);
-	ft_bzero(server, sizeof(t_server));
+	ft_bzero(server, sizeof(t_serv));
 	server->env = env;
 	server->protocol = TCP;
 	server->opt = OPT_VERBOSE;
-	if (!(server->server = server_new()))
+	if (!(server->server = server_new(TCP)))
 		return (ft_error(2, ERROR_ALLOCATION, NULL));
 	if (!(server->root = ft_strdup(ft_getenv(env, "PWD"))))
 		return (ft_error(2, ERROR_CUSTOM, "cannot find PWD in environnement"));
@@ -95,7 +95,7 @@ void	server_init(t_server *server, int argc, char **argv, char **env)
 
 int		main(int argc, char **argv, char **env)
 {
-	t_server	server;
+	t_serv	server;
 
 	setenv("MALLOC_DEBUG", "1", 1);
 	atexit(&my_exit);
@@ -106,7 +106,7 @@ int		main(int argc, char **argv, char **env)
 		print_usage();
 		ft_error(2, ERROR_NO_PORT_SET, NULL);
 	}
-	server_start(server.server, server.protocol, server.port);
+	server_start(server.server, server.port);
 	while (1)
 		server_poll_events(server.server);
 	return (0);

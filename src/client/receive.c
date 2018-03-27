@@ -37,7 +37,7 @@ static t_msg_handler	g_func[STATE_MAX][TYPE_MAX] =
 	{&recv_state, &recv_file, NULL, NULL, NULL, NULL, NULL},
 };
 
-void	save_message(t_client *client, t_header *ptr, size_t size)
+void	save_message(t_cli *client, t_header *ptr, size_t size)
 {
 	if (!client->data.ptr)
 	{
@@ -66,7 +66,7 @@ void	save_message(t_client *client, t_header *ptr, size_t size)
 	ft_printf("%lu/%lu bytes\n", client->data.size, client->data.expected);
 }
 
-void	message_complete(t_client *client, t_header *ptr, size_t size)
+void	message_complete(t_cli *client, t_header *ptr, size_t size)
 {
 	if (client->opt & OPT_VERBOSE)
 		ft_printf("message received of size %lu bytes\n", size);
@@ -81,7 +81,7 @@ void	message_complete(t_client *client, t_header *ptr, size_t size)
 	}
 }
 
-void	waiting_for_message(t_client *client, t_header *ptr, size_t size)
+void	waiting_for_message(t_cli *client, t_header *ptr, size_t size)
 {
 	size_t	save;
 
@@ -96,7 +96,7 @@ void	waiting_for_message(t_client *client, t_header *ptr, size_t size)
 		save_message(client, ptr, size);
 }
 
-void	manage_received_msg(t_client *client, t_header *ptr, size_t size)
+void	manage_received_msg(t_cli *client, t_header *ptr, size_t size)
 {
 	if (client->data.ptr)
 		waiting_for_message(client, ptr, size);

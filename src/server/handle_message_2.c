@@ -12,7 +12,7 @@
 
 #include "server.h"
 
-void	send_file(t_server *server, void *client, char *file)
+void	send_file(t_serv *server, void *client, char *file)
 {
 	t_file_data	*final;
 	struct stat	buff;
@@ -51,7 +51,7 @@ char	*get_corrected_path(char *path)
 	return (result);
 }
 
-void	recv_put(t_server *server, void *client, t_header *ptr, size_t size)
+void	recv_put(t_serv *server, void *client, t_header *ptr, size_t size)
 {
 	t_file_data	*file;
 	char		*name;
@@ -78,7 +78,7 @@ void	recv_put(t_server *server, void *client, t_header *ptr, size_t size)
 	enqueue_msg(server, client, new_msg("SUCCESS", 7), TYPE_STR);
 }
 
-void	recv_get(t_server *server, void *client, t_header *ptr, size_t size)
+void	recv_get(t_serv *server, void *client, t_header *ptr, size_t size)
 {
 	char	*long_file;
 	char	*file;

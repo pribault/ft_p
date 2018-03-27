@@ -14,12 +14,12 @@
 
 void	add_client(void *server, void *client)
 {
-	t_data		data;
-	t_server	*srv;
+	t_data	data;
+	t_serv	*srv;
 
 	if (!(srv = server_get_data(server)))
 		return ;
-	if (((t_server*)server_get_data(server))->opt & OPT_VERBOSE)
+	if (((t_serv*)server_get_data(server))->opt & OPT_VERBOSE)
 		ft_printf("client [%d] added\n", server_get_client_fd(client));
 	ft_bzero(&data, sizeof(t_data));
 	data.pwd = ft_strdup(srv->root);
@@ -28,12 +28,12 @@ void	add_client(void *server, void *client)
 
 void	del_client(void *server, void *client)
 {
-	t_data		*data;
-	t_server	*srv;
+	t_data	*data;
+	t_serv	*srv;
 
 	if (!(srv = server_get_data(server)))
 		return ;
-	if (((t_server*)server_get_data(server))->opt & OPT_VERBOSE)
+	if (((t_serv*)server_get_data(server))->opt & OPT_VERBOSE)
 		ft_printf("client [%d] removed\n", server_get_client_fd(client));
 	if (!(data = server_client_get_data(client)))
 		return ;

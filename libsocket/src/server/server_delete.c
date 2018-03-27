@@ -17,6 +17,6 @@ void	server_delete(t_server **server)
 	if (!server || !(*server))
 		return ;
 	ft_vector_del(&(*server)->clients);
-	ft_vector_del(&(*server)->write_queue);
+	ft_circ_buffer_del(&(*server)->write_queue);
 	free(*server);
 }

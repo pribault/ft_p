@@ -3,7 +3,7 @@ CLIENT = client
 EXT = Makefile
 LIBFT = libft
 LIBSOCKET = libsocket
-JOBS = 4
+JOBS = 1
 
 .PHONY: all clean fclean re norme $(LIBFT) $(LIBSOCKET)
 

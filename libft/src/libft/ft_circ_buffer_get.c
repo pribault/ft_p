@@ -1,20 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   server_set_timeout.c                               :+:      :+:    :+:   */
+/*   ft_circ_buffer_get.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/02/02 16:06:27 by pribault          #+#    #+#             */
-/*   Updated: 2018/02/02 16:07:43 by pribault         ###   ########.fr       */
+/*   Created: 2018/03/27 14:36:53 by pribault          #+#    #+#             */
+/*   Updated: 2018/03/27 14:38:59 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "server.h"
+#include "libft.h"
 
-void	server_set_timeout(t_server *server, struct timeval timeout)
+void	*ft_circ_buffer_get(t_circ_buffer *buffer, uint32_t idx)
 {
-	if (!server)
-		return ;
-	server->timeout = timeout;
+	if (idx < buffer->n)
+	{
+		if (buffer->read_idx + idx < buffer->elems)
+			return (buffer->ptr + (buffer->read_idx + idx) * buffer->type);
+		return (buffer->ptr + (buffer->read_idx + idx - buffer->elems) *
+		buffer->type);
+	}
+	return (NULL);
 }

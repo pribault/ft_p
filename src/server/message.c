@@ -17,7 +17,7 @@ t_msg	new_msg(void *ptr, size_t size)
 	return ((t_msg){ptr, size});
 }
 
-void	enqueue_msg(t_server *server, void *client, t_msg msg, uint8_t type)
+void	enqueue_msg(t_serv *server, void *client, t_msg msg, uint8_t type)
 {
 	static t_msg	new_msg;
 
@@ -54,7 +54,7 @@ void	msg_send(void *server, void *client, t_msg *msg)
 {
 	(void)client;
 	(void)msg;
-	if (((t_server*)server_get_data(server))->opt & OPT_VERBOSE)
+	if (((t_serv*)server_get_data(server))->opt & OPT_VERBOSE)
 		ft_printf("message of size %lu sended to [%d]\n", msg->size,
 		server_get_client_fd(client));
 }

@@ -1,27 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   commands.c                                         :+:      :+:    :+:   */
+/*   ft_circ_buffer_init.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/01/21 16:43:12 by pribault          #+#    #+#             */
-/*   Updated: 2018/02/02 16:30:29 by pribault         ###   ########.fr       */
+/*   Created: 2018/03/26 19:37:34 by pribault          #+#    #+#             */
+/*   Updated: 2018/03/27 08:48:20 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "server.h"
+#include "libft.h"
 
-void	treat_command(t_serv *server, char *cmd)
+void	ft_circ_buffer_init(t_circ_buffer *buffer, uint64_t type_size,
+		uint64_t n_elements)
 {
-	size_t	len;
-	char	**array;
-
-	(void)server;
-	if (!(array = ft_multisplit(cmd, WHITESPACES)))
+	buffer->write_idx = 0;
+	buffer->read_idx = 0;
+	buffer->type = type_size;
+	buffer->elems = n_elements + 1;
+	buffer->n = 0;
+	if (!(buffer->ptr = malloc(type_size * n_elements)))
 		ft_error(2, ERROR_ALLOCATION, NULL);
-	len = ft_arraylen(array);
-	if (len == 1 && !ft_strcmp(array[0], "exit"))
-		exit(0);
-	ft_free_array((void**)array, len);
 }

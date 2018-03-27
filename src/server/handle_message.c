@@ -12,7 +12,7 @@
 
 #include "server.h"
 
-int		path_is_valid(t_server *server, t_data *data, char *file)
+int		path_is_valid(t_serv *server, t_data *data, char *file)
 {
 	size_t	root_len;
 	size_t	len;
@@ -41,7 +41,7 @@ int		path_is_valid(t_server *server, t_data *data, char *file)
 	return ((state >= 0) ? 1 : 0);
 }
 
-void	recv_cd(t_server *server, void *client, t_header *ptr, size_t size)
+void	recv_cd(t_serv *server, void *client, t_header *ptr, size_t size)
 {
 	DIR		*dir;
 	t_data	*data;
@@ -70,7 +70,7 @@ void	recv_cd(t_server *server, void *client, t_header *ptr, size_t size)
 	free(file);
 }
 
-void	recv_ls_2(t_server *server, void *client, char *file)
+void	recv_ls_2(t_serv *server, void *client, char *file)
 {
 	char	**ret;
 	char	*to_send;
@@ -91,7 +91,7 @@ void	recv_ls_2(t_server *server, void *client, char *file)
 	}
 }
 
-void	recv_ls(t_server *server, void *client, t_header *ptr, size_t size)
+void	recv_ls(t_serv *server, void *client, t_header *ptr, size_t size)
 {
 	char	*long_file;
 	char	*file;
@@ -114,7 +114,7 @@ void	recv_ls(t_server *server, void *client, t_header *ptr, size_t size)
 	free(file);
 }
 
-void	recv_pwd(t_server *server, void *client, t_header *ptr, size_t size)
+void	recv_pwd(t_serv *server, void *client, t_header *ptr, size_t size)
 {
 	char	*path;
 	t_data	*data;

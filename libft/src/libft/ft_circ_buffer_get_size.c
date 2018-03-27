@@ -1,30 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   server_set_clients_max.c                           :+:      :+:    :+:   */
+/*   ft_circ_buffer_get_size.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/01/20 14:36:53 by pribault          #+#    #+#             */
-/*   Updated: 2018/03/11 23:17:40 by pribault         ###   ########.fr       */
+/*   Created: 2018/03/27 15:53:46 by pribault          #+#    #+#             */
+/*   Updated: 2018/03/27 15:54:42 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "server.h"
+#include "libft.h"
 
-void	server_set_clients_max(t_server *server, size_t max)
+uint64_t	ft_circ_buffer_get_size(t_circ_buffer *buffer)
 {
-	if (!server)
-		return ;
-	server->clients_max = max;
-	if (!(server->opt & SERVER_BIND))
-	{
-		if (server->clients.n < max)
-			server_bind(server);
-	}
-	else
-	{
-		if (server->clients.n >= max)
-			server_unbind(server);
-	}
+	return (buffer->n);
 }

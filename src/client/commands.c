@@ -12,7 +12,7 @@
 
 #include "client.h"
 
-void	send_put_request_2(t_client *client, char *file, void *data,
+void	send_put_request_2(t_cli *client, char *file, void *data,
 		struct stat *buff)
 {
 	t_file_data	*final;
@@ -29,7 +29,7 @@ void	send_put_request_2(t_client *client, char *file, void *data,
 	free(final);
 }
 
-void	send_put_request(t_client *client, char **cmds, size_t len)
+void	send_put_request(t_cli *client, char **cmds, size_t len)
 {
 	struct stat	buff;
 	char		*s;
@@ -54,7 +54,7 @@ void	send_put_request(t_client *client, char **cmds, size_t len)
 	client->state = STATE_WAITING_FOR_STR;
 }
 
-void	send_get_request(t_client *client, char **cmds, size_t len)
+void	send_get_request(t_cli *client, char **cmds, size_t len)
 {
 	char	*file;
 	size_t	name_len;
@@ -75,7 +75,7 @@ void	send_get_request(t_client *client, char **cmds, size_t len)
 	client->state = STATE_WAITING_FOR_STR;
 }
 
-void	get_command(t_client *client, char **cmds, size_t len)
+void	get_command(t_cli *client, char **cmds, size_t len)
 {
 	if (!ft_strcmp(cmds[0], "ls"))
 		send_ls_request(client, cmds, len);
@@ -93,7 +93,7 @@ void	get_command(t_client *client, char **cmds, size_t len)
 		ft_error(2, ERROR_UNKNOWN_COMMAND, cmds[0]);
 }
 
-void	treat_command(t_client *client, char *cmd)
+void	treat_command(t_cli *client, char *cmd)
 {
 	char	**cmds;
 	size_t	len;

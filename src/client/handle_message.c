@@ -12,7 +12,7 @@
 
 #include "client.h"
 
-void	recv_state(t_client *client, t_header *ptr, size_t size)
+void	recv_state(t_cli *client, t_header *ptr, size_t size)
 {
 	(void)size;
 	if (ptr->size >= sizeof(t_header) + 5 && !ft_strncmp((void*)ptr +
@@ -20,7 +20,7 @@ void	recv_state(t_client *client, t_header *ptr, size_t size)
 		client->state = STATE_NONE;
 }
 
-void	recv_str(t_client *client, t_header *ptr, size_t size)
+void	recv_str(t_cli *client, t_header *ptr, size_t size)
 {
 	static t_msg	msg;
 	uint64_t		x;
@@ -45,7 +45,7 @@ void	recv_str(t_client *client, t_header *ptr, size_t size)
 		client->state = STATE_WAITING_FOR_FILE;
 }
 
-void	recv_file(t_client *client, t_header *ptr, size_t size)
+void	recv_file(t_cli *client, t_header *ptr, size_t size)
 {
 	struct stat	buff;
 	int			fd;

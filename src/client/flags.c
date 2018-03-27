@@ -25,19 +25,19 @@ void	print_usage(void)
 	ft_putchar('\n');
 }
 
-void	set_verbose(t_client *client)
+void	set_verbose(t_cli *client)
 {
 	client->opt ^= OPT_VERBOSE;
 }
 
-void	set_long_verbose(char **args, int n_params, t_client *client)
+void	set_long_verbose(char **args, int n_params, t_cli *client)
 {
 	(void)args;
 	(void)n_params;
 	client->opt ^= OPT_VERBOSE;
 }
 
-void	get_port(char **args, int n_params, t_client *client)
+void	get_port(char **args, int n_params, t_cli *client)
 {
 	unsigned int	n;
 
@@ -53,7 +53,7 @@ void	get_port(char **args, int n_params, t_client *client)
 		client->port = args[0];
 }
 
-void	get_address(char **args, int n_params, t_client *client)
+void	get_address(char **args, int n_params, t_cli *client)
 {
 	(void)n_params;
 	if (client->address)

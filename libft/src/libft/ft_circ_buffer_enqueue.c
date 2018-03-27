@@ -1,18 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   server_get_clients_max.c                           :+:      :+:    :+:   */
+/*   ft_circ_buffer_enqueue.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/01/20 14:37:48 by pribault          #+#    #+#             */
-/*   Updated: 2018/01/20 14:47:39 by pribault         ###   ########.fr       */
+/*   Created: 2018/03/27 08:26:43 by pribault          #+#    #+#             */
+/*   Updated: 2018/03/27 08:27:37 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "server.h"
+#include "libft.h"
 
-size_t	server_get_clients_max(t_server *server)
+void	ft_circ_buffer_enqueue(t_circ_buffer *buffer, void *data)
 {
-	return ((server) ? server->clients_max : 0);
+	ft_memcpy(buffer->ptr + buffer->write_idx * buffer->type, data,
+	buffer->type);
+	buffer->write_idx = (buffer->write_idx + 1) % buffer->elems;
+	buffer->write_idx %= buffer->elems;
+	if (buffer->write_idx == buffer->read_idx)
+		buffer->read_idx = (buffer->read_idx + 1) % buffer->elems;
+	else
+		buffer->n++;
 }

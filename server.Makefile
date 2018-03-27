@@ -15,7 +15,7 @@ LIBFT = libft
 LIBSOCKET = libsocket
 INCLUDE_LIBS = -I $(LIBFT)/include -I $(LIBSOCKET)/include
 COMPILE_LIBS = -L $(LIBSOCKET) -lsocket -L $(LIBFT) -lft
-JOBS = 4
+JOBS = 1
 
 .PHONY: all clean fclean re export
 
