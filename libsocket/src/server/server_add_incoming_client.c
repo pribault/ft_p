@@ -23,7 +23,7 @@ void	server_add_incoming_client(t_server *server, int *n_evts)
 		&client.addr_len)) < 0)
 		return ;
 	(*n_evts)--;
-	ft_vector_add(&server->clients, &client);
 	if (server->client_add)
 		server->client_add(server, &client);
+	ft_vector_add(&server->clients, &client);
 }
