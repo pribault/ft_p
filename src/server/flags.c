@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/21 15:12:21 by pribault          #+#    #+#             */
-/*   Updated: 2018/02/02 19:09:51 by pribault         ###   ########.fr       */
+/*   Updated: 2018/03/28 09:04:21 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	set_verbose(t_serv *server)
 	server->opt ^= OPT_VERBOSE;
 }
 
-void	set_long_verbose(char **args, int n_params, t_serv *server)
+void	set_long_verbose(t_serv *server, char **args, int n_params)
 {
 	(void)args;
 	(void)n_params;
@@ -45,10 +45,10 @@ void	set_long_verbose(char **args, int n_params, t_serv *server)
 
 void	get_default(char *s, t_serv *server)
 {
-	get_port(&s, 1, server);
+	get_port(server, &s, 1);
 }
 
-void	get_port(char **args, int n_params, t_serv *server)
+void	get_port(t_serv *server, char **args, int n_params)
 {
 	unsigned int	n;
 

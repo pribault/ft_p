@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/21 14:38:58 by pribault          #+#    #+#             */
-/*   Updated: 2018/02/03 18:24:13 by pribault         ###   ########.fr       */
+/*   Updated: 2018/03/28 08:59:23 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ static t_error	g_errors[] =
 	{ERROR_UNEXPECTED_MSG, "unexpected message received", 0},
 	{ERROR_UNKNOWN_MSG_TYPE, "unkown message type %ld", 0},
 	{ERROR_FILE_ALREADY_EXIST, "file '%s' already exist", 0},
-	{ERROR_INVALID_ROOT, "invalid path '%s'", ERROR_EXIT},
+	{ERROR_INVALID_ROOT, "invalid root path '%s'", ERROR_EXIT},
 	{0, NULL, 0}
 };
 

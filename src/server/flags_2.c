@@ -6,17 +6,18 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/02 16:17:46 by pribault          #+#    #+#             */
-/*   Updated: 2018/02/03 18:24:45 by pribault         ###   ########.fr       */
+/*   Updated: 2018/03/28 09:01:05 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "server.h"
 
-void	get_root(char **args, int n_params, t_serv *server)
+void	get_root(t_serv *server, char **args, int n_params)
 {
 	DIR	*dir;
 
 	(void)n_params;
+	ft_printf("%s\n", args[0]);
 	if (!(dir = opendir(args[0])))
 		ft_error(2, ERROR_INVALID_ROOT, args[0]);
 	else
@@ -27,7 +28,7 @@ void	get_root(char **args, int n_params, t_serv *server)
 	}
 }
 
-void	get_protocol(char **args, int n_params, t_serv *server)
+void	get_protocol(t_serv *server, char **args, int n_params)
 {
 	(void)n_params;
 	if (!ft_strcmp(args[0], "tcp"))
@@ -38,13 +39,13 @@ void	get_protocol(char **args, int n_params, t_serv *server)
 		ft_error(2, ERROR_INVALID_PROTOCOL, args[0]);
 }
 
-void	get_max(char **args, int n_params, t_serv *server)
+void	get_max(t_serv *server, char **args, int n_params)
 {
 	(void)n_params;
 	server_set_queue_max(server->server, atoi(args[0]));
 }
 
-void	get_timeout(char **args, int n_params, t_serv *server)
+void	get_timeout(t_serv *server, char **args, int n_params)
 {
 	(void)n_params;
 	(void)args;
