@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/20 15:17:30 by pribault          #+#    #+#             */
-/*   Updated: 2018/01/21 14:20:30 by pribault         ###   ########.fr       */
+/*   Updated: 2018/03/28 11:37:01 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int		client_connect(t_client *client, t_protocol protocol,
 	struct addrinfo	*addr;
 	struct addrinfo	hints;
 
-	if (!client || !address || !port || (client->opt & CLIENT_CONNECTED))
+	if ((client->opt & CLIENT_CONNECTED))
 		return (0);
 	ft_bzero(&hints, sizeof(struct addrinfo));
 	hints.ai_family = AF_INET;

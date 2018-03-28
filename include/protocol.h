@@ -38,12 +38,10 @@ typedef enum	e_state
 	STATE_MAX
 }				t_state;
 
-# pragma pack(1)
-
 typedef struct	s_header
 {
+	uint64_t	size;
 	uint8_t		type;
-	uint32_t	size;
 }				t_header;
 
 typedef struct	s_file_data
@@ -51,7 +49,5 @@ typedef struct	s_file_data
 	char		name[FILE_NAME_MAX_SIZE];
 	mode_t		prot;
 }				t_file_data;
-
-# pragma pack()
 
 #endif

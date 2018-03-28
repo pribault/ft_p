@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/07 11:15:22 by pribault          #+#    #+#             */
-/*   Updated: 2018/01/21 14:17:16 by pribault         ###   ########.fr       */
+/*   Updated: 2018/03/28 13:03:54 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 */
 
 # include <sys/socket.h>
+# include <inttypes.h>
 # include <unistd.h>
 
 /*
@@ -54,6 +55,7 @@ typedef enum	e_server_callback
 	SERVER_CLIENT_DEL_CB,
 	SERVER_MSG_RECV_CB,
 	SERVER_MSG_SEND_CB,
+	SERVER_MSG_TRASH_CB,
 	SERVER_CLIENT_EXCEPTION_CB,
 	SERVER_SERVER_EXCEPTION_CB,
 	SERVER_CALLBACK_MAX
@@ -129,5 +131,8 @@ int				server_connect(t_server *server, char *address,
 				char *port);
 void			client_enqueue_write_by_fd(t_client *client, int fd,
 				t_msg *msg);
+void			server_set_timeout(t_server *server, uint64_t seconds,
+				uint64_t micro_seconds);
+struct timeval	*server_get_timeout(t_server *server);
 
 #endif

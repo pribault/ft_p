@@ -20,12 +20,13 @@ void	send_file(t_serv *server, void *client, char *file)
 	int			fd;
 
 	if ((fd = open(file, O_RDONLY)) == -1 || fstat(fd, &buff) == -1)
-		return (enqueue_msg(server, client, new_msg("ERROR: cannot open file",
-		23), TYPE_STR));
+		return (enqueue_msg(server, client, new_msg(
+		"\e[38;5;160mERROR:\e[0m cannot open file", 38), TYPE_STR));
 		if (!(s = mmap(NULL, buff.st_size, PROT_READ, MAP_FILE | MAP_PRIVATE,
 		fd, 0)) || !(final = malloc(buff.st_size + sizeof(t_file_data))))
 		return (ft_error(2, ERROR_ALLOCATION, NULL));
-	enqueue_msg(server, client, new_msg("SUCCESS", 7), TYPE_STR);
+	enqueue_msg(server, client, new_msg("\e[38;5;82mSUCCESS\e[0m", 21),
+	TYPE_STR);
 	final->prot = buff.st_mode;
 	ft_memcpy((void*)final + sizeof(t_file_data), s, buff.st_size);
 	enqueue_msg(server, client, new_msg(final, buff.st_size +
@@ -67,15 +68,16 @@ void	recv_put(t_serv *server, void *client, t_header *ptr, size_t size)
 		ft_error(2, ERROR_ALLOCATION, NULL);
 	if (stat(name, &buff) != -1)
 		return (enqueue_msg(server, client,
-		new_msg("ERROR: file already exist", 25), TYPE_STR));
+		new_msg("\e[38;5;160mERROR:\e[0m file already exist", 40), TYPE_STR));
 		if ((fd = open(name, O_CREAT | O_WRONLY, file->prot)) == -1)
 		return (enqueue_msg(server, client,
-		new_msg("ERROR: cannot create file", 23), TYPE_STR));
+		new_msg("\e[38;5;160mERROR:\e[0m cannot create file", 40), TYPE_STR));
 		write(fd, (void*)file + sizeof(t_file_data),
 	size - sizeof(t_header) - sizeof(t_file_data));
 	close(fd);
 	free(name);
-	enqueue_msg(server, client, new_msg("SUCCESS", 7), TYPE_STR);
+	enqueue_msg(server, client, new_msg("\e[38;5;82mSUCCESS\e[0m", 21),
+	TYPE_STR);
 }
 
 void	recv_get(t_serv *server, void *client, t_header *ptr, size_t size)
@@ -98,8 +100,8 @@ void	recv_get(t_serv *server, void *client, t_header *ptr, size_t size)
 	if (path_is_valid(server, data, file))
 		send_file(server, client, file);
 	else
-		enqueue_msg(server, client, new_msg("ERROR: cannot open file",
-		23), TYPE_STR);
+		enqueue_msg(server, client, new_msg(
+		"\e[38;5;160mERROR:\e[0m cannot open file", 38), TYPE_STR);
 	free(long_file);
 	free(file);
 	free(tmp);

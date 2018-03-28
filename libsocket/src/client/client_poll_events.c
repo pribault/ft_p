@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/21 13:32:57 by pribault          #+#    #+#             */
-/*   Updated: 2018/01/21 13:44:35 by pribault         ###   ########.fr       */
+/*   Updated: 2018/03/28 11:41:54 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,6 @@ static void	client_add_write_request_to_set(fd_set *set, t_circ_buffer *queue,
 	t_towrite	*towrite;
 	size_t		i;
 
-	if (!set || !queue)
-		return ;
 	i = (size_t)-1;
 	while ((towrite = ft_circ_buffer_get(queue, ++i)))
 	{
@@ -51,8 +49,6 @@ void		client_poll_events(t_client *client)
 	int		fd_max;
 	int		ret;
 
-	if (!client || !(client->opt & CLIENT_RUNNING))
-		return ;
 	set_sets(client, (fd_set*)&set, &fd_max);
 	if ((ret = select(fd_max + 1, &set[0], &set[1], &set[2],
 		&client->timeout)) < 0)

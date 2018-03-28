@@ -5,7 +5,7 @@ LIBFT = libft
 LIBSOCKET = libsocket
 JOBS = 1
 
-.PHONY: all clean fclean re norme $(LIBFT) $(LIBSOCKET)
+.PHONY: all clean fclean re norme $(LIBFT) $(LIBSOCKET) $(SERVER) $(CLIENT)
 
 all: $(SERVER) $(CLIENT)
 

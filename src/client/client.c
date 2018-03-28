@@ -72,7 +72,7 @@ void	client_init(t_cli *client, int argc, char **argv, char **env)
 	ft_bzero(client, sizeof(t_cli));
 	client->env = env;
 	client->protocol = TCP;
-	client->opt = OPT_VERBOSE;
+	client->opt = 0;
 	client->state = STATE_NONE;
 	if (!(client->server = server_new(TCP)))
 		return (ft_error(2, ERROR_ALLOCATION, NULL));

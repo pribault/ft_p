@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/18 21:06:13 by pribault          #+#    #+#             */
-/*   Updated: 2018/01/21 11:54:01 by pribault         ###   ########.fr       */
+/*   Updated: 2018/03/28 11:36:28 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,6 @@ static int	server_bind(t_server *server)
 	struct sockaddr_in	addr;
 	int					n;
 
-	if (!server || !(server->opt & SERVER_RUNNING))
-		return (0);
 	addr.sin_family = AF_INET;
 	addr.sin_port = htons(server->port);
 	addr.sin_addr.s_addr = INADDR_ANY;
@@ -52,7 +50,7 @@ static int	server_bind(t_server *server)
 
 int			server_start(t_server *server, char *port)
 {
-	if (!server || (server->opt & SERVER_RUNNING))
+	if ((server->opt & SERVER_RUNNING))
 		return (0);
 	server->opt |= SERVER_RUNNING;
 	server->port = ft_atou(port);

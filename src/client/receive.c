@@ -41,25 +41,20 @@ void	save_message(t_cli *client, t_header *ptr, size_t size)
 {
 	if (!client->data.ptr)
 	{
-		if (!(client->data.ptr = ft_memdup(ptr, size)))
+		if (!(client->data.ptr = malloc(ptr->size)))
 			ft_error(2, ERROR_ALLOCATION, NULL);
+		ft_memcpy(client->data.ptr, ptr, size);
 		client->data.expected = ptr->size;
 		client->data.size = size;
 	}
 	else if (client->data.size + size >= client->data.expected)
 	{
-		if (!(client->data.ptr = realloc(client->data.ptr,
-			client->data.expected)))
-			ft_error(2, ERROR_ALLOCATION, NULL);
 		ft_memcpy(client->data.ptr + client->data.size, ptr,
 		client->data.expected - client->data.size);
 		client->data.size = client->data.expected;
 	}
 	else
 	{
-		if (!(client->data.ptr = realloc(client->data.ptr,
-			client->data.size + size)))
-			ft_error(2, ERROR_ALLOCATION, NULL);
 		ft_memcpy(client->data.ptr + client->data.size, ptr, size);
 		client->data.size += size;
 	}

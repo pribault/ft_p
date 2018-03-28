@@ -37,7 +37,6 @@ int		path_is_valid(t_serv *server, t_data *data, char *file)
 			state++;
 	}
 	ft_free_array((void**)array, len);
-	ft_printf("state=%d\n", state);
 	return ((state >= 0) ? 1 : 0);
 }
 
@@ -60,12 +59,13 @@ void	recv_cd(t_serv *server, void *client, t_header *ptr, size_t size)
 	{
 		free(data->pwd);
 		data->pwd = ft_strdup(long_name);
-		enqueue_msg(server, client, new_msg("SUCCESS", 7), TYPE_STR);
+		enqueue_msg(server, client, new_msg("\e[38;5;82mSUCCESS\e[0m", 21),
+		TYPE_STR);
 		closedir(dir);
 	}
 	else
-		enqueue_msg(server, client, new_msg("ERROR: cannot open directory",
-		28), TYPE_STR);
+		enqueue_msg(server, client, new_msg(
+		"\e[38;5;160mERROR:\e[0m cannot open directory", 43), TYPE_STR);
 	free(long_name);
 	free(file);
 }
@@ -76,15 +76,15 @@ void	recv_ls_2(t_serv *server, void *client, char *file)
 	char	*to_send;
 
 	if (!(ret = ft_ls(file)))
-		enqueue_msg(server, client, new_msg("ERROR: cannot open directory",
-		28), TYPE_STR);
+		enqueue_msg(server, client, new_msg(
+		"\e[38;5;160mERROR:\e[0m cannot open directory", 43), TYPE_STR);
 	else
 	{
-		ft_memdump(ret, sizeof(char*) * (ft_arraylen(ret) + 1));
 		if (!(to_send = ft_implode(ret, '\n')))
 			ft_error(2, ERROR_ALLOCATION, NULL);
 		ft_free_array((void**)ret, ft_arraylen(ret));
-		enqueue_msg(server, client, new_msg("SUCCESS", 7), TYPE_STR);
+		enqueue_msg(server, client, new_msg("\e[38;5;82mSUCCESS\e[0m", 21),
+		TYPE_STR);
 		enqueue_msg(server, client, new_msg(to_send, ft_strlen(to_send)),
 		TYPE_STR);
 		free(to_send);
@@ -108,8 +108,8 @@ void	recv_ls(t_serv *server, void *client, t_header *ptr, size_t size)
 	if (path_is_valid(server, data, long_file))
 		recv_ls_2(server, client, long_file);
 	else
-		enqueue_msg(server, client, new_msg("ERROR: cannot open directory",
-		28), TYPE_STR);
+		enqueue_msg(server, client, new_msg(
+		"\e[38;5;160mERROR:\e[0m cannot open directory", 43), TYPE_STR);
 	free(long_file);
 	free(file);
 }
@@ -124,7 +124,7 @@ void	recv_pwd(t_serv *server, void *client, t_header *ptr, size_t size)
 	if (!(data = server_client_get_data(client)))
 		return (ft_error(2, ERROR_CUSTOM, "client data null, wtf ?!? ._."));
 	enqueue_msg(server, client,
-	new_msg("SUCCESS", 7), TYPE_STR);
+	new_msg("\e[38;5;82mSUCCESS\e[0m", 21), TYPE_STR);
 	path = data->pwd + ft_strlen(server->root) - 1;
 	enqueue_msg(server, client, new_msg(path, ft_strlen(path)),
 	TYPE_STR);

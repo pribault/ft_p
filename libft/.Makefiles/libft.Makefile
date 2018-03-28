@@ -14,6 +14,7 @@ SRC =	ft_abs.c\
 		ft_circ_buffer_get_size.c\
 		ft_circ_buffer_get.c\
 		ft_circ_buffer_init.c\
+		ft_circ_buffer_set_trash_callback.c\
 		ft_error.c\
 		ft_execute.c\
 		ft_factorial.c\
@@ -121,12 +122,14 @@ INCLUDES =	libft.h
 INCLUDE = $(INCLUDES:%.h=include/%.h)
 N = 0
 MAX = $(words $(OBJ))
+COMPILED = false
 
-.PHONY: clean fclean all re norme $(NAME)
+.PHONY: clean fclean all re norme
 
 .SILENT:
 
 all: $(NAME)
+	@if [ $(COMPILED) = true ]; then echo "\033[0m\033[38;5;166m[$(DIR) ∎∎∎∎] \033[0m🐹  \033[38;5;214m$(NAME) done\033[0m"; else echo "\033[0m\033[38;5;166m[$(DIR) ∎∎∎∎] \033[0m🐹  \033[38;5;214mnothing to be done\033[0m"; fi
 
 $(OBJ_DIR):
 	@mkdir $@
@@ -143,7 +146,7 @@ $(OBJ_DIR)/$(DIR)/%.o: $(SRC_DIR)/$(DIR)/%.c $(INCLUDE) | $(OBJ_DIR)/$(DIR)
 $(NAME): $(OBJ)
 	@ar rc $(NAME) $(OBJ)
 	@ranlib $(NAME)
-	@if [ ! $(N) = 0 ]; then echo "\033[0m\033[38;5;166m[$(DIR) ∎∎∎∎] \033[0m🐹  \033[38;5;214m$@ done\033[0m"; else echo "\033[0m\033[38;5;166m[$(DIR) ∎∎∎∎] \033[0m🐹  \033[38;5;214mnothing to be done\033[0m"; fi
+	$(eval COMPILED=true)
 
 clean:
 	@rm -rf $(OBJ_DIR)/$(DIR)

@@ -41,22 +41,19 @@ void	save_message(t_data *data, t_header *ptr, size_t size)
 {
 	if (!data->ptr)
 	{
-		if (!(data->ptr = ft_memdup(ptr, size)))
+		if (!(data->ptr = malloc(sizeof(t_header) + ptr->size)))
 			ft_error(2, ERROR_ALLOCATION, NULL);
+		ft_memcpy(data->ptr, ptr, size);
 		data->expected = ptr->size;
 		data->size = size;
 	}
 	else if (data->size + size >= data->expected)
 	{
-		if (!(data->ptr = realloc(data->ptr, data->expected)))
-			ft_error(2, ERROR_ALLOCATION, NULL);
 		ft_memcpy(data->ptr + data->size, ptr,
 		data->expected - data->size);
 	}
 	else
 	{
-		if (!(data->ptr = realloc(data->ptr, data->size + size)))
-			ft_error(2, ERROR_ALLOCATION, NULL);
 		ft_memcpy(data->ptr + data->size, ptr, size);
 		data->size += size;
 	}

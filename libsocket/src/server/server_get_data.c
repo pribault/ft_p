@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/19 10:55:29 by pribault          #+#    #+#             */
-/*   Updated: 2018/01/19 10:56:47 by pribault         ###   ########.fr       */
+/*   Updated: 2018/03/28 11:31:43 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,5 +14,5 @@
 
 void	*server_get_data(t_server *server)
 {
-	return ((server) ? server->data : NULL);
+	return (server->data);
 }

@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/19 10:31:22 by pribault          #+#    #+#             */
-/*   Updated: 2018/01/21 13:45:27 by pribault         ###   ########.fr       */
+/*   Updated: 2018/03/28 11:34:43 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,6 @@ static void	server_add_clients_to_set(fd_set *set, fd_set *err_set,
 	t_client	*client;
 	size_t		i;
 
-	if (!set || !clients || !fd_max)
-		return ;
 	i = (size_t)clients->n;
 	while (--i != (size_t)-1)
 	{
@@ -39,8 +37,6 @@ static void	server_add_write_request_to_set(fd_set *set, t_circ_buffer *queue,
 	t_towrite	*towrite;
 	size_t		i;
 
-	if (!set || !queue)
-		return ;
 	i = (size_t)-1;
 	while ((towrite = ft_circ_buffer_get(queue, ++i)))
 	{
@@ -69,14 +65,10 @@ void		server_poll_events(t_server *server)
 	int				fd_max;
 	int				ret;
 
-	if (!server)
-		return ;
 	set_sets(server, (fd_set*)&set, &fd_max);
 	time = server->timeout;
 	if ((ret = select(fd_max + 1, &set[0], &set[1], &set[2],
-		&time)) < 0)
-		return ;
-	if (!ret)
+		&time)) <= 0)
 		return ;
 	if (FD_ISSET(server->sockfd, &set[0]))
 		server_add_incoming_client(server, &ret);
@@ -84,5 +76,4 @@ void		server_poll_events(t_server *server)
 		server->server_excpt(server);
 	server_manage_incoming_messages(server, &set[0], &set[2], &ret);
 	server_manage_write_requests(server, &set[1], &ret);
-	return ;
 }

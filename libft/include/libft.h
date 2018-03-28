@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/03 16:13:23 by pribault          #+#    #+#             */
-/*   Updated: 2018/03/27 08:30:24 by pribault         ###   ########.fr       */
+/*   Updated: 2018/03/28 12:48:19 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,8 @@ typedef struct		s_circ_buffer
 	uint64_t		type;
 	uint64_t		elems;
 	void			*ptr;
+	void			(*trash_callback)(void*, void*);
+	void			*data;
 }					t_circ_buffer;
 
 typedef struct		s_gnl_stack
@@ -290,6 +292,8 @@ void				ft_circ_buffer_enqueue(t_circ_buffer *buffer, void *data);
 void				*ft_circ_buffer_dequeue(t_circ_buffer *dequeue);
 void				*ft_circ_buffer_get(t_circ_buffer *buffer, uint32_t idx);
 uint64_t			ft_circ_buffer_get_size(t_circ_buffer *buffer);
+void				ft_circ_buffer_set_trash_callback(t_circ_buffer *buffer,
+					void (*callback)(void*, void*), void *data);
 
 /*
 **	string functions

@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/18 21:20:08 by pribault          #+#    #+#             */
-/*   Updated: 2018/01/21 10:57:28 by pribault         ###   ########.fr       */
+/*   Updated: 2018/03/28 11:36:39 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void		server_stop(t_server *server)
 	t_towrite	*towrite;
 	size_t		i;
 
-	if (!server || !(server->opt & SERVER_RUNNING))
+	if (!(server->opt & SERVER_RUNNING))
 		return ;
 	server->opt &= ~SERVER_RUNNING;
 	while ((towrite = ft_circ_buffer_dequeue(&server->write_queue)))

@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/19 17:18:05 by pribault          #+#    #+#             */
-/*   Updated: 2018/01/21 13:49:04 by pribault         ###   ########.fr       */
+/*   Updated: 2018/03/28 11:42:31 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,9 @@ void	server_manage_write_requests(t_server *server, fd_set *set,
 	uint64_t		size;
 	uint64_t		i;
 
-	if ((*n_evts) < 1 || !(buffer = &server->write_queue))
+	if ((*n_evts) < 1)
 		return ;
+	buffer = &server->write_queue;
 	i = (uint64_t)-1;
 	size = ft_circ_buffer_get_size(buffer);
 	while (++i < size &&

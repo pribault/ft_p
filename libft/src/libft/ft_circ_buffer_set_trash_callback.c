@@ -1,18 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   server_client_attach_data.c                        :+:      :+:    :+:   */
+/*   ft_circ_buffer_set_trash_callback.c                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/01/20 13:46:52 by pribault          #+#    #+#             */
-/*   Updated: 2018/03/28 11:30:17 by pribault         ###   ########.fr       */
+/*   Created: 2018/03/28 11:49:16 by pribault          #+#    #+#             */
+/*   Updated: 2018/03/28 12:48:29 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "server.h"
+#include "libft.h"
 
-void	server_client_attach_data(t_client *client, void *data)
+void	ft_circ_buffer_set_trash_callback(t_circ_buffer *buffer,
+		void (*callback)(void*, void*), void *data)
 {
-	client->data = data;
+	buffer->trash_callback = callback;
+	buffer->data = data;
 }
