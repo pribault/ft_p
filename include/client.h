@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/13 11:04:44 by pribault          #+#    #+#             */
-/*   Updated: 2018/02/03 17:27:55 by pribault         ###   ########.fr       */
+/*   Updated: 2018/03/29 18:05:38 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ typedef struct	s_cli
 	char		*port;
 	char		**env;
 	t_protocol	protocol;
-	int			fd;
+	void		*client;
 	uint8_t		opt;
 	t_data		data;
 	int			state;
@@ -77,19 +77,19 @@ typedef void	(*t_msg_handler)(t_cli *, t_header *, size_t);
 
 void			print_usage(void);
 void			set_verbose(t_cli *client);
-void			set_long_verbose(char **args, int n_params,
-				t_cli *client);
+void			set_long_verbose(t_cli *client, char **args, int n_params);
 void			get_default(char *s, t_cli *client);
-void			get_port(char **args, int n_params, t_cli *client);
-void			get_address(char **args, int n_params, t_cli *client);
-void			get_protocol(char **args, int n_params, t_cli *client);
-void			get_timeout(char **args, int n_params, t_cli *client);
+void			get_port(t_cli *client, char **args, int n_params);
+void			get_protocol(t_cli *client, char **args, int n_params);
+void			get_address(t_cli *client, char **args, int n_params);
+void			get_timeout(t_cli *client, char **args, int n_params);
 
 void			add_client(void *server, void *client);
 void			del_client(void *server, void *client);
 
 void			msg_recv(void *server, void *client, t_msg *msg);
 void			msg_send(void *server, void *client, t_msg *msg);
+void			msg_trash(void *server, void *client, t_msg *msg);
 
 void			enqueue_msg(t_cli *client, void *data, size_t size,
 				uint8_t type);

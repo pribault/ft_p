@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/18 21:20:08 by pribault          #+#    #+#             */
-/*   Updated: 2018/03/28 11:36:39 by pribault         ###   ########.fr       */
+/*   Updated: 2018/03/29 16:03:11 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,10 @@ void		server_stop(t_server *server)
 	while ((towrite = ft_circ_buffer_dequeue(&server->write_queue)))
 		free(towrite->data.ptr);
 	i = (size_t)-1;
-	while (++i < server->clients.n)
-		if ((client = ft_vector_get(&server->clients, i)))
-			close(client->fd);
+	if (server->protocol == TCP)
+		while (++i < server->clients.n)
+			if ((client = ft_vector_get(&server->clients, i)))
+				close(client->fd);
 	ft_vector_resize(&server->clients, 0);
 	close(server->sockfd);
 	return ;

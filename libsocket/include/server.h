@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/18 22:51:48 by pribault          #+#    #+#             */
-/*   Updated: 2018/03/28 13:08:19 by pribault         ###   ########.fr       */
+/*   Updated: 2018/03/29 18:03:23 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,8 +143,10 @@ void				server_enqueue_write(t_server *server, t_client *client,
 					t_msg *msg);
 void				server_enqueue_write_by_fd(t_server *server, int fd,
 					t_msg *msg);
+void				server_enqueue_write_by_address(t_server *server,
+					struct sockaddr *address, t_msg *msg);
 void				server_add_client_by_fd(t_server *server, int fd);
-char				*server_get_client_address(t_client *client);
+struct sockaddr		*server_get_client_address(t_client *client);
 void				server_client_attach_data(t_client *client, void *data);
 void				*server_client_get_data(t_client *client);
 int					server_set_queue_max(t_server *server, int max);
@@ -164,5 +166,8 @@ void				server_manage_incoming_messages(t_server *server,
 					fd_set *set, fd_set *err_set, int *n_evts);
 void				server_manage_write_requests(t_server *server,
 					fd_set *set, int *n_evts);
+void				server_get_incoming_message(t_server *server, int *n_evts);
+t_client			*server_find_client_by_address(t_server *server,
+					struct sockaddr *addr);
 
 #endif

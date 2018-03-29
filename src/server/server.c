@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/21 14:38:58 by pribault          #+#    #+#             */
-/*   Updated: 2018/03/28 08:59:23 by pribault         ###   ########.fr       */
+/*   Updated: 2018/03/29 13:08:24 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,17 +78,18 @@ void	server_init(t_serv *server, int argc, char **argv, char **env)
 	server->env = env;
 	server->protocol = TCP;
 	server->opt = OPT_VERBOSE;
-	if (!(server->server = server_new(TCP)))
-		return (ft_error(2, ERROR_ALLOCATION, NULL));
 	if (!(server->root = ft_strdup(ft_getenv(env, "PWD"))))
 		return (ft_error(2, ERROR_CUSTOM, "cannot find PWD in environnement"));
+	verify_root(server);
 	ft_get_flags(argc, argv, ft_get_flag_array((t_short_flag*)&g_short_flags,
 	(t_long_flag*)&g_long_flags, (void*)&get_default), server);
-	verify_root(server);
+	if (!(server->server = server_new(server->protocol)))
+		return (ft_error(2, ERROR_ALLOCATION, NULL));
 	server_set_callback(server->server, SERVER_CLIENT_ADD_CB, &add_client);
 	server_set_callback(server->server, SERVER_CLIENT_DEL_CB, &del_client);
 	server_set_callback(server->server, SERVER_MSG_RECV_CB, &msg_recv);
 	server_set_callback(server->server, SERVER_MSG_SEND_CB, &msg_send);
+	server_set_callback(server->server, SERVER_MSG_TRASH_CB, &trash_msg);
 	server_attach_data(server->server, server);
 	server_add_client_by_fd(server->server, 0);
 }

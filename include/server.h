@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/13 11:04:44 by pribault          #+#    #+#             */
-/*   Updated: 2018/03/28 09:03:56 by pribault         ###   ########.fr       */
+/*   Updated: 2018/03/28 13:29:23 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ void			add_client(void *server, void *client);
 void			del_client(void *server, void *client);
 void			msg_recv(void *server, void *client, t_msg *msg);
 void			msg_send(void *server, void *client, t_msg *msg);
+void			trash_msg(void *server, void *client, t_msg *msg);
 
 void			treat_command(t_serv *server, char *cmd);
 

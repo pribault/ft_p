@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/21 14:38:53 by pribault          #+#    #+#             */
-/*   Updated: 2018/02/03 16:01:49 by pribault         ###   ########.fr       */
+/*   Updated: 2018/03/29 13:09:33 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,15 +74,16 @@ void	client_init(t_cli *client, int argc, char **argv, char **env)
 	client->protocol = TCP;
 	client->opt = 0;
 	client->state = STATE_NONE;
-	if (!(client->server = server_new(TCP)))
-		return (ft_error(2, ERROR_ALLOCATION, NULL));
 	ft_get_flags(argc, argv, ft_get_flag_array((t_short_flag*)&g_short_flags,
 	(t_long_flag*)&g_long_flags, (void*)&get_default), client);
+	if (!(client->server = server_new(client->protocol)))
+		return (ft_error(2, ERROR_ALLOCATION, NULL));
 	server_attach_data(client->server, client);
 	server_set_callback(client->server, SERVER_CLIENT_ADD_CB, &add_client);
 	server_set_callback(client->server, SERVER_CLIENT_DEL_CB, &del_client);
 	server_set_callback(client->server, SERVER_MSG_RECV_CB, &msg_recv);
 	server_set_callback(client->server, SERVER_MSG_SEND_CB, &msg_send);
+	server_set_callback(client->server, SERVER_MSG_TRASH_CB, &msg_trash);
 	// server_set_clients_max(client->server, 2);
 	server_add_client_by_fd(client->server, 0);
 }

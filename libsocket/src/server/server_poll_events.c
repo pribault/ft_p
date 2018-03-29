@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/19 10:31:22 by pribault          #+#    #+#             */
-/*   Updated: 2018/03/28 11:34:43 by pribault         ###   ########.fr       */
+/*   Updated: 2018/03/29 16:43:08 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,14 @@ static void	server_add_clients_to_set(fd_set *set, fd_set *err_set,
 	{
 		if ((client = ft_vector_get(clients, i)))
 		{
-			if (client->fd > *fd_max)
-				*fd_max = client->fd;
-			FD_SET(client->fd, set);
-			FD_SET(client->fd, err_set);
+			if (!FD_ISSET(client->fd, set) ||
+				!FD_ISSET(client->fd, err_set))
+			{
+				if (client->fd > *fd_max)
+					*fd_max = client->fd;
+				FD_SET(client->fd, set);
+				FD_SET(client->fd, err_set);
+			}
 		}
 	}
 }
@@ -65,13 +69,19 @@ void		server_poll_events(t_server *server)
 	int				fd_max;
 	int				ret;
 
+	fd_max = -42;
 	set_sets(server, (fd_set*)&set, &fd_max);
 	time = server->timeout;
 	if ((ret = select(fd_max + 1, &set[0], &set[1], &set[2],
 		&time)) <= 0)
 		return ;
 	if (FD_ISSET(server->sockfd, &set[0]))
-		server_add_incoming_client(server, &ret);
+	{
+		if (server->protocol == TCP)
+			server_add_incoming_client(server, &ret);
+		else if (server->protocol == UDP)
+			server_get_incoming_message(server, &ret);
+	}
 	if (FD_ISSET(server->sockfd, &set[2]) && server->server_excpt)
 		server->server_excpt(server);
 	server_manage_incoming_messages(server, &set[0], &set[2], &ret);

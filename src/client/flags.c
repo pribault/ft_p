@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/21 18:41:38 by pribault          #+#    #+#             */
-/*   Updated: 2018/02/02 21:36:33 by pribault         ###   ########.fr       */
+/*   Updated: 2018/03/29 13:02:41 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,14 +30,14 @@ void	set_verbose(t_cli *client)
 	client->opt ^= OPT_VERBOSE;
 }
 
-void	set_long_verbose(char **args, int n_params, t_cli *client)
+void	set_long_verbose(t_cli *client, char **args, int n_params)
 {
 	(void)args;
 	(void)n_params;
 	client->opt ^= OPT_VERBOSE;
 }
 
-void	get_port(char **args, int n_params, t_cli *client)
+void	get_port(t_cli *client, char **args, int n_params)
 {
 	unsigned int	n;
 
@@ -53,7 +53,7 @@ void	get_port(char **args, int n_params, t_cli *client)
 		client->port = args[0];
 }
 
-void	get_address(char **args, int n_params, t_cli *client)
+void	get_address(t_cli *client, char **args, int n_params)
 {
 	(void)n_params;
 	if (client->address)

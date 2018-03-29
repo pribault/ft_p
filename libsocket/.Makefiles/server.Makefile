@@ -22,7 +22,9 @@ SRC =	server_new.c server_delete.c\
 		server_get_queue_max.c\
 		server_set_timeout.c\
 		server_get_timeout.c\
-		server_connect.c
+		server_get_incoming_message.c\
+		server_connect.c\
+		server_find_client_by_address.c
 DIR = server
 SRC_DIR = src
 OBJ_DIR = .obj

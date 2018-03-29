@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/20 16:33:12 by pribault          #+#    #+#             */
-/*   Updated: 2018/03/28 11:30:37 by pribault         ###   ########.fr       */
+/*   Updated: 2018/03/29 18:07:34 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@ static int	iter_on_addresses(t_server *server, t_client *client,
 			client->addr_len = addr->ai_addrlen;
 			ft_vector_add(&server->clients, client);
 			if (server->client_add)
-				server->client_add(server, client);
+				server->client_add(server, ft_vector_get(&server->clients,
+				server->clients.n - 1));
 			freeaddrinfo(result);
 			return (1);
 		}
