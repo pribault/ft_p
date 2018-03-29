@@ -27,6 +27,7 @@ typedef enum	e_server_error
 	ERROR_PORT_ALREADY_SET,
 	ERROR_NO_PORT_SET,
 	ERROR_INVALID_PROTOCOL,
+	ERROR_INVALID_DOMAIN,
 	ERROR_MSG_TOO_SMALL,
 	ERROR_UNEXPECTED_MSG,
 	ERROR_UNKNOWN_MSG_TYPE,
@@ -51,6 +52,7 @@ typedef struct	s_serv
 	char		*port;
 	char		*root;
 	t_protocol	protocol;
+	t_domain	domain;
 	uint8_t		opt;
 }				t_serv;
 
@@ -64,6 +66,7 @@ void			set_long_verbose(t_serv *server, char **args,
 void			get_root(t_serv *server, char **args, int n_params);
 void			get_port(t_serv *server, char **args, int n);
 void			get_protocol(t_serv *server, char **args, int n_params);
+void			get_domain(t_serv *server, char **args, int n_params);
 void			get_max(t_serv *server, char **args, int n_params);
 void			get_timeout(t_serv *server, char **args, int n_params);
 

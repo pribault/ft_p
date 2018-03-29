@@ -13,7 +13,7 @@
 #include "server.h"
 
 t_client	*server_find_client_by_address(t_server *server,
-			struct sockaddr *addr)
+			struct sockaddr_storage *addr)
 {
 	t_client	*client;
 	t_vector	*vector;

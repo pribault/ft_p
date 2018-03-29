@@ -25,6 +25,7 @@ static t_long_flag	g_long_flags[] =
 	{"verbose", 0, {0}, (void*)&set_long_verbose},
 	{"port", 1, {PARAM_UNSIGNED}, (void*)&get_port},
 	{"protocol", 1, {PARAM_STR}, (void*)&get_protocol},
+	{"domain", 1, {PARAM_STR}, (void*)&get_domain},
 	{"max", 1, {PARAM_INTEGER}, (void*)&get_max},
 	{"timeout", 2, {PARAM_UNSIGNED, PARAM_UNSIGNED}, (void*)&get_timeout},
 	{"root", 1, {PARAM_STR}, (void*)get_root},
@@ -36,6 +37,7 @@ static t_error	g_errors[] =
 	{ERROR_NOT_IN_PORT_RANGE, "'%s' is not a valid port number [0;65535]", 0},
 	{ERROR_PORT_ALREADY_SET, "'%s' port already set", 0},
 	{ERROR_INVALID_PROTOCOL, "invalid protocol '%s', allowed: tcp/udp", 0},
+	{ERROR_INVALID_DOMAIN, "invalid domain '%s', allowed: ipv4/ipv6", 0},
 	{ERROR_NO_PORT_SET, "please specify a port", ERROR_EXIT},
 	{ERROR_MSG_TOO_SMALL, "message too small, ignoring", 0},
 	{ERROR_UNEXPECTED_MSG, "unexpected message received", 0},
@@ -77,13 +79,14 @@ void	server_init(t_serv *server, int argc, char **argv, char **env)
 	ft_bzero(server, sizeof(t_serv));
 	server->env = env;
 	server->protocol = TCP;
+	server->domain = IPV4;
 	server->opt = OPT_VERBOSE;
 	if (!(server->root = ft_strdup(ft_getenv(env, "PWD"))))
 		return (ft_error(2, ERROR_CUSTOM, "cannot find PWD in environnement"));
 	verify_root(server);
 	ft_get_flags(argc, argv, ft_get_flag_array((t_short_flag*)&g_short_flags,
 	(t_long_flag*)&g_long_flags, (void*)&get_default), server);
-	if (!(server->server = server_new(server->protocol)))
+	if (!(server->server = server_new()))
 		return (ft_error(2, ERROR_ALLOCATION, NULL));
 	server_set_callback(server->server, SERVER_CLIENT_ADD_CB, &add_client);
 	server_set_callback(server->server, SERVER_CLIENT_DEL_CB, &del_client);
@@ -107,7 +110,9 @@ int		main(int argc, char **argv, char **env)
 		print_usage();
 		ft_error(2, ERROR_NO_PORT_SET, NULL);
 	}
-	server_start(server.server, server.port);
+	server_start(server.server, (t_method){server.protocol,
+	server.domain},
+	server.port);
 	while (1)
 		server_poll_events(server.server);
 	return (0);

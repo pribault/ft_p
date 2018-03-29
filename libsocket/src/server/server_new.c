@@ -18,7 +18,7 @@ static void	server_trash_callback(t_server *server, t_towrite *towrite)
 		server->msg_trash(server, &towrite->client, &towrite->data);
 }
 
-t_server	*server_new(t_protocol protocol)
+t_server	*server_new(void)
 {
 	t_server	*server;
 
@@ -34,6 +34,5 @@ t_server	*server_new(t_protocol protocol)
 	server->timeout = (struct timeval){SERVER_DEFAULT_TIMEOUT_S,
 	SERVER_DEFAULT_TIMEOUT_US};
 	server->opt = 0;
-	server->protocol = protocol;
 	return (server);
 }

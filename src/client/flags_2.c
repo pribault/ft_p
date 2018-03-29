@@ -33,6 +33,17 @@ void	get_protocol(t_cli *client, char **args, int n_params)
 		ft_error(2, ERROR_INVALID_PROTOCOL, args[0]);
 }
 
+void	get_domain(t_cli *client, char **args, int n_params)
+{
+	(void)n_params;
+	if (!ft_strcmp(args[0], "ipv4"))
+		client->domain = IPV4;
+	else if (!ft_strcmp(args[0], "ipv6"))
+		client->domain = IPV6;
+	else
+		ft_error(2, ERROR_INVALID_DOMAIN, args[0]);
+}
+
 void	get_timeout(t_cli *client, char **args, int n_params)
 {
 	(void)n_params;

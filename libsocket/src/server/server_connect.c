@@ -22,8 +22,9 @@ static int	iter_on_addresses(t_server *server, t_client *client,
 	{
 		if (connect(client->fd, addr->ai_addr, addr->ai_addrlen) >= 0)
 		{
-			client->addr = *addr->ai_addr;
+			ft_memcpy(&client->addr, addr->ai_addr, addr->ai_addrlen);
 			client->addr_len = addr->ai_addrlen;
+			client->write_type = WRITE_BY_ADDR;
 			ft_vector_add(&server->clients, client);
 			if (server->client_add)
 				server->client_add(server, ft_vector_get(&server->clients,
@@ -37,7 +38,8 @@ static int	iter_on_addresses(t_server *server, t_client *client,
 	return (0);
 }
 
-int			server_connect(t_server *server, char *address, char *port)
+int			server_connect(t_server *server, t_method method, char *address,
+			char *port)
 {
 	t_client		client;
 	struct addrinfo	hints;
@@ -45,11 +47,11 @@ int			server_connect(t_server *server, char *address, char *port)
 
 	ft_bzero(&hints, sizeof(struct addrinfo));
 	ft_bzero(&client, sizeof(t_client));
-	hints.ai_family = AF_INET;
-	hints.ai_socktype = server->protocol;
+	hints.ai_family = method.domain;
+	hints.ai_socktype = method.protocol;
 	result = NULL;
 	if (getaddrinfo(address, port, &hints, &result) != 0 ||
-		(client.fd = socket(AF_INET, server->protocol, 0)) < 0)
+		(client.fd = socket(method.domain, method.protocol, 0)) < 0)
 	{
 		if (result)
 			freeaddrinfo(result);

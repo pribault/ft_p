@@ -39,6 +39,17 @@ void	get_protocol(t_serv *server, char **args, int n_params)
 		ft_error(2, ERROR_INVALID_PROTOCOL, args[0]);
 }
 
+void	get_domain(t_serv *server, char **args, int n_params)
+{
+	(void)n_params;
+	if (!ft_strcmp(args[0], "ipv4"))
+		server->domain = IPV4;
+	else if (!ft_strcmp(args[0], "ipv6"))
+		server->domain = IPV6;
+	else
+		ft_error(2, ERROR_INVALID_DOMAIN, args[0]);
+}
+
 void	get_max(t_serv *server, char **args, int n_params)
 {
 	(void)n_params;

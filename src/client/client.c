@@ -25,6 +25,7 @@ static t_long_flag	g_long_flags[] =
 	{"address", 1, {PARAM_STR}, (void*)&get_address},
 	{"port", 1, {PARAM_UNSIGNED}, (void*)&get_port},
 	{"protocol", 1, {PARAM_STR}, (void*)&get_protocol},
+	{"domain", 1, {PARAM_STR}, (void*)&get_domain},
 	{"timeout", 1, {PARAM_UNSIGNED, PARAM_UNSIGNED}, (void*)&get_timeout},
 	{NULL, 0, {0}, NULL}
 };
@@ -36,6 +37,7 @@ static t_error	g_errors[] =
 	{ERROR_PORT_ALREADY_SET, "'%s' port already set", 0},
 	{ERROR_PARAMS_ALREADY_SET, "'%s' address and port already set", 0},
 	{ERROR_INVALID_PROTOCOL, "invalid protocol '%s', allowed: tcp/udp", 0},
+	{ERROR_INVALID_DOMAIN, "invalid domain '%s', allowed: ipv4/ipv6", 0},
 	{ERROR_NO_ADDRESS_SET, "please specify an address", ERROR_EXIT},
 	{ERROR_NO_PORT_SET, "please specify a port", ERROR_EXIT},
 	{ERROR_CANNOT_CONNECT, "cannot connect to '%s'", ERROR_EXIT},
@@ -72,11 +74,12 @@ void	client_init(t_cli *client, int argc, char **argv, char **env)
 	ft_bzero(client, sizeof(t_cli));
 	client->env = env;
 	client->protocol = TCP;
+	client->domain = IPV4;
 	client->opt = 0;
 	client->state = STATE_NONE;
 	ft_get_flags(argc, argv, ft_get_flag_array((t_short_flag*)&g_short_flags,
 	(t_long_flag*)&g_long_flags, (void*)&get_default), client);
-	if (!(client->server = server_new(client->protocol)))
+	if (!(client->server = server_new()))
 		return (ft_error(2, ERROR_ALLOCATION, NULL));
 	server_attach_data(client->server, client);
 	server_set_callback(client->server, SERVER_CLIENT_ADD_CB, &add_client);
@@ -100,7 +103,8 @@ int		main(int argc, char **argv, char **env)
 		ft_error(2, ERROR_NO_ADDRESS_SET, NULL);
 	if (!client.port)
 		ft_error(2, ERROR_NO_PORT_SET, NULL);
-	if (!server_connect(client.server, client.address, client.port))
+	if (!server_connect(client.server, (t_method){client.protocol, IPV4},
+		client.address, client.port))
 		ft_error(2, ERROR_CANNOT_CONNECT, client.address);
 	// server_set_clients_max(client.server, 0);
 	while (1)

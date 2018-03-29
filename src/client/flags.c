@@ -20,6 +20,7 @@ void	print_usage(void)
 	ft_putstr("  --\e[4mhelp\e[0m or -h: \e[2mprint usage\e[0m\n");
 	ft_putstr("  --\e[4mverbose\e[0m or -v: \e[2mturn verbose on/off\e[0m\n");
 	ft_putstr("  --\e[4mprotocol\e[0m: \e[2mtcp/udp\e[0m\n");
+	ft_putstr("  --\e[4mdomain\e[0m: \e[2mipv4/ipv6\e[0m\n");
 	ft_putstr("  --\e[4mtimeout\e[0m: \e[2m<seconds> <nano-seconds>");
 	ft_putstr("<n micro seconds>\e[0m\n");
 	ft_putchar('\n');

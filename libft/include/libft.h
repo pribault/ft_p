@@ -176,8 +176,8 @@ size_t				ft_nbrlen(int nbr);
 size_t				ft_nbrlen_base(int nbr, int base);
 int					ft_tolower(int c);
 int					ft_toupper(int c);
-void				ft_strtolower(char *str);
-void				ft_strtoupper(char *str);
+char				*ft_strtolower(char *str);
+char				*ft_strtoupper(char *str);
 
 /*
 **	write functions

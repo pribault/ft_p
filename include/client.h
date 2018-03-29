@@ -30,6 +30,7 @@ typedef enum	e_client_error
 	ERROR_NO_ADDRESS_SET,
 	ERROR_NO_PORT_SET,
 	ERROR_INVALID_PROTOCOL,
+	ERROR_INVALID_DOMAIN,
 	ERROR_CANNOT_CONNECT,
 	ERROR_MSG_TOO_SMALL,
 	ERROR_UNEXPECTED_MSG,
@@ -60,6 +61,7 @@ typedef struct	s_cli
 	char		*port;
 	char		**env;
 	t_protocol	protocol;
+	t_domain	domain;
 	void		*client;
 	uint8_t		opt;
 	t_data		data;
@@ -81,6 +83,7 @@ void			set_long_verbose(t_cli *client, char **args, int n_params);
 void			get_default(char *s, t_cli *client);
 void			get_port(t_cli *client, char **args, int n_params);
 void			get_protocol(t_cli *client, char **args, int n_params);
+void			get_domain(t_cli *client, char **args, int n_params);
 void			get_address(t_cli *client, char **args, int n_params);
 void			get_timeout(t_cli *client, char **args, int n_params);
 

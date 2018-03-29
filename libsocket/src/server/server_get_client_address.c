@@ -12,7 +12,7 @@
 
 #include "server.h"
 
-struct sockaddr	*server_get_client_address(t_client *client)
+struct sockaddr_storage	*server_get_client_address(t_client *client)
 {
 	return (&client->addr);
 }

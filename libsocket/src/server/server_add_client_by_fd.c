@@ -18,7 +18,9 @@ void	server_add_client_by_fd(t_server *server, int fd)
 
 	ft_bzero(&client, sizeof(t_client));
 	client.fd = fd;
-	if (server->client_add)
-		server->client_add(server, &client);
+	client.write_type = WRITE_BY_FD;
 	ft_vector_add(&server->clients, &client);
+	if (server->client_add)
+		server->client_add(server, ft_vector_get(&server->clients,
+		server->clients.n - 1));
 }

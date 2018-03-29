@@ -53,13 +53,13 @@
 *************
 */
 
-typedef enum		e_protocol
+typedef enum				e_protocol
 {
 	TCP = SOCK_STREAM,
 	UDP = SOCK_DGRAM
-}					t_protocol;
+}							t_protocol;
 
-typedef enum		e_callback
+typedef enum				e_callback
 {
 	CONNECT_CB,
 	DISCONNECT_CB,
@@ -67,7 +67,7 @@ typedef enum		e_callback
 	MSG_SEND_CB,
 	EXCEPTION_CB,
 	CALLBACK_MAX
-}					t_callback;
+}							t_callback;
 
 /*
 ******************
@@ -75,33 +75,33 @@ typedef enum		e_callback
 ******************
 */
 
-typedef struct		s_msg
+typedef struct				s_msg
 {
-	void			*ptr;
-	size_t			size;
-}					t_msg;
+	void					*ptr;
+	size_t					size;
+}							t_msg;
 
-typedef struct		s_towrite
+typedef struct				s_towrite
 {
-	int				fd;
-	t_msg			data;
-}					t_towrite;
+	int						fd;
+	t_msg					data;
+}							t_towrite;
 
-typedef struct		s_client
+typedef struct				s_client
 {
-	t_protocol		protocol;
-	int				sockfd;
-	struct sockaddr	addr;
-	socklen_t		addr_len;
-	struct timeval	timeout;
-	t_circ_buffer	write_queue;
-	uint8_t			opt;
-	void			(*connect)(struct s_client*);
-	void			(*disconnect)(struct s_client*);
-	void			(*msg_recv)(struct s_client*, t_msg*);
-	void			(*msg_send)(struct s_client*, int fd, t_msg*);
-	void			(*excpt)(struct s_client*);
-}					t_client;
+	t_protocol				protocol;
+	int						sockfd;
+	struct sockaddr_storage	addr;
+	socklen_t				addr_len;
+	struct timeval			timeout;
+	t_circ_buffer			write_queue;
+	uint8_t					opt;
+	void					(*connect)(struct s_client*);
+	void					(*disconnect)(struct s_client*);
+	void					(*msg_recv)(struct s_client*, t_msg*);
+	void					(*msg_send)(struct s_client*, int fd, t_msg*);
+	void					(*excpt)(struct s_client*);
+}							t_client;
 
 /*
 *****************
@@ -109,17 +109,19 @@ typedef struct		s_client
 *****************
 */
 
-t_client			*client_new(void);
-int					client_connect(t_client *client, t_protocol protocol,
-					char *address, char *port);
-void				client_disconnect(t_client *client);
-void				client_set_callback(t_client *client, t_callback cb,
-					void *ptr);
-void				client_poll_events(t_client *client);
-void				client_get_incoming_message(t_client *client, int *n_evts);
-void				client_manage_write_requests(t_client *client, fd_set *set,
-					int *n_evts);
-void				client_enqueue_write_by_fd(t_client *client, int fd,
-					t_msg *msg);
+t_client					*client_new(void);
+int							client_connect(t_client *client,
+							t_protocol protocol, char *address,
+							char *port);
+void						client_disconnect(t_client *client);
+void						client_set_callback(t_client *client,
+							t_callback cb, void *ptr);
+void						client_poll_events(t_client *client);
+void						client_get_incoming_message(t_client *client,
+							int *n_evts);
+void						client_manage_write_requests(t_client *client,
+							fd_set *set, int *n_evts);
+void						client_enqueue_write_by_fd(t_client *client,
+							int fd, t_msg *msg);
 
 #endif

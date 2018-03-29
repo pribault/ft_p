@@ -15,7 +15,7 @@
 static int	connected(t_client *client, struct addrinfo *result,
 			struct addrinfo *addr)
 {
-	client->addr = *addr->ai_addr;
+	ft_memcpy(&client->addr, addr->ai_addr, addr->ai_addrlen);
 	client->addr_len = addr->ai_addrlen;
 	freeaddrinfo(result);
 	client->opt |= CLIENT_CONNECTED;
