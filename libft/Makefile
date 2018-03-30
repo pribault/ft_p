@@ -8,7 +8,7 @@ FT_PRINTF = ft_printf
 FT_JOINF = ft_joinf
 DIR = .Makefiles
 EXT = Makefile
-JOBS = 4
+JOBS = 1
 
 .PHONY: clean fclean all re norme $(NAME)
 
@@ -17,10 +17,10 @@ JOBS = 4
 all: $(NAME)
 
 $(NAME):
-	@make -f $(DIR)/$(LIBFT).$(EXT) -j$(JOBS)
-	@make -f $(DIR)/$(MALLOC).$(EXT) -j$(JOBS)
-	@make -f $(DIR)/$(FT_PRINTF).$(EXT) -j$(JOBS)
-	@make -f $(DIR)/$(FT_JOINF).$(EXT) -j$(JOBS)
+	@make -f $(DIR)/$(LIBFT).$(EXT)
+	@make -f $(DIR)/$(MALLOC).$(EXT)
+	@make -f $(DIR)/$(FT_PRINTF).$(EXT)
+	@make -f $(DIR)/$(FT_JOINF).$(EXT)
 
 $(NAME_SO): $(NAME)
 	# @$(CC) $(FLAGS) -shared -o $@ -L . -lft

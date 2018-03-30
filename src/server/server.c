@@ -71,7 +71,6 @@ void	verify_root(t_serv *server)
 		free(server->root);
 		server->root = new;
 	}
-	ft_printf("root=%s\n", server->root);
 }
 
 void	server_init(t_serv *server, int argc, char **argv, char **env)

@@ -21,7 +21,7 @@ COMPILED = false
 .SILENT:
 
 all: $(NAME)
-	@if [ $(COMPILED) = true ]; then echo "\033[0m\033[38;5;166m[$(DIR) ∎∎∎∎] \033[0m🐹  \033[38;5;214m$(NAME) done\033[0m"; else echo "\033[0m\033[38;5;166m[$(DIR) ∎∎∎∎] \033[0m🐹  \033[38;5;214mnothing to be done\033[0m"; fi
+	@if [ $(COMPILED) = true ]; then echo "\033[0m\033[38;5;166m[$(DIR) ∎∎∎∎] \033[0m🐹  \033[38;5;214m$(NAME) done\033[0m"; else if [ $(N) = 0 ]; then echo "\033[0m\033[38;5;166m[$(DIR) ∎∎∎∎] \033[0m🐹  \033[38;5;214mnothing to be done\033[0m"; else ar rc $(NAME) $(OBJ); ranlib $(NAME); echo "\033[0m\033[38;5;166m[$(DIR) ∎∎∎∎] \033[0m🐹  \033[38;5;214m$(NAME) done\033[0m"; fi; fi
 
 $(OBJ_DIR):
 	@mkdir $@
