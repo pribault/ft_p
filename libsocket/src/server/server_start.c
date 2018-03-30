@@ -12,6 +12,7 @@
 
 #include "server.h"
 
+#include <errno.h>
 
 static int	server_bind_tcp(t_server *server)
 {
@@ -38,7 +39,8 @@ static int	server_bind(t_server *server)
 	if ((server->sockfd = socket(server->domain, server->protocol, 0)) < 0 ||
 		setsockopt(server->sockfd, SOL_SOCKET, SO_REUSEADDR, &n,
 		sizeof(int)) < 0 ||
-		bind(server->sockfd, (void*)&addr, sizeof(struct sockaddr_in6)) < 0)
+		bind(server->sockfd, (void*)&addr, (server->domain == IPV6) ?
+		sizeof(struct sockaddr_in6) : sizeof(struct sockaddr)) < 0)
 		return (0);
 	if (server->protocol == TCP)
 		return (server_bind_tcp(server));

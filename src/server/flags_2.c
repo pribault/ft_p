@@ -23,7 +23,7 @@ void	get_root(t_serv *server, char **args, int n_params)
 	else
 	{
 		free(server->root);
-		server->root = args[0];
+		server->root = ft_strdup(args[0]);
 		closedir(dir);
 	}
 }

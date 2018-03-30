@@ -71,6 +71,7 @@ void	verify_root(t_serv *server)
 		free(server->root);
 		server->root = new;
 	}
+	ft_printf("root=%s\n", server->root);
 }
 
 void	server_init(t_serv *server, int argc, char **argv, char **env)
@@ -83,9 +84,9 @@ void	server_init(t_serv *server, int argc, char **argv, char **env)
 	server->opt = OPT_VERBOSE;
 	if (!(server->root = ft_strdup(ft_getenv(env, "PWD"))))
 		return (ft_error(2, ERROR_CUSTOM, "cannot find PWD in environnement"));
-	verify_root(server);
 	ft_get_flags(argc, argv, ft_get_flag_array((t_short_flag*)&g_short_flags,
 	(t_long_flag*)&g_long_flags, (void*)&get_default), server);
+	verify_root(server);
 	if (!(server->server = server_new()))
 		return (ft_error(2, ERROR_ALLOCATION, NULL));
 	server_set_callback(server->server, SERVER_CLIENT_ADD_CB, &add_client);
@@ -96,6 +97,8 @@ void	server_init(t_serv *server, int argc, char **argv, char **env)
 	server_attach_data(server->server, server);
 	server_add_client_by_fd(server->server, 0);
 }
+
+#include <errno.h>
 
 int		main(int argc, char **argv, char **env)
 {
@@ -111,8 +114,7 @@ int		main(int argc, char **argv, char **env)
 		ft_error(2, ERROR_NO_PORT_SET, NULL);
 	}
 	server_start(server.server, (t_method){server.protocol,
-	server.domain},
-	server.port);
+	server.domain}, server.port);
 	while (1)
 		server_poll_events(server.server);
 	return (0);
