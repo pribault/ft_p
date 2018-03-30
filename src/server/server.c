@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/21 14:38:58 by pribault          #+#    #+#             */
-/*   Updated: 2018/03/29 13:08:24 by pribault         ###   ########.fr       */
+/*   Updated: 2018/03/30 22:51:27 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ static t_long_flag	g_long_flags[] =
 	{"protocol", 1, {PARAM_STR}, (void*)&get_protocol},
 	{"domain", 1, {PARAM_STR}, (void*)&get_domain},
 	{"max", 1, {PARAM_INTEGER}, (void*)&get_max},
-	{"timeout", 2, {PARAM_UNSIGNED, PARAM_UNSIGNED}, (void*)&get_timeout},
 	{"root", 1, {PARAM_STR}, (void*)get_root},
 	{NULL, 0, {0}, NULL}
 };
@@ -96,8 +95,6 @@ void	server_init(t_serv *server, int argc, char **argv, char **env)
 	server_attach_data(server->server, server);
 	server_add_client_by_fd(server->server, 0);
 }
-
-#include <errno.h>
 
 int		main(int argc, char **argv, char **env)
 {

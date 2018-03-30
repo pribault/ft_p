@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/03 16:13:23 by pribault          #+#    #+#             */
-/*   Updated: 2018/03/28 12:48:19 by pribault         ###   ########.fr       */
+/*   Updated: 2018/03/30 21:16:13 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -302,6 +302,7 @@ void				ft_circ_buffer_set_trash_callback(t_circ_buffer *buffer,
 char				*ft_get_file_name_from_path(char *path);
 char				*ft_getenv(char **env, char *name);
 char				**ft_multisplit(char *str, char *sep);
+char				*ft_reduct_path(char *path);
 char				*ft_strcat(char *s1, const char *s2);
 char				*ft_strchr(const char *s, int c);
 void				ft_strclr(char *s);

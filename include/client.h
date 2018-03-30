@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/13 11:04:44 by pribault          #+#    #+#             */
-/*   Updated: 2018/03/29 18:05:38 by pribault         ###   ########.fr       */
+/*   Updated: 2018/03/30 22:50:50 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,6 @@ void			get_port(t_cli *client, char **args, int n_params);
 void			get_protocol(t_cli *client, char **args, int n_params);
 void			get_domain(t_cli *client, char **args, int n_params);
 void			get_address(t_cli *client, char **args, int n_params);
-void			get_timeout(t_cli *client, char **args, int n_params);
 
 void			add_client(void *server, void *client);
 void			del_client(void *server, void *client);

@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/13 11:04:44 by pribault          #+#    #+#             */
-/*   Updated: 2018/03/28 13:29:23 by pribault         ###   ########.fr       */
+/*   Updated: 2018/03/30 22:49:35 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,6 @@ void			get_port(t_serv *server, char **args, int n);
 void			get_protocol(t_serv *server, char **args, int n_params);
 void			get_domain(t_serv *server, char **args, int n_params);
 void			get_max(t_serv *server, char **args, int n_params);
-void			get_timeout(t_serv *server, char **args, int n_params);
 
 void			add_client(void *server, void *client);
 void			del_client(void *server, void *client);

@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/02 19:10:08 by pribault          #+#    #+#             */
-/*   Updated: 2018/03/29 13:04:43 by pribault         ###   ########.fr       */
+/*   Updated: 2018/03/30 22:50:42 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,13 +42,4 @@ void	get_domain(t_cli *client, char **args, int n_params)
 		client->domain = IPV6;
 	else
 		ft_error(2, ERROR_INVALID_DOMAIN, args[0]);
-}
-
-void	get_timeout(t_cli *client, char **args, int n_params)
-{
-	(void)n_params;
-	(void)args;
-	(void)client;
-	// server_set_timeout(client->server,
-	// (struct timeval){ft_atou(args[0]), ft_atou(args[1])});
 }

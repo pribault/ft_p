@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/21 14:38:53 by pribault          #+#    #+#             */
-/*   Updated: 2018/03/29 13:09:33 by pribault         ###   ########.fr       */
+/*   Updated: 2018/03/30 22:50:58 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ static t_long_flag	g_long_flags[] =
 	{"port", 1, {PARAM_UNSIGNED}, (void*)&get_port},
 	{"protocol", 1, {PARAM_STR}, (void*)&get_protocol},
 	{"domain", 1, {PARAM_STR}, (void*)&get_domain},
-	{"timeout", 1, {PARAM_UNSIGNED, PARAM_UNSIGNED}, (void*)&get_timeout},
 	{NULL, 0, {0}, NULL}
 };
 
@@ -87,7 +86,6 @@ void	client_init(t_cli *client, int argc, char **argv, char **env)
 	server_set_callback(client->server, SERVER_MSG_RECV_CB, &msg_recv);
 	server_set_callback(client->server, SERVER_MSG_SEND_CB, &msg_send);
 	server_set_callback(client->server, SERVER_MSG_TRASH_CB, &msg_trash);
-	// server_set_clients_max(client->server, 2);
 	server_add_client_by_fd(client->server, 0);
 }
 
@@ -106,7 +104,6 @@ int		main(int argc, char **argv, char **env)
 	if (!server_connect(client.server, (t_method){client.protocol, IPV4},
 		client.address, client.port))
 		ft_error(2, ERROR_CANNOT_CONNECT, client.address);
-	// server_set_clients_max(client.server, 0);
 	while (1)
 		server_poll_events(client.server);
 	return (0);

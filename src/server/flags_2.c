@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/02 16:17:46 by pribault          #+#    #+#             */
-/*   Updated: 2018/03/28 09:01:05 by pribault         ###   ########.fr       */
+/*   Updated: 2018/03/30 22:49:26 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,13 +54,4 @@ void	get_max(t_serv *server, char **args, int n_params)
 {
 	(void)n_params;
 	server_set_queue_max(server->server, atoi(args[0]));
-}
-
-void	get_timeout(t_serv *server, char **args, int n_params)
-{
-	(void)n_params;
-	(void)args;
-	(void)server;
-	// server_set_timeout(server->server,
-	// (struct timeval){ft_atou(args[0]), ft_atou(args[1])});
 }

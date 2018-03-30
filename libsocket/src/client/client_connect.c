@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/20 15:17:30 by pribault          #+#    #+#             */
-/*   Updated: 2018/03/28 11:37:01 by pribault         ###   ########.fr       */
+/*   Updated: 2018/03/30 22:48:32 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,8 @@ static int	connected(t_client *client, struct addrinfo *result,
 	return (1);
 }
 
-int		client_connect(t_client *client, t_protocol protocol,
-		char *address, char *port)
+int			client_connect(t_client *client, t_protocol protocol,
+			char *address, char *port)
 {
 	struct addrinfo	*result;
 	struct addrinfo	*addr;

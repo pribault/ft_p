@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/03 13:50:38 by pribault          #+#    #+#             */
-/*   Updated: 2018/03/16 06:48:13 by pribault         ###   ########.fr       */
+/*   Updated: 2018/03/30 22:55:53 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,21 +44,20 @@ void	recv_cd(t_serv *server, void *client, t_header *ptr, size_t size)
 {
 	DIR		*dir;
 	t_data	*data;
-	char	*long_name;
-	char	*file;
+	char	*file[2];
 
 	if (!(data = server_client_get_data(client)))
 		return (ft_error(2, ERROR_CUSTOM, "client data null, wtf ?!? ._."));
-	if (!(file = malloc(size - sizeof(t_header) + 1)))
+	if (!(file[0] = malloc(size - sizeof(t_header) + 1)))
 		ft_error(2, ERROR_ALLOCATION, NULL);
-	ft_memcpy(file, (void*)ptr + sizeof(t_header), size - sizeof(t_header));
-	file[size - sizeof(t_header)] = '\0';
-	if (!(long_name = ft_joinf("%s%s/", data->pwd, file)))
+	ft_memcpy(file[0], (void*)ptr + sizeof(t_header), size - sizeof(t_header));
+	file[0][size - sizeof(t_header)] = '\0';
+	if (!(file[1] = ft_joinf("%s%s/", data->pwd, file[0])))
 		ft_error(2, ERROR_ALLOCATION, NULL);
-	if ((dir = opendir(long_name)) && path_is_valid(server, data, long_name))
+	if ((dir = opendir(file[1])) && path_is_valid(server, data, file[1]))
 	{
 		free(data->pwd);
-		data->pwd = ft_strdup(long_name);
+		data->pwd = ft_reduct_path(ft_strdup(file[1]));
 		enqueue_msg(server, client, new_msg("\e[38;5;82mSUCCESS\e[0m", 21),
 		TYPE_STR);
 		closedir(dir);
@@ -66,8 +65,8 @@ void	recv_cd(t_serv *server, void *client, t_header *ptr, size_t size)
 	else
 		enqueue_msg(server, client, new_msg(
 		"\e[38;5;160mERROR:\e[0m cannot open directory", 43), TYPE_STR);
-	free(long_name);
-	free(file);
+	free(file[1]);
+	free(file[0]);
 }
 
 void	recv_ls_2(t_serv *server, void *client, char *file)
