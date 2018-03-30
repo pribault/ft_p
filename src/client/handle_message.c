@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/02 21:50:14 by pribault          #+#    #+#             */
-/*   Updated: 2018/02/03 18:20:25 by pribault         ###   ########.fr       */
+/*   Updated: 2018/03/30 11:25:13 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	recv_str(t_cli *client, t_header *ptr, size_t size)
 	((char*)msg.ptr)[size - sizeof(t_header)] = '\n';
 	msg.size = size - sizeof(t_header) + 1;
 	server_enqueue_write_by_fd(client->server, 1, &msg);
-	if (!ft_strncmp(msg.ptr, "ERROR: ", 7))
+	if (!ft_strncmp(msg.ptr, "\e[38;5;160mERROR:", 17))
 	{
 		if (client->file)
 			ft_memdel((void**)&client->file);
