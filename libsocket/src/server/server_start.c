@@ -6,12 +6,11 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/18 21:06:13 by pribault          #+#    #+#             */
-/*   Updated: 2018/03/31 18:23:00 by pribault         ###   ########.fr       */
+/*   Updated: 2018/03/31 18:35:37 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "server.h"
-
 
 static int	server_bind_tcp(t_server *server)
 {
@@ -38,8 +37,8 @@ static int	server_bind(t_server *server)
 	if ((server->sockfd = socket(server->domain, server->protocol, 0)) < 0 ||
 		setsockopt(server->sockfd, SOL_SOCKET, SO_REUSEADDR, &n,
 		sizeof(int)) < 0 ||
-		bind(server->sockfd, (void*)&addr, (server->domain == IPV6) ?
-		sizeof(struct sockaddr_in6) : sizeof(struct sockaddr)) < 0)
+		bind(server->sockfd, (void*)&addr, (server->domain == IPV4) ?
+		sizeof(struct sockaddr) : sizeof(struct sockaddr_in6)) < 0)
 		return (0);
 	if (server->protocol == TCP)
 		return (server_bind_tcp(server));

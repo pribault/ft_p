@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/29 16:43:32 by pribault          #+#    #+#             */
-/*   Updated: 2018/03/29 17:38:39 by pribault         ###   ########.fr       */
+/*   Updated: 2018/03/31 18:36:31 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ static void	server_add_client_udp(t_server *server, t_client *client)
 	server->clients.n - 1));
 }
 
-#include <errno.h>
 void		server_get_incoming_message(t_server *server, int *n_evts)
 {
 	char		buffer[READ_BUFFER_SIZE];

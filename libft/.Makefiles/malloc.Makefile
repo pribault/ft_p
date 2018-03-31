@@ -4,7 +4,7 @@ CC = clang
 SRC =	malloc.c show_alloc.c zone.c\
 		get.c allocation.c error.c\
 		free.c realloc.c realloc_2.c\
-		malloc_2.c
+		malloc_2.c log.c
 DIR = malloc
 SRC_DIR = src
 OBJ_DIR = .obj
