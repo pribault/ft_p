@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/03 13:17:45 by pribault          #+#    #+#             */
-/*   Updated: 2018/03/16 06:59:00 by pribault         ###   ########.fr       */
+/*   Updated: 2018/03/31 13:49:07 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,8 +80,7 @@ void	message_complete(t_serv *server, void *client, t_header *ptr,
 		ft_error(2, ERROR_UNEXPECTED_MSG, NULL);
 	if (data->ptr)
 	{
-		free(data->ptr);
-		ft_bzero(data, sizeof(t_data));
+		ft_memdel(&data->ptr);
 	}
 }
 
@@ -112,7 +111,7 @@ void	manage_received_msg(t_serv *server, void *client, t_header *ptr,
 	if (!(data = server_client_get_data(client)))
 		return (ft_error(2, ERROR_CUSTOM, "client data null, wtf ?!? ._."));
 	if (data->ptr)
-		waiting_for_message(server, data, ptr, size);
+		waiting_for_message(server, client, ptr, size);
 	else if (size >= sizeof(t_header))
 	{
 		if (ptr->size <= size)

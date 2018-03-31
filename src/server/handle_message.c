@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/03 13:50:38 by pribault          #+#    #+#             */
-/*   Updated: 2018/03/30 22:55:53 by pribault         ###   ########.fr       */
+/*   Updated: 2018/03/31 12:46:48 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,6 +120,7 @@ void	recv_pwd(t_serv *server, void *client, t_header *ptr, size_t size)
 
 	(void)ptr;
 	(void)size;
+	ft_printf("pwd=%s\n", ((t_data*)server_client_get_data(client))->pwd);
 	if (!(data = server_client_get_data(client)))
 		return (ft_error(2, ERROR_CUSTOM, "client data null, wtf ?!? ._."));
 	enqueue_msg(server, client,

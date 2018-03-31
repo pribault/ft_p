@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/03 18:47:16 by pribault          #+#    #+#             */
-/*   Updated: 2018/03/16 06:53:18 by pribault         ###   ########.fr       */
+/*   Updated: 2018/03/31 13:50:41 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ void	recv_get(t_serv *server, void *client, t_header *ptr, size_t size)
 	t_data	*data;
 
 	if (!(data = server_client_get_data(client)))
-		return (ft_error(2, ERROR_CUSTOM, "client data null, wtf ?!? ._."));
+		return (ft_error(2, ERROR_CUSTOM, "client data null, wtf ?!? ._. 1"));
 	if (!(tmp = malloc(size - sizeof(t_header) + 1)))
 		ft_error(2, ERROR_ALLOCATION, NULL);
 	ft_memcpy(tmp, (void*)ptr + sizeof(t_header), size - sizeof(t_header));
