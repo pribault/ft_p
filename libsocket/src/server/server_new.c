@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/18 20:56:42 by pribault          #+#    #+#             */
-/*   Updated: 2018/03/28 12:59:33 by pribault         ###   ########.fr       */
+/*   Updated: 2018/03/31 18:10:57 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,9 @@ t_server	*server_new(void)
 	if (!(server = (t_server*)malloc(sizeof(t_server))))
 		return (NULL);
 	ft_bzero(server, sizeof(t_server));
-	ft_vector_init(&server->clients, sizeof(t_client));
-	ft_circ_buffer_init(&server->write_queue, sizeof(t_towrite),
-	CIRCULAR_BUFFER_SIZE);
+	ft_vector_init(&server->clients, ALLOC_MALLOC, sizeof(t_client));
+	ft_circ_buffer_init(&server->write_queue, ALLOC_MALLOC,
+	sizeof(t_towrite), CIRCULAR_BUFFER_SIZE);
 	ft_circ_buffer_set_trash_callback(&server->write_queue,
 	(void*)&server_trash_callback, server);
 	server->queue_max = SERVER_DEFAULT_QUEUE_MAX;

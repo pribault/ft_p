@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/03 13:50:38 by pribault          #+#    #+#             */
-/*   Updated: 2018/03/31 12:46:48 by pribault         ###   ########.fr       */
+/*   Updated: 2018/03/31 18:19:40 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void	recv_cd(t_serv *server, void *client, t_header *ptr, size_t size)
 	if ((dir = opendir(file[1])) && path_is_valid(server, data, file[1]))
 	{
 		free(data->pwd);
-		data->pwd = ft_reduct_path(ft_strdup(file[1]));
+		data->pwd = ft_reduce_path(ft_strdup(file[1]));
 		enqueue_msg(server, client, new_msg("\e[38;5;82mSUCCESS\e[0m", 21),
 		TYPE_STR);
 		closedir(dir);

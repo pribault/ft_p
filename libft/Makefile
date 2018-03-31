@@ -17,10 +17,10 @@ JOBS = 1
 all: $(NAME)
 
 $(NAME):
-	@make -f $(DIR)/$(LIBFT).$(EXT)
-	@make -f $(DIR)/$(MALLOC).$(EXT)
-	@make -f $(DIR)/$(FT_PRINTF).$(EXT)
-	@make -f $(DIR)/$(FT_JOINF).$(EXT)
+	@make -f $(DIR)/$(LIBFT).$(EXT) $(NAME) -j$(JOBS)
+	@make -f $(DIR)/$(MALLOC).$(EXT) $(NAME) -j$(JOBS)
+	@make -f $(DIR)/$(FT_PRINTF).$(EXT) $(NAME) -j$(JOBS)
+	@make -f $(DIR)/$(FT_JOINF).$(EXT) $(NAME) -j$(JOBS)
 
 $(NAME_SO): $(NAME)
 	# @$(CC) $(FLAGS) -shared -o $@ -L . -lft

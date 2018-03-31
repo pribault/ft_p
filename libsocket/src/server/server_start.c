@@ -6,13 +6,12 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/18 21:06:13 by pribault          #+#    #+#             */
-/*   Updated: 2018/03/28 11:36:28 by pribault         ###   ########.fr       */
+/*   Updated: 2018/03/31 18:23:00 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "server.h"
 
-#include <errno.h>
 
 static int	server_bind_tcp(t_server *server)
 {

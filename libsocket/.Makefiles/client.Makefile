@@ -51,7 +51,7 @@ $(OBJ_DIR)/$(DIR)/%.o: $(SRC_DIR)/$(DIR)/%.c $(INCLUDE) $(DEPENDENCIES) | $(OBJ_
 $(NAME): $(OBJ)
 	@ar rc $(NAME) $(OBJ)
 	@ranlib $(NAME)
-	$(eval COMPILED=true)
+	@$(eval COMPILED=true)
 
 clean:
 	@rm -rf $(OBJ_DIR)/$(DIR)
