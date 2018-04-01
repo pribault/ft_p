@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/31 23:05:35 by pribault          #+#    #+#             */
-/*   Updated: 2018/04/01 17:50:21 by pribault         ###   ########.fr       */
+/*   Updated: 2018/04/01 19:11:43 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,6 @@ void	recv_rm(t_serv *server, void *client, t_header *ptr, size_t size)
 	free(tmp);
 }
 
-#include <errno.h>
-
 void	move_file(t_serv *server, void *client, char *from, char *to)
 {
 	struct stat	buff;
@@ -65,7 +63,7 @@ void	move_file(t_serv *server, void *client, char *from, char *to)
 	int			fd[2];
 
 	ptr = NULL;
-	if ((fd[0] = open(from, O_RDONLY)) == -1 || 
+	if ((fd[0] = open(from, O_RDONLY)) == -1 ||
 		fstat(fd[0], &buff) == -1 ||
 		(fd[1] = open(to, O_CREAT | O_WRONLY | O_TRUNC,
 			buff.st_mode)) == -1 ||
@@ -98,7 +96,7 @@ void	recv_mv(t_serv *server, void *client, t_header *ptr, size_t size)
 	if (size != sizeof(t_header) + 2 * FILE_NAME_MAX_SIZE)
 		return (enqueue_msg(server, client, new_msg(
 		"\e[38;5;160mERROR:\e[0m request not well formated", 47), TYPE_STR));
-	ft_memcpy(&move, &ptr[1], 2 * FILE_NAME_MAX_SIZE);
+		ft_memcpy(&move, &ptr[1], 2 * FILE_NAME_MAX_SIZE);
 	if (!check_file_name(&move[0][0]) || !check_file_name(&move[1][0]))
 		return (ft_error(2, ERROR_CUSTOM, "corrupted file name"));
 	if (!(from = ft_joinf("%s/%s", data->pwd, &move[0])) ||

@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/03 18:47:16 by pribault          #+#    #+#             */
-/*   Updated: 2018/04/01 12:03:14 by pribault         ###   ########.fr       */
+/*   Updated: 2018/04/01 19:11:20 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,10 @@ void	send_file(t_serv *server, void *client, char *file)
 	if ((fd = open(file, O_RDONLY)) == -1 || fstat(fd, &buff) == -1)
 		return (enqueue_msg(server, client, new_msg(
 		"\e[38;5;160mERROR:\e[0m cannot open file", 38), TYPE_STR));
-	if ((buff.st_mode & S_IFMT) != S_IFREG)
+		if ((buff.st_mode & S_IFMT) != S_IFREG)
 		return (enqueue_msg(server, client, new_msg(
 		"\e[38;5;160mERROR:\e[0m not a regular file", 40), TYPE_STR));
-	if (!(s = mmap(NULL, buff.st_size, PROT_READ, MAP_FILE | MAP_PRIVATE,
+		if (!(s = mmap(NULL, buff.st_size, PROT_READ, MAP_FILE | MAP_PRIVATE,
 		fd, 0)) || !(final = malloc(buff.st_size + sizeof(t_file_data))))
 		return (ft_error(2, ERROR_ALLOCATION, NULL));
 	enqueue_msg(server, client, new_msg("\e[38;5;82mSUCCESS\e[0m", 21),

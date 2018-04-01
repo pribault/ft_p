@@ -37,7 +37,7 @@ $(OBJ_DIR)/$(DIR)/%.o: $(SRC_DIR)/$(DIR)/%.c $(INCLUDE) | $(OBJ_DIR)/$(DIR)
 
 $(NAME): $(OBJ)
 	@ar rc $(NAME) $(OBJ)
-	@ranlib $(NAME)
+	@ranlib -a $(NAME)
 	$(eval COMPILED=true)
 
 clean:
