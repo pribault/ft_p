@@ -1,6 +1,6 @@
 NAME = client
 CC = clang
-FLAGS = -Wall -Wextra
+FLAGS = -Wall -Wextra -Werror
 INC = include
 INCLUDE = client.h protocol.h
 INCLUDES = $(INCLUDE:%.h=$(INC)/%.h)
@@ -47,6 +47,6 @@ fclean: clean
 	@echo "\033[0m\033[38;5;87m$(NAME) removed\033[0m"
 
 norme:
-	@norminette $(OBJS:%.o=%.c) $(INCLUDES)
+	@norminette $(OBJS:$(OBJ)/%.o=$(SRC)/%.c) $(INCLUDES)
 
 re: fclean all
