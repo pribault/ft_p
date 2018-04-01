@@ -18,11 +18,8 @@ all: $(NAME)
 
 $(NAME):
 	@make -f $(DIR)/$(LIBFT).$(EXT) -j$(JOBS)
-	@sleep 1
 	@make -f $(DIR)/$(MALLOC).$(EXT) -j$(JOBS)
-	@sleep 1
 	@make -f $(DIR)/$(FT_PRINTF).$(EXT) -j$(JOBS)
-	@sleep 1
 	@make -f $(DIR)/$(FT_JOINF).$(EXT) -j$(JOBS)
 
 $(NAME_SO): $(NAME)
@@ -40,6 +37,10 @@ clean:
 	@echo "\033[0m\033[38;5;166m[libft ∎∎∎∎] \033[0m\033[38;5;45mobject files removed\033[0m"
 
 fclean:
+	@make -f $(DIR)/$(LIBFT).$(EXT) fclean
+	@make -f $(DIR)/$(MALLOC).$(EXT) fclean
+	@make -f $(DIR)/$(FT_PRINTF).$(EXT) fclean
+	@make -f $(DIR)/$(FT_JOINF).$(EXT) fclean
 	@rm -f $(NAME)
 	@rm -f $(NAME_SO)
 	@rm -rf .obj
