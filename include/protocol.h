@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/14 14:22:43 by pribault          #+#    #+#             */
-/*   Updated: 2018/02/03 15:58:15 by pribault         ###   ########.fr       */
+/*   Updated: 2018/03/31 22:38:20 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ typedef enum	e_type
 	TYPE_PWD,
 	TYPE_PUT,
 	TYPE_GET,
+	TYPE_RM,
+	TYPE_MV,
 	TYPE_MAX
 }				t_type;
 

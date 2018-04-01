@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/03 13:17:45 by pribault          #+#    #+#             */
-/*   Updated: 2018/03/31 13:49:07 by pribault         ###   ########.fr       */
+/*   Updated: 2018/03/31 23:04:03 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@
 **	- TYPE_PWD
 **	- TYPE_PUT
 **	- TYPE_GET
+**	- TYPE_RM
+**	- TYPE_MV
 **
 **	states:
 **
@@ -32,9 +34,10 @@
 
 static t_msg_handler	g_func[STATE_MAX][TYPE_MAX] =
 {
-	{NULL, NULL, &recv_ls, &recv_cd, &recv_pwd, &recv_put, &recv_get},
-	{NULL, NULL, NULL, NULL, NULL, NULL, NULL},
-	{NULL, NULL, NULL, NULL, NULL, NULL, NULL},
+	{NULL, NULL, &recv_ls, &recv_cd, &recv_pwd, &recv_put, &recv_get,
+		&recv_rm, &recv_mv},
+	{NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL},
+	{NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL},
 };
 
 void	save_message(t_data *data, t_header *ptr, size_t size)

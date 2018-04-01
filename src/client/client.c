@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/21 14:38:53 by pribault          #+#    #+#             */
-/*   Updated: 2018/03/30 22:50:58 by pribault         ###   ########.fr       */
+/*   Updated: 2018/03/31 23:11:05 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,10 +49,13 @@ static t_error	g_errors[] =
 	{ERROR_PWD_PARAMS, "pwd don't take any parameter", 0},
 	{ERROR_PUT_PARAMS, "put take only one parameter", 0},
 	{ERROR_GET_PARAMS, "get take only one parameter", 0},
+	{ERROR_RM_PARAMS, "rm take only one parameter", 0},
+	{ERROR_MV_PARAMS, "mv take two parameters", 0},
 	{ERROR_EXIT_PARAMS, "exit don't take any parameter", 0},
 	{ERROR_UNKNOWN_COMMAND, "unknown command '%s'", 0},
 	{ERROR_FILE_ALREADY_EXIST, "file '%s' already exist", 0},
 	{ERROR_FILE_NAME_TOO_LONG, "file name '%s' too long", 0},
+	{ERROR_FILE_NOT_REGULAR, "file %s is not regular", 0},
 	{0, NULL, 0}
 };
 

@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/13 11:04:44 by pribault          #+#    #+#             */
-/*   Updated: 2018/03/30 22:50:50 by pribault         ###   ########.fr       */
+/*   Updated: 2018/03/31 23:10:25 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,9 +42,12 @@ typedef enum	e_client_error
 	ERROR_PUT_PARAMS,
 	ERROR_GET_PARAMS,
 	ERROR_EXIT_PARAMS,
+	ERROR_RM_PARAMS,
+	ERROR_MV_PARAMS,
 	ERROR_UNKNOWN_COMMAND,
 	ERROR_FILE_ALREADY_EXIST,
-	ERROR_FILE_NAME_TOO_LONG
+	ERROR_FILE_NAME_TOO_LONG,
+	ERROR_FILE_NOT_REGULAR
 }				t_cli_error;
 
 typedef struct	s_data
@@ -103,6 +106,8 @@ void			quit(t_cli *client, char **cmds, size_t len);
 void			send_ls_request(t_cli *client, char **cmds, size_t len);
 void			send_cd_request(t_cli *client, char **cmds, size_t len);
 void			send_pwd_request(t_cli *client, char **cmds, size_t len);
+void			send_rm_request(t_cli *client, char **cmds, size_t len);
+void			send_mv_request(t_cli *client, char **cmds, size_t len);
 
 void			recv_state(t_cli *client, t_header *ptr, size_t size);
 void			recv_str(t_cli *client, t_header *ptr, size_t size);

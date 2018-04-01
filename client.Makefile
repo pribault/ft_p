@@ -9,7 +9,7 @@ SRC = src/client
 SRCS =	client.c flags.c flags_2.c\
 		clients.c message.c commands.c\
 		receive.c handle_message.c\
-		commands_2.c
+		commands_2.c commands_3.c
 OBJS = $(SRCS:%.c=$(OBJ)/%.o)
 LIBFT = libft
 LIBSOCKET = libsocket

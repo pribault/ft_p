@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/13 11:04:44 by pribault          #+#    #+#             */
-/*   Updated: 2018/03/30 22:49:35 by pribault         ###   ########.fr       */
+/*   Updated: 2018/03/31 23:05:07 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,10 @@ void			recv_pwd(t_serv *server, void *client, t_header *ptr,
 void			recv_put(t_serv *server, void *client, t_header *ptr,
 				size_t size);
 void			recv_get(t_serv *server, void *client, t_header *ptr,
+				size_t size);
+void			recv_rm(t_serv *server, void *client, t_header *ptr,
+				size_t size);
+void			recv_mv(t_serv *server, void *client, t_header *ptr,
 				size_t size);
 
 t_msg			new_msg(void *ptr, size_t size);

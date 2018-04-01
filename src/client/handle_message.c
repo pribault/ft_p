@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/02 21:50:14 by pribault          #+#    #+#             */
-/*   Updated: 2018/03/30 11:25:13 by pribault         ###   ########.fr       */
+/*   Updated: 2018/03/31 21:20:58 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	recv_state(t_cli *client, t_header *ptr, size_t size)
 {
 	(void)size;
 	if (ptr->size >= sizeof(t_header) + 5 && !ft_strncmp((void*)ptr +
-		sizeof(t_header), "ERROR", 5))
+		sizeof(t_header), "\e[38;5;160mERROR", 16))
 		client->state = STATE_NONE;
 }
 
