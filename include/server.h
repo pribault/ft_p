@@ -18,6 +18,7 @@
 # include <signal.h>
 # include <sys/stat.h>
 # include <sys/mman.h>
+# include <stdio.h>
 
 # define OPT_VERBOSE	BYTE(0)
 
