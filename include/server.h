@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/13 11:04:44 by pribault          #+#    #+#             */
-/*   Updated: 2018/03/31 23:05:07 by pribault         ###   ########.fr       */
+/*   Updated: 2018/04/01 12:17:19 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ typedef enum	e_server_error
 	ERROR_UNEXPECTED_MSG,
 	ERROR_UNKNOWN_MSG_TYPE,
 	ERROR_FILE_ALREADY_EXIST,
-	ERROR_INVALID_ROOT
+	ERROR_INVALID_ROOT,
 }				t_server_error;
 
 typedef struct	s_data
@@ -81,6 +81,7 @@ void			manage_received_msg(t_serv *server, void *client,
 				t_header *ptr, size_t size);
 
 int				path_is_valid(t_serv *server, t_data *data, char *file);
+char			*get_corrected_path(char *path);
 void			recv_cd(t_serv *server, void *client, t_header *ptr,
 				size_t size);
 void			recv_ls(t_serv *server, void *client, t_header *ptr,

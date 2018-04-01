@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/03 18:47:16 by pribault          #+#    #+#             */
-/*   Updated: 2018/03/31 23:09:36 by pribault         ###   ########.fr       */
+/*   Updated: 2018/04/01 12:03:14 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,6 @@ void	recv_put(t_serv *server, void *client, t_header *ptr, size_t size)
 
 void	recv_get(t_serv *server, void *client, t_header *ptr, size_t size)
 {
-	char	*long_file;
 	char	*file;
 	char	*tmp;
 	t_data	*data;
@@ -94,26 +93,15 @@ void	recv_get(t_serv *server, void *client, t_header *ptr, size_t size)
 		return (ft_error(2, ERROR_CUSTOM, "client data null, wtf ?!? ._."));
 	if (!(tmp = malloc(size - sizeof(t_header) + 1)))
 		ft_error(2, ERROR_ALLOCATION, NULL);
-	ft_memcpy(tmp, (void*)ptr + sizeof(t_header), size - sizeof(t_header));
+	ft_memcpy(tmp, &ptr[1], size - sizeof(t_header));
 	tmp[size - sizeof(t_header)] = '\0';
-	file = NULL;
-	if (!(long_file = ft_joinf("%s/%s", data->pwd, tmp)) ||
-		!(file = get_corrected_path(long_file)))
-		ft_error(2, ERROR_ALLOCATION, NULL);
+	if (!(file = ft_joinf("%s/%s", data->pwd, tmp)))
+		return (ft_error(2, ERROR_ALLOCATION, NULL));
 	if (path_is_valid(server, data, file))
 		send_file(server, client, file);
 	else
 		enqueue_msg(server, client, new_msg(
 		"\e[38;5;160mERROR:\e[0m cannot open file", 38), TYPE_STR);
-	free(long_file);
 	free(file);
 	free(tmp);
-}
-
-void	recv_rm(t_serv *server, void *client, t_header *ptr, size_t size)
-{
-	t_data	*data;
-
-	if (!(data = server_client_get_data(client)))
-		return (ft_error(2, ERROR_CUSTOM, "client data null, wtf ?!? ._."));
 }

@@ -17,13 +17,16 @@ JOBS = 1
 all: $(NAME)
 
 $(NAME):
-	@make -f $(DIR)/$(LIBFT).$(EXT) $(NAME) -j$(JOBS)
-	@make -f $(DIR)/$(MALLOC).$(EXT) $(NAME) -j$(JOBS)
-	@make -f $(DIR)/$(FT_PRINTF).$(EXT) $(NAME) -j$(JOBS)
-	@make -f $(DIR)/$(FT_JOINF).$(EXT) $(NAME) -j$(JOBS)
+	@make -f $(DIR)/$(LIBFT).$(EXT) -j$(JOBS)
+	@make -f $(DIR)/$(MALLOC).$(EXT) -j$(JOBS)
+	@make -f $(DIR)/$(FT_PRINTF).$(EXT) -j$(JOBS)
+	@make -f $(DIR)/$(FT_JOINF).$(EXT) -j$(JOBS)
 
 $(NAME_SO): $(NAME)
-	# @$(CC) $(FLAGS) -shared -o $@ -L . -lft
+	@$(eval OBJ=$(shell ar t $(NAME)))
+	@ar x $(NAME)
+	@$(CC) -o $@ -shared $(OBJ)
+	@rm -f $(OBJ)
 	@echo "\033[0m\033[38;5;166m[libft ∎∎∎∎] \033[0m🦁  \033[38;5;214m$@ done\033[0m"
 
 clean:
