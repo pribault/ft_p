@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/14 14:22:43 by pribault          #+#    #+#             */
-/*   Updated: 2018/02/03 15:58:15 by pribault         ###   ########.fr       */
+/*   Updated: 2018/03/31 22:38:20 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ typedef enum	e_type
 	TYPE_PWD,
 	TYPE_PUT,
 	TYPE_GET,
+	TYPE_RM,
+	TYPE_MV,
 	TYPE_MAX
 }				t_type;
 
@@ -38,12 +40,10 @@ typedef enum	e_state
 	STATE_MAX
 }				t_state;
 
-# pragma pack(1)
-
 typedef struct	s_header
 {
+	uint64_t	size;
 	uint8_t		type;
-	uint32_t	size;
 }				t_header;
 
 typedef struct	s_file_data
@@ -51,7 +51,5 @@ typedef struct	s_file_data
 	char		name[FILE_NAME_MAX_SIZE];
 	mode_t		prot;
 }				t_file_data;
-
-# pragma pack()
 
 #endif

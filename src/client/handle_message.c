@@ -6,21 +6,21 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/02 21:50:14 by pribault          #+#    #+#             */
-/*   Updated: 2018/02/03 18:20:25 by pribault         ###   ########.fr       */
+/*   Updated: 2018/03/31 21:20:58 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "client.h"
 
-void	recv_state(t_client *client, t_header *ptr, size_t size)
+void	recv_state(t_cli *client, t_header *ptr, size_t size)
 {
 	(void)size;
 	if (ptr->size >= sizeof(t_header) + 5 && !ft_strncmp((void*)ptr +
-		sizeof(t_header), "ERROR", 5))
+		sizeof(t_header), "\e[38;5;160mERROR", 16))
 		client->state = STATE_NONE;
 }
 
-void	recv_str(t_client *client, t_header *ptr, size_t size)
+void	recv_str(t_cli *client, t_header *ptr, size_t size)
 {
 	static t_msg	msg;
 	uint64_t		x;
@@ -35,7 +35,7 @@ void	recv_str(t_client *client, t_header *ptr, size_t size)
 	((char*)msg.ptr)[size - sizeof(t_header)] = '\n';
 	msg.size = size - sizeof(t_header) + 1;
 	server_enqueue_write_by_fd(client->server, 1, &msg);
-	if (!ft_strncmp(msg.ptr, "ERROR: ", 7))
+	if (!ft_strncmp(msg.ptr, "\e[38;5;160mERROR:", 17))
 	{
 		if (client->file)
 			ft_memdel((void**)&client->file);
@@ -45,7 +45,7 @@ void	recv_str(t_client *client, t_header *ptr, size_t size)
 		client->state = STATE_WAITING_FOR_FILE;
 }
 
-void	recv_file(t_client *client, t_header *ptr, size_t size)
+void	recv_file(t_cli *client, t_header *ptr, size_t size)
 {
 	struct stat	buff;
 	int			fd;

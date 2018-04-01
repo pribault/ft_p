@@ -6,11 +6,17 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/18 20:56:42 by pribault          #+#    #+#             */
-/*   Updated: 2018/01/20 14:46:01 by pribault         ###   ########.fr       */
+/*   Updated: 2018/03/31 18:10:57 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "server.h"
+
+static void	server_trash_callback(t_server *server, t_towrite *towrite)
+{
+	if (server->msg_trash)
+		server->msg_trash(server, &towrite->client, &towrite->data);
+}
 
 t_server	*server_new(void)
 {
@@ -19,17 +25,12 @@ t_server	*server_new(void)
 	if (!(server = (t_server*)malloc(sizeof(t_server))))
 		return (NULL);
 	ft_bzero(server, sizeof(t_server));
-	if (!(server->clients = ft_vector_new(sizeof(t_client), 0)) ||
-		!(server->write_queue = ft_vector_new(sizeof(t_towrite), 0)))
-	{
-		if (server && server->clients)
-			ft_vector_del(&server->clients);
-		if (server)
-			free(server);
-		return (NULL);
-	}
+	ft_vector_init(&server->clients, ALLOC_MALLOC, sizeof(t_client));
+	ft_circ_buffer_init(&server->write_queue, ALLOC_MALLOC,
+	sizeof(t_towrite), CIRCULAR_BUFFER_SIZE);
+	ft_circ_buffer_set_trash_callback(&server->write_queue,
+	(void*)&server_trash_callback, server);
 	server->queue_max = SERVER_DEFAULT_QUEUE_MAX;
-	server->clients_max = SERVER_DEFAULT_CLIENTS_MAX;
 	server->timeout = (struct timeval){SERVER_DEFAULT_TIMEOUT_S,
 	SERVER_DEFAULT_TIMEOUT_US};
 	server->opt = 0;

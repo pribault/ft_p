@@ -6,13 +6,13 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/21 16:32:55 by pribault          #+#    #+#             */
-/*   Updated: 2018/02/03 14:00:12 by pribault         ###   ########.fr       */
+/*   Updated: 2018/03/29 18:06:09 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "client.h"
 
-void	enqueue_msg(t_client *client, void *data, size_t size, uint8_t type)
+void	enqueue_msg(t_cli *client, void *data, size_t size, uint8_t type)
 {
 	static t_msg	msg;
 
@@ -22,7 +22,16 @@ void	enqueue_msg(t_client *client, void *data, size_t size, uint8_t type)
 	((t_header*)msg.ptr)->type = type;
 	((t_header*)msg.ptr)->size = msg.size;
 	ft_memcpy(msg.ptr + sizeof(t_header), data, size);
-	server_enqueue_write_by_fd(client->server, client->fd, &msg);
+	server_enqueue_write(client->server, client->client, &msg);
+}
+
+void	msg_trash(void *server, void *client, t_msg *msg)
+{
+	(void)client;
+	free(msg->ptr);
+	if (((t_cli*)server_get_data(server))->opt & OPT_VERBOSE)
+		ft_printf("message sended to [%d] trashed\n",
+		server_get_client_fd(client));
 }
 
 void	msg_recv(void *server, void *client, t_msg *msg)
@@ -54,7 +63,7 @@ void	msg_send(void *server, void *client, t_msg *msg)
 	(void)client;
 	free(msg->ptr);
 	if (server_get_client_fd(client) != 1 &&
-		((t_client*)server_get_data(server))->opt & OPT_VERBOSE)
+		((t_cli*)server_get_data(server))->opt & OPT_VERBOSE)
 		ft_printf("message sended to [%d]\n",
 		server_get_client_fd(client));
 }

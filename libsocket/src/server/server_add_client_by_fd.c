@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/20 09:50:47 by pribault          #+#    #+#             */
-/*   Updated: 2018/01/21 11:55:33 by pribault         ###   ########.fr       */
+/*   Updated: 2018/03/28 13:22:49 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,11 @@ void	server_add_client_by_fd(t_server *server, int fd)
 {
 	t_client	client;
 
-	if (!server || server->clients->n >= server->clients_max)
-		return ;
 	ft_bzero(&client, sizeof(t_client));
 	client.fd = fd;
-	ft_vector_add(server->clients, &client);
+	client.write_type = WRITE_BY_FD;
+	ft_vector_add(&server->clients, &client);
 	if (server->client_add)
-		server->client_add(server, &client);
-	if (server->clients->n >= server->clients_max)
-		server_unbind(server);
+		server->client_add(server, ft_vector_get(&server->clients,
+		server->clients.n - 1));
 }

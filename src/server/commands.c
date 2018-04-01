@@ -6,13 +6,13 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/21 16:43:12 by pribault          #+#    #+#             */
-/*   Updated: 2018/02/02 16:30:29 by pribault         ###   ########.fr       */
+/*   Updated: 2018/03/28 13:25:58 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "server.h"
 
-void	treat_command(t_server *server, char *cmd)
+void	treat_command(t_serv *server, char *cmd)
 {
 	size_t	len;
 	char	**array;

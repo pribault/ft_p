@@ -6,13 +6,13 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/21 16:43:12 by pribault          #+#    #+#             */
-/*   Updated: 2018/02/03 17:51:32 by pribault         ###   ########.fr       */
+/*   Updated: 2018/03/31 23:10:40 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "client.h"
 
-void	send_put_request_2(t_client *client, char *file, void *data,
+void	send_put_request_2(t_cli *client, char *file, void *data,
 		struct stat *buff)
 {
 	t_file_data	*final;
@@ -29,7 +29,7 @@ void	send_put_request_2(t_client *client, char *file, void *data,
 	free(final);
 }
 
-void	send_put_request(t_client *client, char **cmds, size_t len)
+void	send_put_request(t_cli *client, char **cmds, size_t len)
 {
 	struct stat	buff;
 	char		*s;
@@ -42,6 +42,8 @@ void	send_put_request(t_client *client, char **cmds, size_t len)
 		if ((fd = open(cmds[1], O_RDWR)) == -1 ||
 			fstat(fd, &buff) == -1)
 			return (ft_error(2, ERROR_FILE, cmds[1]));
+		if ((buff.st_mode & S_IFMT) != S_IFREG)
+			return (ft_error(2, ERROR_FILE_NOT_REGULAR, cmds[1]));
 		if (!(s = mmap(NULL, buff.st_size, PROT_READ,
 			MAP_FILE | MAP_PRIVATE, fd, 0)))
 			return (ft_error(2, ERROR_ALLOCATION, NULL));
@@ -54,7 +56,7 @@ void	send_put_request(t_client *client, char **cmds, size_t len)
 	client->state = STATE_WAITING_FOR_STR;
 }
 
-void	send_get_request(t_client *client, char **cmds, size_t len)
+void	send_get_request(t_cli *client, char **cmds, size_t len)
 {
 	char	*file;
 	size_t	name_len;
@@ -75,7 +77,7 @@ void	send_get_request(t_client *client, char **cmds, size_t len)
 	client->state = STATE_WAITING_FOR_STR;
 }
 
-void	get_command(t_client *client, char **cmds, size_t len)
+void	get_command(t_cli *client, char **cmds, size_t len)
 {
 	if (!ft_strcmp(cmds[0], "ls"))
 		send_ls_request(client, cmds, len);
@@ -89,11 +91,15 @@ void	get_command(t_client *client, char **cmds, size_t len)
 		send_put_request(client, cmds, len);
 	else if (!ft_strcmp(cmds[0], "get"))
 		send_get_request(client, cmds, len);
+	else if (!ft_strcmp(cmds[0], "rm"))
+		send_rm_request(client, cmds, len);
+	else if (!ft_strcmp(cmds[0], "mv"))
+		send_mv_request(client, cmds, len);
 	else
 		ft_error(2, ERROR_UNKNOWN_COMMAND, cmds[0]);
 }
 
-void	treat_command(t_client *client, char *cmd)
+void	treat_command(t_cli *client, char *cmd)
 {
 	char	**cmds;
 	size_t	len;

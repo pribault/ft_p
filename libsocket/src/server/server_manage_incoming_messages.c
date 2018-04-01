@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/19 17:18:48 by pribault          #+#    #+#             */
-/*   Updated: 2018/01/21 13:48:55 by pribault         ###   ########.fr       */
+/*   Updated: 2018/03/29 17:22:16 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 static void	server_get_client_message(t_server *server, t_client *client)
 {
-	static char		buffer[READ_BUFFER_SIZE];
-	int				ret;
-	static t_msg	msg;
+	char	buffer[READ_BUFFER_SIZE];
+	int		ret;
+	t_msg	msg;
 
 	if ((ret = read(client->fd, &buffer, READ_BUFFER_SIZE)) > 0)
 	{
@@ -38,8 +38,9 @@ void		server_manage_incoming_messages(t_server *server, fd_set *set,
 	t_client	*client;
 	size_t		i;
 
-	if ((*n_evts) < 1 || !(vector = server->clients))
+	if ((*n_evts) < 1)
 		return ;
+	vector = &server->clients;
 	i = vector->n;
 	while (--i != (size_t)-1 && (*n_evts))
 	{

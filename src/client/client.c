@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/21 14:38:53 by pribault          #+#    #+#             */
-/*   Updated: 2018/02/03 16:01:49 by pribault         ###   ########.fr       */
+/*   Updated: 2018/03/31 23:11:05 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static t_long_flag	g_long_flags[] =
 	{"address", 1, {PARAM_STR}, (void*)&get_address},
 	{"port", 1, {PARAM_UNSIGNED}, (void*)&get_port},
 	{"protocol", 1, {PARAM_STR}, (void*)&get_protocol},
-	{"timeout", 1, {PARAM_UNSIGNED, PARAM_UNSIGNED}, (void*)&get_timeout},
+	{"domain", 1, {PARAM_STR}, (void*)&get_domain},
 	{NULL, 0, {0}, NULL}
 };
 
@@ -36,6 +36,7 @@ static t_error	g_errors[] =
 	{ERROR_PORT_ALREADY_SET, "'%s' port already set", 0},
 	{ERROR_PARAMS_ALREADY_SET, "'%s' address and port already set", 0},
 	{ERROR_INVALID_PROTOCOL, "invalid protocol '%s', allowed: tcp/udp", 0},
+	{ERROR_INVALID_DOMAIN, "invalid domain '%s', allowed: ipv4/ipv6", 0},
 	{ERROR_NO_ADDRESS_SET, "please specify an address", ERROR_EXIT},
 	{ERROR_NO_PORT_SET, "please specify a port", ERROR_EXIT},
 	{ERROR_CANNOT_CONNECT, "cannot connect to '%s'", ERROR_EXIT},
@@ -48,10 +49,13 @@ static t_error	g_errors[] =
 	{ERROR_PWD_PARAMS, "pwd don't take any parameter", 0},
 	{ERROR_PUT_PARAMS, "put take only one parameter", 0},
 	{ERROR_GET_PARAMS, "get take only one parameter", 0},
+	{ERROR_RM_PARAMS, "rm take only one parameter", 0},
+	{ERROR_MV_PARAMS, "mv take two parameters", 0},
 	{ERROR_EXIT_PARAMS, "exit don't take any parameter", 0},
 	{ERROR_UNKNOWN_COMMAND, "unknown command '%s'", 0},
 	{ERROR_FILE_ALREADY_EXIST, "file '%s' already exist", 0},
 	{ERROR_FILE_NAME_TOO_LONG, "file name '%s' too long", 0},
+	{ERROR_FILE_NOT_REGULAR, "file %s is not regular", 0},
 	{0, NULL, 0}
 };
 
@@ -66,30 +70,31 @@ void	my_sig(int sig)
 	exit(1);
 }
 
-void	client_init(t_client *client, int argc, char **argv, char **env)
+void	client_init(t_cli *client, int argc, char **argv, char **env)
 {
 	ft_add_errors((t_error*)&g_errors);
-	ft_bzero(client, sizeof(t_client));
+	ft_bzero(client, sizeof(t_cli));
 	client->env = env;
 	client->protocol = TCP;
-	client->opt = OPT_VERBOSE;
+	client->domain = IPV4;
+	client->opt = 0;
 	client->state = STATE_NONE;
-	if (!(client->server = server_new()))
-		return (ft_error(2, ERROR_ALLOCATION, NULL));
 	ft_get_flags(argc, argv, ft_get_flag_array((t_short_flag*)&g_short_flags,
 	(t_long_flag*)&g_long_flags, (void*)&get_default), client);
+	if (!(client->server = server_new()))
+		return (ft_error(2, ERROR_ALLOCATION, NULL));
 	server_attach_data(client->server, client);
 	server_set_callback(client->server, SERVER_CLIENT_ADD_CB, &add_client);
 	server_set_callback(client->server, SERVER_CLIENT_DEL_CB, &del_client);
 	server_set_callback(client->server, SERVER_MSG_RECV_CB, &msg_recv);
 	server_set_callback(client->server, SERVER_MSG_SEND_CB, &msg_send);
-	server_set_clients_max(client->server, 2);
+	server_set_callback(client->server, SERVER_MSG_TRASH_CB, &msg_trash);
 	server_add_client_by_fd(client->server, 0);
 }
 
 int		main(int argc, char **argv, char **env)
 {
-	t_client	client;
+	t_cli	client;
 
 	setenv("MALLOC_DEBUG", "1", 1);
 	atexit(&my_exit);
@@ -99,9 +104,9 @@ int		main(int argc, char **argv, char **env)
 		ft_error(2, ERROR_NO_ADDRESS_SET, NULL);
 	if (!client.port)
 		ft_error(2, ERROR_NO_PORT_SET, NULL);
-	if (!server_connect(client.server, TCP, client.address, client.port))
+	if (!server_connect(client.server, (t_method){client.protocol, IPV4},
+		client.address, client.port))
 		ft_error(2, ERROR_CANNOT_CONNECT, client.address);
-	server_set_clients_max(client.server, 0);
 	while (1)
 		server_poll_events(client.server);
 	return (0);

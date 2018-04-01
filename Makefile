@@ -3,23 +3,22 @@ CLIENT = client
 EXT = Makefile
 LIBFT = libft
 LIBSOCKET = libsocket
-JOBS = 4
 
-.PHONY: all clean fclean re norme $(LIBFT) $(LIBSOCKET)
+.PHONY: all clean fclean re norme $(LIBFT) $(LIBSOCKET) $(SERVER) $(CLIENT)
 
 all: $(SERVER) $(CLIENT)
 
 $(LIBFT):
-	@make -C $(LIBFT) -j$(JOBS)
+	@make -C $(LIBFT)
 
 $(LIBSOCKET):
-	@make -C $(LIBSOCKET) -j$(JOBS)
+	@make -C $(LIBSOCKET)
 
 $(SERVER): $(LIBFT) $(LIBSOCKET)
-	@make -f $(SERVER).$(EXT) -j$(JOBS)
+	@make -f $(SERVER).$(EXT)
 
 $(CLIENT): $(LIBFT) $(LIBSOCKET)
-	@make -f $(CLIENT).$(EXT) -j$(JOBS)
+	@make -f $(CLIENT).$(EXT)
 
 clean:
 	@make -C $(LIBFT) clean

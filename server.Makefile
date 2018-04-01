@@ -9,17 +9,19 @@ SRC = src/server
 SRCS =	server.c flags.c flags_2.c\
 		clients.c message.c commands.c\
 		receive.c handle_message.c\
-		handle_message_2.c
+		handle_message_2.c handle_message_3.c
 OBJS = $(SRCS:%.c=$(OBJ)/%.o)
 LIBFT = libft
 LIBSOCKET = libsocket
 INCLUDE_LIBS = -I $(LIBFT)/include -I $(LIBSOCKET)/include
 COMPILE_LIBS = -L $(LIBSOCKET) -lsocket -L $(LIBFT) -lft
-JOBS = 4
+JOBS = 1
+COMPILED = false
 
 .PHONY: all clean fclean re export
 
 all: $(NAME)
+	@if [ $(COMPILED) = true ]; then echo "\033[38;5;125m🐼  $(NAME) done\033[0m"; else echo "\033[38;5;125m🐼  nothing to be done for $(NAME)\033[0m"; fi
 
 $(OBJ):
 	@mkdir $@
@@ -29,14 +31,12 @@ $(LIBFT)/libft.a:
 $(LIBSOCKET)/libsocket.a:
 
 $(OBJ)/%.o: $(SRC)/%.c $(INCLUDES) $(LIBFT)/libft.a $(LIBSOCKET)/libsocket.a | $(OBJ)
-	@echo "\033[38;5;207m🍇  compiling $@\033[0m"
 	@$(CC) $(FLAGS) -I $(INC) $(INCLUDE_LIBS) -o $@ -c $<
-	@echo "\033[1A\033[K\033[38;5;207m🍇  $@ done\033[0m"
+	@echo "\033[38;5;207m🍇  $@ done\033[0m"
 
 $(NAME): $(OBJS)
-	@echo "\033[38;5;125m🐼  compiling $(NAME)\033[0m"
 	@$(CC) $(FLAGS) -o $(NAME) $(OBJS) $(COMPILE_LIBS)
-	@echo "\033[1A\033[K\033[38;5;125m🐼  $(NAME) done\033[0m"
+	@$(eval COMPILED=true)
 
 clean:
 	@rm -rf $(OBJ)

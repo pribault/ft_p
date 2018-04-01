@@ -6,29 +6,24 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/21 13:32:57 by pribault          #+#    #+#             */
-/*   Updated: 2018/01/21 13:44:35 by pribault         ###   ########.fr       */
+/*   Updated: 2018/03/28 11:41:54 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "client.h"
 
-static void	client_add_write_request_to_set(fd_set *set, t_vector *write_queue,
+static void	client_add_write_request_to_set(fd_set *set, t_circ_buffer *queue,
 			int *fd_max)
 {
 	t_towrite	*towrite;
 	size_t		i;
 
-	i = write_queue->n;
-	if (!set || !write_queue)
-		return ;
-	while (--i < (size_t)-1)
+	i = (size_t)-1;
+	while ((towrite = ft_circ_buffer_get(queue, ++i)))
 	{
-		if ((towrite = ft_vector_get(write_queue, i)))
-		{
-			if (towrite->fd > *fd_max)
-				*fd_max = towrite->fd;
-			FD_SET(towrite->fd, set);
-		}
+		if (towrite->fd > *fd_max)
+			*fd_max = towrite->fd;
+		FD_SET(towrite->fd, set);
 	}
 }
 
@@ -45,7 +40,7 @@ static void	set_sets(t_client *client, fd_set *set, int *fd_max)
 	}
 	else
 		*fd_max = 0;
-	client_add_write_request_to_set(&set[1], client->write_queue, fd_max);
+	client_add_write_request_to_set(&set[1], &client->write_queue, fd_max);
 }
 
 void		client_poll_events(t_client *client)
@@ -54,8 +49,6 @@ void		client_poll_events(t_client *client)
 	int		fd_max;
 	int		ret;
 
-	if (!client || !(client->opt & CLIENT_RUNNING))
-		return ;
 	set_sets(client, (fd_set*)&set, &fd_max);
 	if ((ret = select(fd_max + 1, &set[0], &set[1], &set[2],
 		&client->timeout)) < 0)

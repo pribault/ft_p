@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/21 14:38:58 by pribault          #+#    #+#             */
-/*   Updated: 2018/02/03 18:24:13 by pribault         ###   ########.fr       */
+/*   Updated: 2018/03/30 22:51:27 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@ static t_long_flag	g_long_flags[] =
 	{"verbose", 0, {0}, (void*)&set_long_verbose},
 	{"port", 1, {PARAM_UNSIGNED}, (void*)&get_port},
 	{"protocol", 1, {PARAM_STR}, (void*)&get_protocol},
+	{"domain", 1, {PARAM_STR}, (void*)&get_domain},
 	{"max", 1, {PARAM_INTEGER}, (void*)&get_max},
-	{"timeout", 2, {PARAM_UNSIGNED, PARAM_UNSIGNED}, (void*)&get_timeout},
 	{"root", 1, {PARAM_STR}, (void*)get_root},
 	{NULL, 0, {0}, NULL}
 };
@@ -36,12 +36,13 @@ static t_error	g_errors[] =
 	{ERROR_NOT_IN_PORT_RANGE, "'%s' is not a valid port number [0;65535]", 0},
 	{ERROR_PORT_ALREADY_SET, "'%s' port already set", 0},
 	{ERROR_INVALID_PROTOCOL, "invalid protocol '%s', allowed: tcp/udp", 0},
+	{ERROR_INVALID_DOMAIN, "invalid domain '%s', allowed: ipv4/ipv6", 0},
 	{ERROR_NO_PORT_SET, "please specify a port", ERROR_EXIT},
 	{ERROR_MSG_TOO_SMALL, "message too small, ignoring", 0},
 	{ERROR_UNEXPECTED_MSG, "unexpected message received", 0},
 	{ERROR_UNKNOWN_MSG_TYPE, "unkown message type %ld", 0},
 	{ERROR_FILE_ALREADY_EXIST, "file '%s' already exist", 0},
-	{ERROR_INVALID_ROOT, "invalid path '%s'", ERROR_EXIT},
+	{ERROR_INVALID_ROOT, "invalid root path '%s'", ERROR_EXIT},
 	{0, NULL, 0}
 };
 
@@ -56,7 +57,7 @@ void	my_sig(int sig)
 	exit(1);
 }
 
-void	verify_root(t_server *server)
+void	verify_root(t_serv *server)
 {
 	char	*new;
 	size_t	len;
@@ -71,31 +72,33 @@ void	verify_root(t_server *server)
 	}
 }
 
-void	server_init(t_server *server, int argc, char **argv, char **env)
+void	server_init(t_serv *server, int argc, char **argv, char **env)
 {
 	ft_add_errors((t_error*)&g_errors);
-	ft_bzero(server, sizeof(t_server));
+	ft_bzero(server, sizeof(t_serv));
 	server->env = env;
 	server->protocol = TCP;
+	server->domain = IPV4;
 	server->opt = OPT_VERBOSE;
-	if (!(server->server = server_new()))
-		return (ft_error(2, ERROR_ALLOCATION, NULL));
 	if (!(server->root = ft_strdup(ft_getenv(env, "PWD"))))
 		return (ft_error(2, ERROR_CUSTOM, "cannot find PWD in environnement"));
 	ft_get_flags(argc, argv, ft_get_flag_array((t_short_flag*)&g_short_flags,
 	(t_long_flag*)&g_long_flags, (void*)&get_default), server);
 	verify_root(server);
+	if (!(server->server = server_new()))
+		return (ft_error(2, ERROR_ALLOCATION, NULL));
 	server_set_callback(server->server, SERVER_CLIENT_ADD_CB, &add_client);
 	server_set_callback(server->server, SERVER_CLIENT_DEL_CB, &del_client);
 	server_set_callback(server->server, SERVER_MSG_RECV_CB, &msg_recv);
 	server_set_callback(server->server, SERVER_MSG_SEND_CB, &msg_send);
+	server_set_callback(server->server, SERVER_MSG_TRASH_CB, &trash_msg);
 	server_attach_data(server->server, server);
 	server_add_client_by_fd(server->server, 0);
 }
 
 int		main(int argc, char **argv, char **env)
 {
-	t_server	server;
+	t_serv	server;
 
 	setenv("MALLOC_DEBUG", "1", 1);
 	atexit(&my_exit);
@@ -106,7 +109,8 @@ int		main(int argc, char **argv, char **env)
 		print_usage();
 		ft_error(2, ERROR_NO_PORT_SET, NULL);
 	}
-	server_start(server.server, server.protocol, server.port);
+	server_start(server.server, (t_method){server.protocol,
+	server.domain}, server.port);
 	while (1)
 		server_poll_events(server.server);
 	return (0);

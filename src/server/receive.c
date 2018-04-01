@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/03 13:17:45 by pribault          #+#    #+#             */
-/*   Updated: 2018/02/03 17:44:17 by pribault         ###   ########.fr       */
+/*   Updated: 2018/03/31 23:04:03 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@
 **	- TYPE_PWD
 **	- TYPE_PUT
 **	- TYPE_GET
+**	- TYPE_RM
+**	- TYPE_MV
 **
 **	states:
 **
@@ -32,37 +34,37 @@
 
 static t_msg_handler	g_func[STATE_MAX][TYPE_MAX] =
 {
-	{NULL, NULL, &recv_ls, &recv_cd, &recv_pwd, &recv_put, &recv_get},
-	{NULL, NULL, NULL, NULL, NULL, NULL, NULL},
-	{NULL, NULL, NULL, NULL, NULL, NULL, NULL},
+	{NULL, NULL, &recv_ls, &recv_cd, &recv_pwd, &recv_put, &recv_get,
+		&recv_rm, &recv_mv},
+	{NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL},
+	{NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL},
 };
 
 void	save_message(t_data *data, t_header *ptr, size_t size)
 {
 	if (!data->ptr)
 	{
-		if (!(data->ptr = ft_memdup(ptr, size)))
+		if (!(data->ptr = malloc(sizeof(t_header) + ptr->size)))
 			ft_error(2, ERROR_ALLOCATION, NULL);
+		ft_memcpy(data->ptr, ptr, size);
 		data->expected = ptr->size;
 		data->size = size;
 	}
 	else if (data->size + size >= data->expected)
 	{
-		if (!(data->ptr = realloc(data->ptr, data->expected)))
-			ft_error(2, ERROR_ALLOCATION, NULL);
 		ft_memcpy(data->ptr + data->size, ptr,
 		data->expected - data->size);
 	}
 	else
 	{
-		if (!(data->ptr = realloc(data->ptr, data->size + size)))
-			ft_error(2, ERROR_ALLOCATION, NULL);
 		ft_memcpy(data->ptr + data->size, ptr, size);
 		data->size += size;
 	}
+	ft_printf("message received %lu/%lu bytes\n",
+	data->size, data->expected);
 }
 
-void	message_complete(t_server *server, void *client, t_header *ptr,
+void	message_complete(t_serv *server, void *client, t_header *ptr,
 		size_t size)
 {
 	t_data	*data;
@@ -73,6 +75,7 @@ void	message_complete(t_server *server, void *client, t_header *ptr,
 	{
 		ft_printf("message received from [%d]:\n",
 		server_get_client_fd(client));
+		ft_printf("type=%lu\nsize=%lu\n", ptr->type, size);
 	}
 	if (g_func[data->state][ptr->type])
 		g_func[data->state][ptr->type](server, client, ptr, size);
@@ -80,12 +83,11 @@ void	message_complete(t_server *server, void *client, t_header *ptr,
 		ft_error(2, ERROR_UNEXPECTED_MSG, NULL);
 	if (data->ptr)
 	{
-		free(data->ptr);
-		ft_bzero(data, sizeof(t_data));
+		ft_memdel(&data->ptr);
 	}
 }
 
-void	waiting_for_message(t_server *server, void *client, t_header *ptr,
+void	waiting_for_message(t_serv *server, void *client, t_header *ptr,
 		size_t size)
 {
 	t_data	*data;
@@ -104,7 +106,7 @@ void	waiting_for_message(t_server *server, void *client, t_header *ptr,
 		save_message(client, ptr, size);
 }
 
-void	manage_received_msg(t_server *server, void *client, t_header *ptr,
+void	manage_received_msg(t_serv *server, void *client, t_header *ptr,
 		size_t size)
 {
 	t_data	*data;
@@ -112,7 +114,7 @@ void	manage_received_msg(t_server *server, void *client, t_header *ptr,
 	if (!(data = server_client_get_data(client)))
 		return (ft_error(2, ERROR_CUSTOM, "client data null, wtf ?!? ._."));
 	if (data->ptr)
-		waiting_for_message(server, data, ptr, size);
+		waiting_for_message(server, client, ptr, size);
 	else if (size >= sizeof(t_header))
 	{
 		if (ptr->size <= size)

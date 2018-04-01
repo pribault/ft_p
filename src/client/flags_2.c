@@ -6,23 +6,23 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/02 19:10:08 by pribault          #+#    #+#             */
-/*   Updated: 2018/02/02 21:36:36 by pribault         ###   ########.fr       */
+/*   Updated: 2018/03/30 22:50:42 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "client.h"
 
-void	get_default(char *s, t_client *client)
+void	get_default(char *s, t_cli *client)
 {
 	if (!client->address)
-		get_address(&s, 1, client);
+		get_address(client, &s, 1);
 	else if (!client->port)
-		get_port(&s, 1, client);
+		get_port(client, &s, 1);
 	else
 		ft_error(2, ERROR_PARAMS_ALREADY_SET, s);
 }
 
-void	get_protocol(char **args, int n_params, t_client *client)
+void	get_protocol(t_cli *client, char **args, int n_params)
 {
 	(void)n_params;
 	if (!ft_strcmp(args[0], "tcp"))
@@ -33,9 +33,13 @@ void	get_protocol(char **args, int n_params, t_client *client)
 		ft_error(2, ERROR_INVALID_PROTOCOL, args[0]);
 }
 
-void	get_timeout(char **args, int n_params, t_client *client)
+void	get_domain(t_cli *client, char **args, int n_params)
 {
 	(void)n_params;
-	server_set_timeout(client->server,
-	(struct timeval){ft_atou(args[0]), ft_atou(args[1])});
+	if (!ft_strcmp(args[0], "ipv4"))
+		client->domain = IPV4;
+	else if (!ft_strcmp(args[0], "ipv6"))
+		client->domain = IPV6;
+	else
+		ft_error(2, ERROR_INVALID_DOMAIN, args[0]);
 }
