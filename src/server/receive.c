@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/03 13:17:45 by pribault          #+#    #+#             */
-/*   Updated: 2018/03/31 23:04:03 by pribault         ###   ########.fr       */
+/*   Updated: 2018/04/02 17:26:01 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ void	waiting_for_message(t_serv *server, void *client, t_header *ptr,
 		manage_received_msg(server, client, (void*)ptr + save, size - save);
 	}
 	else
-		save_message(client, ptr, size);
+		save_message(data, ptr, size);
 }
 
 void	manage_received_msg(t_serv *server, void *client, t_header *ptr,
