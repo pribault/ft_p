@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/03 13:17:45 by pribault          #+#    #+#             */
-/*   Updated: 2018/04/02 17:26:01 by pribault         ###   ########.fr       */
+/*   Updated: 2018/04/02 17:53:18 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void	save_message(t_data *data, t_header *ptr, size_t size)
 	if (!data->ptr)
 	{
 		if (!(data->ptr = malloc(sizeof(t_header) + ptr->size)))
-			ft_error(2, ERROR_ALLOCATION, NULL);
+			return (ft_error(2, ERROR_CUSTOM, "cannot allocate memory"));
 		ft_memcpy(data->ptr, ptr, size);
 		data->expected = ptr->size;
 		data->size = size;

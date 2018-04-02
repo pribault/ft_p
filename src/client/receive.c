@@ -6,7 +6,7 @@
 /*   By: pribault <pribault@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/02 20:30:31 by pribault          #+#    #+#             */
-/*   Updated: 2018/03/31 21:19:37 by pribault         ###   ########.fr       */
+/*   Updated: 2018/04/02 17:53:25 by pribault         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void	save_message(t_cli *client, t_header *ptr, size_t size)
 	if (!client->data.ptr)
 	{
 		if (!(client->data.ptr = malloc(ptr->size)))
-			ft_error(2, ERROR_ALLOCATION, NULL);
+			return (ft_error(2, ERROR_CUSTOM, "cannot allocate memory"));
 		ft_memcpy(client->data.ptr, ptr, size);
 		client->data.expected = ptr->size;
 		client->data.size = size;
